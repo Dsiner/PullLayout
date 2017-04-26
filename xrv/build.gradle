@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+// bintray step2:add this apply
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 25
@@ -19,6 +21,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -27,8 +32,24 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.nineoldandroids:library:2.4.0'
 }
+
+// bintray step3:add publish info
+publish {
+    userOrg = 'dsiner'              //bintray注册的用户名
+    groupId = 'com.dsiner'          //compile引用时的第1部分groupId
+    artifactId = 'xrv'              //compile引用时的第2部分项目名
+    publishVersion = '1.0.0'        //compile引用时的第3部分版本号
+    desc = 'commen recyclerview for android'            //描述，不重要
+    website = 'https://github.com/Dsiner/xRecyclerViewF'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+}
+
+// bintray step4:Terminal
+//./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
+//参数说明：
+//-PbintrayUser=BINTRAY_USERNAME    //用户名
+//-PbintrayKey=BINTRAY_KEY          //key
+//-PdryRun=false                    //当为true的时候，会运行所有的环节，但是不会上传
