@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.xrv">
+    package="com.d.xrv">
 
     <application
         android:allowBackup="true"
