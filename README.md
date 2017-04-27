@@ -1,7 +1,7 @@
 # Commen RecyclerView for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Download](https://api.bintray.com/packages/tangsiyuan/maven/myokhttp/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/dsiner/maven/xrv/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
 
 ## Setup
 Maven:
@@ -26,24 +26,24 @@ compile 'com.dsiner:xrv:1.0.0'
         android:layout_height="match_parent" />
 ```
 
-### step1:获取引用
+#### Step1. 获取引用
 ```java
         //step1:获取引用
         XRecyclerView recyclerView = (XRecyclerView) this.findViewById(R.id.xrv_list);
 ```
     
-### step2:设置LayoutManager
+#### Step2. 设置LayoutManager
 ```java
         recyclerView.showAsList();//listview展现形式
 ```
 
 
-### step3:setHeader(可选)
+#### Step3. setHeader(可选)
 ```java
         View header = LayoutInflater.from(this).inflate(R.layout.view_header, (ViewGroup) findViewById(android.R.id.content), false);
         recyclerView.addHeaderView(header);
 ```
-### step4:new Adapter
+#### Step4. new Adapter
 ```java
         public class MultiRvAdapter extends CommonAdapter<Bean> {
         
@@ -102,11 +102,12 @@ compile 'com.dsiner:xrv:1.0.0'
         });
 ```
 
-### step5:setAdapter
+#### Step5. setAdapter
 ```java
         recyclerView.setAdapter(adapter);
 ```
-### step6:setListener
+
+#### Step6. setListener
 ```java
         recyclerView.setLoadingListener(new IRecyclerView.LoadingListener() {
             @Override
