@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.d.xrecyclerviewf.activity.MultiLRvActivity;
-import com.d.xrecyclerviewf.activity.MultiXRvActivity;
-import com.d.xrecyclerviewf.activity.SimLRvActivity;
-import com.d.xrecyclerviewf.activity.SimXRvActivity;
+import com.d.xrecyclerviewf.activity.MultipleLRvActivity;
+import com.d.xrecyclerviewf.activity.MultipleXRvActivity;
+import com.d.xrecyclerviewf.activity.SimpleLRvActivity;
+import com.d.xrecyclerviewf.activity.SimpleXRvActivity;
 import com.d.xrecyclerviewf.model.Bean;
 import com.d.xrv.adapter.CommonAdapter;
 import com.d.xrv.adapter.CommonHolder;
@@ -15,12 +15,12 @@ import com.d.xrv.adapter.CommonHolder;
 import java.util.List;
 
 /**
- * simple type
+ * Simple Type
  * Created by D on 2017/4/26.
  */
 
-class MRvAdapter extends CommonAdapter<Bean> {
-    MRvAdapter(Context context, List<Bean> datas, int layoutId) {
+class MainAdapter extends CommonAdapter<Bean> {
+    MainAdapter(Context context, List<Bean> datas, int layoutId) {
         super(context, datas, layoutId);
     }
 
@@ -35,16 +35,16 @@ class MRvAdapter extends CommonAdapter<Bean> {
                 switch (item.index) {
                     case 0:
                     default:
-                        clz = SimLRvActivity.class;
+                        clz = SimpleLRvActivity.class;
                         break;
                     case 1:
-                        clz = MultiLRvActivity.class;
+                        clz = MultipleLRvActivity.class;
                         break;
                     case 2:
-                        clz = SimXRvActivity.class;
+                        clz = SimpleXRvActivity.class;
                         break;
                     case 3:
-                        clz = MultiXRvActivity.class;
+                        clz = MultipleXRvActivity.class;
                         break;
                 }
                 mContext.startActivity(new Intent(mContext, clz));

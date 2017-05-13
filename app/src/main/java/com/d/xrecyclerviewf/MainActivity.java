@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 
     private void init() {
         LRecyclerView lrvList = (LRecyclerView) this.findViewById(R.id.lrv_list);
-        MRvAdapter mRvAdapter = new MRvAdapter(this, datas, R.layout.item_0);
-        lrvList.setAdapter(mRvAdapter);
+        MainAdapter adapter = new MainAdapter(this, datas, R.layout.item_0);
+        lrvList.setAdapter(adapter);
     }
 }

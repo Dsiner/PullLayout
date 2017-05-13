@@ -1,8 +1,8 @@
 package com.d.xrecyclerviewf.model;
 
 /**
- * bean test
- * Created by Shenyulei on 2017/2/10.
+ * Bean Test
+ * Created by D on 2017/2/10.
  */
 public class Bean {
     public int type;

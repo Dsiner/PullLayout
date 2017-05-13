@@ -10,16 +10,16 @@ import com.d.xrv.adapter.CommonHolder;
 import java.util.List;
 
 /**
- * simple type
+ * Simple Type
  * Created by D on 2017/4/26.
  */
-public class SimRvAdapter extends CommonAdapter<Bean> {
+public class SimpleAdapter extends CommonAdapter<Bean> {
     /**
      * @param context:context
      * @param datas:填充数据源
      * @param layoutId:单一类型布局layout
      */
-    public SimRvAdapter(Context context, List<Bean> datas, int layoutId) {
+    public SimpleAdapter(Context context, List<Bean> datas, int layoutId) {
         super(context, datas, layoutId);
     }
 

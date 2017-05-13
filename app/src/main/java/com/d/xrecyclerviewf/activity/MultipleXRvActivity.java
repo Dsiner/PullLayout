@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.d.xrecyclerviewf.Factory;
 import com.d.xrecyclerviewf.R;
-import com.d.xrecyclerviewf.adapter.MultiRvAdapter;
+import com.d.xrecyclerviewf.adapter.MultipleAdapter;
 import com.d.xrecyclerviewf.model.Bean;
 import com.d.xrv.XRecyclerView;
 import com.d.xrv.adapter.MultiItemTypeSupport;
@@ -17,10 +17,10 @@ import com.d.xrv.listener.IRecyclerView;
 import java.util.ArrayList;
 
 /**
- * multi type
- * Created by Shenyulei on 2017/2/26.
+ * Multiple Type
+ * Created by D on 2017/2/26.
  */
-public class MultiXRvActivity extends Activity {
+public class MultipleXRvActivity extends Activity {
     private ArrayList<Bean> datas;
     private int refreshTime;
     private int times;
@@ -42,7 +42,7 @@ public class MultiXRvActivity extends Activity {
         View header = LayoutInflater.from(this).inflate(R.layout.view_header, (ViewGroup) findViewById(android.R.id.content), false);
         recyclerView.addHeaderView(header);
         //step4:new Adapter
-        final MultiRvAdapter adapter = new MultiRvAdapter(MultiXRvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
+        final MultipleAdapter adapter = new MultipleAdapter(MultipleXRvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
                 //step4-2:根据type返回layout布局

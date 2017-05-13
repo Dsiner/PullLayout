@@ -11,17 +11,17 @@ import com.d.xrv.adapter.MultiItemTypeSupport;
 import java.util.List;
 
 /**
- * multi type
- * Created by Shenyulei on 2017/4/26.
+ * Multiple Type
+ * Created by D on 2017/4/26.
  */
-public class MultiRvAdapter extends CommonAdapter<Bean> {
+public class MultipleAdapter extends CommonAdapter<Bean> {
 
     /**
      * @param context:context
      * @param datas:填充数据源
      * @param multiItemTypeSupport:多布局类型支持
      */
-    public MultiRvAdapter(Context context, List<Bean> datas, MultiItemTypeSupport<Bean> multiItemTypeSupport) {
+    public MultipleAdapter(Context context, List<Bean> datas, MultiItemTypeSupport<Bean> multiItemTypeSupport) {
         super(context, datas, multiItemTypeSupport);
     }
 

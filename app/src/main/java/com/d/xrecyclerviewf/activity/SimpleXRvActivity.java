@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.d.xrecyclerviewf.Factory;
 import com.d.xrecyclerviewf.R;
-import com.d.xrecyclerviewf.adapter.SimRvAdapter;
+import com.d.xrecyclerviewf.adapter.SimpleAdapter;
 import com.d.xrecyclerviewf.model.Bean;
 import com.d.xrv.XRecyclerView;
 import com.d.xrv.listener.IRecyclerView;
@@ -13,10 +13,10 @@ import com.d.xrv.listener.IRecyclerView;
 import java.util.ArrayList;
 
 /**
- * simple type
+ * Simple Type
  * Created by D on 2017/4/26.
  */
-public class SimXRvActivity extends Activity {
+public class SimpleXRvActivity extends Activity {
     private ArrayList<Bean> datas;
     private int refreshTime;
     private int times;
@@ -35,7 +35,7 @@ public class SimXRvActivity extends Activity {
         //step2:设置LayoutManager
         recyclerView.showAsList();//listview展现形式
         //step3:new Adapter
-        final SimRvAdapter adapter = new SimRvAdapter(this, datas, R.layout.item_0);
+        final SimpleAdapter adapter = new SimpleAdapter(this, datas, R.layout.item_0);
         //step4:setAdapter
         recyclerView.setAdapter(adapter);
         //step5:setListener

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.d.xrecyclerviewf.Factory;
 import com.d.xrecyclerviewf.R;
-import com.d.xrecyclerviewf.adapter.MultiRvAdapter;
+import com.d.xrecyclerviewf.adapter.MultipleAdapter;
 import com.d.xrecyclerviewf.model.Bean;
 import com.d.xrv.LRecyclerView;
 import com.d.xrv.adapter.MultiItemTypeSupport;
@@ -13,10 +13,10 @@ import com.d.xrv.adapter.MultiItemTypeSupport;
 import java.util.ArrayList;
 
 /**
- * multi type
- * Created by Shenyulei on 2017/2/26.
+ * Multiple Type
+ * Created by D on 2017/2/26.
  */
-public class MultiLRvActivity extends Activity {
+public class MultipleLRvActivity extends Activity {
     private ArrayList<Bean> datas;
 
     @Override
@@ -31,7 +31,7 @@ public class MultiLRvActivity extends Activity {
         //step1:获取引用
         LRecyclerView recyclerView = (LRecyclerView) this.findViewById(R.id.lrv_list);
         //step2:new Adapter
-        MultiRvAdapter adapter = new MultiRvAdapter(this, datas, new MultiItemTypeSupport<Bean>() {
+        MultipleAdapter adapter = new MultipleAdapter(this, datas, new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
                 //step2-2:根据type返回layout布局

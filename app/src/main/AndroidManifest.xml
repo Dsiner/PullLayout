@@ -16,9 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.d.xrecyclerviewf.activity.SimLRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.MultiLRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.SimXRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.MultiXRvActivity" />
+        <activity android:name="com.d.xrecyclerviewf.activity.SimpleLRvActivity" />
+        <activity android:name="com.d.xrecyclerviewf.activity.MultipleLRvActivity" />
+        <activity android:name="com.d.xrecyclerviewf.activity.SimpleXRvActivity" />
+        <activity android:name="com.d.xrecyclerviewf.activity.MultipleXRvActivity" />
     </application>
 </manifest>

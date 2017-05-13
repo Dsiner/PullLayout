@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * Factory for create datas
  * Created by D on 2017/4/26.
  */
-
 public class Factory {
 
     public static ArrayList<Bean> createMList() {
@@ -21,13 +20,13 @@ public class Factory {
         Bean bean = new Bean(10, 0, "", "simple type list");
         datas.add(bean);
 
-        bean = new Bean(10, 1, "", "multi type list");
+        bean = new Bean(10, 1, "", "multiple type list");
         datas.add(bean);
 
         bean = new Bean(10, 2, "", "simple type pull xlist");
         datas.add(bean);
 
-        bean = new Bean(10, 3, "", "multi type pull xlist");
+        bean = new Bean(10, 3, "", "multiple type pull xlist");
         datas.add(bean);
 
         return datas;
