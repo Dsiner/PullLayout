@@ -4,7 +4,9 @@
 [ ![Download](https://api.bintray.com/packages/dsiner/maven/xrv/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
 
 ## Demo
-![](https://github.com/Dsiner/xRecyclerViewF/blob/master/screenshot/screenshot.gif)
+<p>
+   <img src="https://github.com/Dsiner/xRecyclerViewF/blob/master/screenshot/screenshot.gif" width="320" alt="Screenshot"/>
+</p>
 
 ## Setup
 Maven:
