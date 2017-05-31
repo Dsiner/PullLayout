@@ -3,6 +3,9 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [ ![Download](https://api.bintray.com/packages/dsiner/maven/xrv/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
 
+## Demo
+![](https://github.com/Dsiner/xRecyclerViewF/blob/master/screenshot/screenshot.gif)
+
 ## Setup
 Maven:
 ```xml
@@ -45,14 +48,14 @@ compile 'com.dsiner:xrv:1.0.0'
 ```
 #### Step4. new Adapter
 ```java
-        public class MultiRvAdapter extends CommonAdapter<Bean> {
+        public class MultipleAdapter extends CommonAdapter<Bean> {
         
             /**
              * @param context:context
              * @param datas:填充数据源
              * @param multiItemTypeSupport:多布局类型支持
              */
-            public MultiRvAdapter(Context context, List<Bean> datas, MultiItemTypeSupport<Bean> multiItemTypeSupport) {
+            public MultipleAdapter(Context context, List<Bean> datas, MultiItemTypeSupport<Bean> multiItemTypeSupport) {
                 super(context, datas, multiItemTypeSupport);
             }
         
@@ -76,7 +79,7 @@ compile 'com.dsiner:xrv:1.0.0'
             }
         }
         
-        MultiRvAdapter adapter = new MultiRvAdapter(MultiXRvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
+        MultipleAdapter adapter = new MultipleAdapter(MultipleXRvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
                 //step4-2:根据type返回layout布局
