@@ -10,9 +10,9 @@ import com.d.xrecyclerviewf.Factory;
 import com.d.xrecyclerviewf.R;
 import com.d.xrecyclerviewf.adapter.MultipleAdapter;
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.xrv.XRecyclerView;
-import com.d.xrv.adapter.MultiItemTypeSupport;
-import com.d.xrv.listener.IRecyclerView;
+import com.d.lib.xrv.XRecyclerView;
+import com.d.lib.xrv.adapter.MultiItemTypeSupport;
+import com.d.lib.xrv.listener.IRecyclerView;
 
 import java.util.ArrayList;
 

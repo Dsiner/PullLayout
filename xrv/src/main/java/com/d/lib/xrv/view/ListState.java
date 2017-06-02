@@ -1,4 +1,4 @@
-package com.d.xrv.view;
+package com.d.lib.xrv.view;
 
 /**
  * state

@@ -27,7 +27,7 @@
                 android:src="@drawable/ic_pulltorefresh_arrow" />
 
             <!-- 进度条 -->
-            <com.d.xrv.view.LoadingView
+            <com.d.lib.xrv.view.LoadingView
                 android:id="@+id/ldv_loading"
                 android:layout_width="20dp"
                 android:layout_height="20dp"

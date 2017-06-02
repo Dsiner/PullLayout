@@ -1,4 +1,4 @@
-package com.d.xrv;
+package com.d.lib.xrv;
 
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
@@ -12,13 +12,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 
-import com.d.xrv.adapter.WrapAdapter;
-import com.d.xrv.listener.AppBarStateChangeListener;
-import com.d.xrv.listener.DataObserver;
-import com.d.xrv.listener.IRecyclerView;
-import com.d.xrv.view.ArrowRefreshHeader;
-import com.d.xrv.view.ListState;
-import com.d.xrv.view.LoadingMoreFooter;
+import com.d.lib.xrv.adapter.WrapAdapter;
+import com.d.lib.xrv.listener.AppBarStateChangeListener;
+import com.d.lib.xrv.listener.DataObserver;
+import com.d.lib.xrv.listener.IRecyclerView;
+import com.d.lib.xrv.view.ArrowRefreshHeader;
+import com.d.lib.xrv.view.ListState;
+import com.d.lib.xrv.view.LoadingMoreFooter;
 
 import java.util.ArrayList;
 import java.util.List;

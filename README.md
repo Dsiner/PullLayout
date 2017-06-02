@@ -12,20 +12,20 @@
 Maven:
 ```xml
 <dependency>
-  <groupId>com.dsiner</groupId>
+  <groupId>com.dsiner.lib</groupId>
   <artifactId>xrv</artifactId>
   <version>1.0.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner:xrv:1.0.0'
+compile 'com.dsiner.lib:xrv:1.0.0'
 ```
 
 
 ## Usage
 ```xml
-    <com.d.xrv.XRecyclerView
+    <com.d.lib.xrv.XRecyclerView
         android:id="@+id/xrv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -128,7 +128,7 @@ compile 'com.dsiner:xrv:1.0.0'
 ```
 
 
-More usage see [demo](app/src/main/java/com/d/xrecyclerviewf/MainActivity.java)
+More usage see [Demo](app/src/main/java/com/d/xrecyclerviewf/MainActivity.java)
 
 
 ## Licence

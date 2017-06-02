@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.d.xrecyclerviewf.R;
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.xrv.adapter.CommonAdapter;
-import com.d.xrv.adapter.CommonHolder;
-import com.d.xrv.adapter.MultiItemTypeSupport;
+import com.d.lib.xrv.adapter.CommonAdapter;
+import com.d.lib.xrv.adapter.CommonHolder;
+import com.d.lib.xrv.adapter.MultiItemTypeSupport;
 
 import java.util.List;
 

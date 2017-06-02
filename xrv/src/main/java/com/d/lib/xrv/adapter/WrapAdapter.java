@@ -1,4 +1,4 @@
-package com.d.xrv.adapter;
+package com.d.lib.xrv.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -6,8 +6,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.d.xrv.listener.IRecyclerView;
-import com.d.xrv.view.ArrowRefreshHeader;
+import com.d.lib.xrv.listener.IRecyclerView;
+import com.d.lib.xrv.view.ArrowRefreshHeader;
 
 import java.util.ArrayList;
 import java.util.List;

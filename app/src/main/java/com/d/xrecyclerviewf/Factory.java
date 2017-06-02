@@ -3,8 +3,8 @@ package com.d.xrecyclerviewf;
 import android.os.Handler;
 
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.xrv.XRecyclerView;
-import com.d.xrv.adapter.CommonAdapter;
+import com.d.lib.xrv.XRecyclerView;
+import com.d.lib.xrv.adapter.CommonAdapter;
 
 import java.util.ArrayList;
 

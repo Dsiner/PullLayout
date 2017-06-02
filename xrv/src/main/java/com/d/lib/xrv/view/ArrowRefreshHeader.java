@@ -1,4 +1,4 @@
-package com.d.xrv.view;
+package com.d.lib.xrv.view;
 
 import android.content.Context;
 import android.os.Handler;
@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.d.xrv.R;
+import com.d.lib.xrv.R;
 import com.nineoldandroids.animation.ValueAnimator;
 
 import java.text.SimpleDateFormat;

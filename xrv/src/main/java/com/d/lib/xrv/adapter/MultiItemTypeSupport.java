@@ -1,4 +1,4 @@
-package com.d.xrv.adapter;
+package com.d.lib.xrv.adapter;
 
 /**
  * MultiItemTypeSupport for RecyclerView

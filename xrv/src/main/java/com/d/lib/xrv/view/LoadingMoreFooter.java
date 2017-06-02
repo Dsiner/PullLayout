@@ -1,4 +1,4 @@
-package com.d.xrv.view;
+package com.d.lib.xrv.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.d.xrv.R;
+import com.d.lib.xrv.R;
 
 public class LoadingMoreFooter extends LinearLayout implements View.OnClickListener {
     private LoadingView ldvLoading;

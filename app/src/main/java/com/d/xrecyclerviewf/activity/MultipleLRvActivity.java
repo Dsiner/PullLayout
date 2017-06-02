@@ -7,8 +7,8 @@ import com.d.xrecyclerviewf.Factory;
 import com.d.xrecyclerviewf.R;
 import com.d.xrecyclerviewf.adapter.MultipleAdapter;
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.xrv.LRecyclerView;
-import com.d.xrv.adapter.MultiItemTypeSupport;
+import com.d.lib.xrv.LRecyclerView;
+import com.d.lib.xrv.adapter.MultiItemTypeSupport;
 
 import java.util.ArrayList;
 

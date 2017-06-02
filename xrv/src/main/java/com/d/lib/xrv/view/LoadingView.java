@@ -1,4 +1,4 @@
-package com.d.xrv.view;
+package com.d.lib.xrv.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.d.xrv.R;
+import com.d.lib.xrv.R;
 
 /**
  * Loading

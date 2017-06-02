@@ -7,7 +7,7 @@ import com.d.xrecyclerviewf.Factory;
 import com.d.xrecyclerviewf.R;
 import com.d.xrecyclerviewf.adapter.SimpleAdapter;
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.xrv.LRecyclerView;
+import com.d.lib.xrv.LRecyclerView;
 
 import java.util.ArrayList;
 

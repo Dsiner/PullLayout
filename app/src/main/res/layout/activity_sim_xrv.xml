@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.d.xrv.XRecyclerView
+    <com.d.lib.xrv.XRecyclerView
         android:id="@+id/xrv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

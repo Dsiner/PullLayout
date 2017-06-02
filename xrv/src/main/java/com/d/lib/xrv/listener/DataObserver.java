@@ -1,10 +1,10 @@
-package com.d.xrv.listener;
+package com.d.lib.xrv.listener;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.d.xrv.XRecyclerView;
-import com.d.xrv.adapter.WrapAdapter;
+import com.d.lib.xrv.XRecyclerView;
+import com.d.lib.xrv.adapter.WrapAdapter;
 
 /**
  * AdapterDataObserver for RecyclerView

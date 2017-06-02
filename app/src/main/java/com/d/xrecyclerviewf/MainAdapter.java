@@ -9,8 +9,8 @@ import com.d.xrecyclerviewf.activity.MultipleXRvActivity;
 import com.d.xrecyclerviewf.activity.SimpleLRvActivity;
 import com.d.xrecyclerviewf.activity.SimpleXRvActivity;
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.xrv.adapter.CommonAdapter;
-import com.d.xrv.adapter.CommonHolder;
+import com.d.lib.xrv.adapter.CommonAdapter;
+import com.d.lib.xrv.adapter.CommonHolder;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.d.xrv.view;
+package com.d.lib.xrv.view;
 
 /**
  * Created by jianghejie on 15/11/22.

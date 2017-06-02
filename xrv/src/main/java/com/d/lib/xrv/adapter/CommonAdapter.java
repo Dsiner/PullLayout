@@ -1,4 +1,4 @@
-package com.d.xrv.adapter;
+package com.d.lib.xrv.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

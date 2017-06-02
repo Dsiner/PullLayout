@@ -1,4 +1,4 @@
-package com.d.xrv;
+package com.d.lib.xrv;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
