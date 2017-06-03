@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.d.xrecyclerviewf.itemtouchhelper;
+package com.d.lib.xrv.itemtouchhelper;
 
 import android.support.v7.widget.helper.ItemTouchHelper;
 

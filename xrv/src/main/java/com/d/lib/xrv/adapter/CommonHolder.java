@@ -12,11 +12,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CommonHolder extends RecyclerView.ViewHolder {
+import com.d.lib.xrv.itemtouchhelper.ItemTouchHelperViewHolder;
+
+public class CommonHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     private Context mContext;
     private SparseArray<View> mViews;
     private View mConvertView;
     public int mLayoutId;
+    private ItemTouchHelperViewHolder itemTouchListener;
 
     public CommonHolder(Context context, View itemView, int layoutId) {
         super(itemView);
@@ -137,5 +140,32 @@ public class CommonHolder extends RecyclerView.ViewHolder {
         TextView textView = getView(viewId);
         textView.setTextColor(res);
         return this;
+    }
+
+    /**
+     * 3-1:Just for ItemTouch (optional)
+     */
+    public void setOnItemTouchListener(ItemTouchHelperViewHolder listener) {
+        this.itemTouchListener = listener;
+    }
+
+    /**
+     * 3-2:Just for ItemTouch
+     */
+    @Override
+    public void onItemSelected() {
+        if (itemTouchListener != null) {
+            itemTouchListener.onItemSelected();
+        }
+    }
+
+    /**
+     * 3-3:Just for ItemTouch
+     */
+    @Override
+    public void onItemClear() {
+        if (itemTouchListener != null) {
+            itemTouchListener.onItemClear();
+        }
     }
 }

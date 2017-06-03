@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.d.lib.xrv.adapter.CommonAdapter;
+import com.d.lib.xrv.adapter.CommonHolder;
+import com.d.xrecyclerviewf.activity.ItemTouchRvActivity;
 import com.d.xrecyclerviewf.activity.MultipleLRvActivity;
 import com.d.xrecyclerviewf.activity.MultipleXRvActivity;
 import com.d.xrecyclerviewf.activity.SimpleLRvActivity;
 import com.d.xrecyclerviewf.activity.SimpleXRvActivity;
 import com.d.xrecyclerviewf.model.Bean;
-import com.d.lib.xrv.adapter.CommonAdapter;
-import com.d.lib.xrv.adapter.CommonHolder;
 
 import java.util.List;
 
@@ -45,6 +46,9 @@ class MainAdapter extends CommonAdapter<Bean> {
                         break;
                     case 3:
                         clz = MultipleXRvActivity.class;
+                        break;
+                    case 4:
+                        clz = ItemTouchRvActivity.class;
                         break;
                 }
                 mContext.startActivity(new Intent(mContext, clz));

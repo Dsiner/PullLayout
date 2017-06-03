@@ -2,9 +2,9 @@ package com.d.xrecyclerviewf;
 
 import android.os.Handler;
 
-import com.d.xrecyclerviewf.model.Bean;
 import com.d.lib.xrv.XRecyclerView;
 import com.d.lib.xrv.adapter.CommonAdapter;
+import com.d.xrecyclerviewf.model.Bean;
 
 import java.util.ArrayList;
 
@@ -27,6 +27,9 @@ public class Factory {
         datas.add(bean);
 
         bean = new Bean(10, 3, "", "multiple type pull xlist");
+        datas.add(bean);
+
+        bean = new Bean(10, 4, "", "item touch");
         datas.add(bean);
 
         return datas;

@@ -20,5 +20,6 @@
         <activity android:name="com.d.xrecyclerviewf.activity.MultipleLRvActivity" />
         <activity android:name="com.d.xrecyclerviewf.activity.SimpleXRvActivity" />
         <activity android:name="com.d.xrecyclerviewf.activity.MultipleXRvActivity" />
+        <activity android:name="com.d.xrecyclerviewf.activity.ItemTouchRvActivity" />
     </application>
 </manifest>

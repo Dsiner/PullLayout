@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.d.xrecyclerviewf.itemtouchhelper;
+package com.d.lib.xrv.itemtouchhelper;
 
 import android.graphics.Canvas;
 import android.os.Build;
@@ -33,11 +33,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
  * @author Paul Burke (ipaulpro)
  */
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
-
     public static final float ALPHA_FULL = 1.0f;
 
     private final ItemTouchHelperAdapter mAdapter;
-
 
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
