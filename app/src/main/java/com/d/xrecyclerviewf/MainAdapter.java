@@ -16,10 +16,9 @@ import com.d.xrecyclerviewf.model.Bean;
 import java.util.List;
 
 /**
- * Simple Type
+ * MainAdapter
  * Created by D on 2017/4/26.
  */
-
 class MainAdapter extends CommonAdapter<Bean> {
     MainAdapter(Context context, List<Bean> datas, int layoutId) {
         super(context, datas, layoutId);
