@@ -14,12 +14,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>xrv</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:xrv:1.0.0'
+compile 'com.dsiner.lib:xrv:1.1.0'
 ```
 
 
