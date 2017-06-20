@@ -130,6 +130,8 @@ compile 'com.dsiner.lib:xrv:1.1.0'
 
 More usage see [Demo](app/src/main/java/com/d/xrecyclerviewf/MainActivity.java)
 
+## Thanks
+- [XRecyclerView](https://github.com/jianghejie/XRecyclerView)  -a RecyclerView that implements pullrefresh , loadingmore and header featrues
 
 ## Licence
 
