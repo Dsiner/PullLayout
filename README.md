@@ -48,7 +48,28 @@ compile 'com.dsiner.lib:xrv:1.1.0'
         View header = LayoutInflater.from(this).inflate(R.layout.view_header, (ViewGroup) findViewById(android.R.id.content), false);
         recyclerView.addHeaderView(header);
 ```
-#### Step4. new Adapter
+#### Step4-1. new Adapter(SimpleType)
+```java
+        public class SimpleAdapter extends CommonAdapter<Bean> {
+            /**
+             * @param context:context
+             * @param datas:填充数据源
+             * @param layoutId:单一类型布局layout
+             */
+            public SimpleAdapter(Context context, List<Bean> datas, int layoutId) {
+                super(context, datas, layoutId);
+            }
+        
+            @Override
+            public void convert(int position, CommonHolder holder, Bean item) {
+                //通过通用holder方法赋值
+                holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
+            }
+        }
+        SimpleAdapter adapter = new SimpleAdapter(this, datas, R.layout.item_0);
+```
+
+#### Step4-2.  or new Adapter(MultipleType)
 ```java
         public class MultipleAdapter extends CommonAdapter<Bean> {
         
