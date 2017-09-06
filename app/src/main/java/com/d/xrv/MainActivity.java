@@ -1,9 +1,9 @@
-package com.d.xrecyclerviewf;
+package com.d.xrv;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.d.xrecyclerviewf.model.Bean;
+import com.d.xrv.model.Bean;
 import com.d.lib.xrv.LRecyclerView;
 
 import java.util.ArrayList;

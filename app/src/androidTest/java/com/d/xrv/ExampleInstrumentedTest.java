@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf;
+package com.d.xrv;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

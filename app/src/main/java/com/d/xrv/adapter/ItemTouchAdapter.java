@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf.adapter;
+package com.d.xrv.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import com.d.lib.xrv.adapter.CommonAdapter;
 import com.d.lib.xrv.adapter.CommonHolder;
 import com.d.lib.xrv.itemtouchhelper.ItemTouchHelperViewHolder;
-import com.d.xrecyclerviewf.R;
-import com.d.xrecyclerviewf.model.Bean;
+import com.d.xrv.R;
+import com.d.xrv.model.Bean;
 
 import java.util.Collections;
 import java.util.List;

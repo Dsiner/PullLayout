@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf;
+package com.d.xrv;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,12 +6,12 @@ import android.view.View;
 
 import com.d.lib.xrv.adapter.CommonAdapter;
 import com.d.lib.xrv.adapter.CommonHolder;
-import com.d.xrecyclerviewf.activity.ItemTouchRvActivity;
-import com.d.xrecyclerviewf.activity.MultipleLRvActivity;
-import com.d.xrecyclerviewf.activity.MultipleXRvActivity;
-import com.d.xrecyclerviewf.activity.SimpleLRvActivity;
-import com.d.xrecyclerviewf.activity.SimpleXRvActivity;
-import com.d.xrecyclerviewf.model.Bean;
+import com.d.xrv.activity.ItemTouchRvActivity;
+import com.d.xrv.activity.MultipleLRvActivity;
+import com.d.xrv.activity.MultipleXRvActivity;
+import com.d.xrv.activity.SimpleLRvActivity;
+import com.d.xrv.activity.SimpleXRvActivity;
+import com.d.xrv.model.Bean;
 
 import java.util.List;
 

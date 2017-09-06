@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.d.xrecyclerviewf">
+    package="com.d.xrv">
 
     <application
         android:allowBackup="true"
@@ -9,17 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.d.xrecyclerviewf.MainActivity">
+        <activity android:name="com.d.xrv.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.d.xrecyclerviewf.activity.SimpleLRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.MultipleLRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.SimpleXRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.MultipleXRvActivity" />
-        <activity android:name="com.d.xrecyclerviewf.activity.ItemTouchRvActivity" />
+        <activity android:name="com.d.xrv.activity.SimpleLRvActivity" />
+        <activity android:name="com.d.xrv.activity.MultipleLRvActivity" />
+        <activity android:name="com.d.xrv.activity.SimpleXRvActivity" />
+        <activity android:name="com.d.xrv.activity.MultipleXRvActivity" />
+        <activity android:name="com.d.xrv.activity.ItemTouchRvActivity" />
     </application>
 </manifest>

@@ -1,10 +1,10 @@
-package com.d.xrecyclerviewf;
+package com.d.xrv;
 
 import android.os.Handler;
 
 import com.d.lib.xrv.XRecyclerView;
 import com.d.lib.xrv.adapter.CommonAdapter;
-import com.d.xrecyclerviewf.model.Bean;
+import com.d.xrv.model.Bean;
 
 import java.util.ArrayList;
 

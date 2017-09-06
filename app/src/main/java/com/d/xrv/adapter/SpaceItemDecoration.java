@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf.adapter;
+package com.d.xrv.adapter;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

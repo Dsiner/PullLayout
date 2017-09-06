@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf.activity;
+package com.d.xrv.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,11 +10,11 @@ import android.view.View;
 
 import com.d.lib.xrv.itemtouchhelper.OnStartDragListener;
 import com.d.lib.xrv.itemtouchhelper.SimpleItemTouchHelperCallback;
-import com.d.xrecyclerviewf.Factory;
-import com.d.xrecyclerviewf.R;
-import com.d.xrecyclerviewf.adapter.ItemTouchAdapter;
-import com.d.xrecyclerviewf.adapter.SpaceItemDecoration;
-import com.d.xrecyclerviewf.model.Bean;
+import com.d.xrv.Factory;
+import com.d.xrv.R;
+import com.d.xrv.adapter.ItemTouchAdapter;
+import com.d.xrv.adapter.SpaceItemDecoration;
+import com.d.xrv.model.Bean;
 
 import java.util.ArrayList;
 

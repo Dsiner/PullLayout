@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf.activity;
+package com.d.xrv.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.d.xrecyclerviewf.Factory;
-import com.d.xrecyclerviewf.R;
-import com.d.xrecyclerviewf.adapter.MultipleAdapter;
-import com.d.xrecyclerviewf.model.Bean;
+import com.d.xrv.Factory;
+import com.d.xrv.R;
+import com.d.xrv.adapter.MultipleAdapter;
+import com.d.xrv.model.Bean;
 import com.d.lib.xrv.XRecyclerView;
 import com.d.lib.xrv.adapter.MultiItemTypeSupport;
 import com.d.lib.xrv.listener.IRecyclerView;

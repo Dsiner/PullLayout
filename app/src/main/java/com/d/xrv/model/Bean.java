@@ -1,4 +1,4 @@
-package com.d.xrecyclerviewf.model;
+package com.d.xrv.model;
 
 /**
  * Bean Test

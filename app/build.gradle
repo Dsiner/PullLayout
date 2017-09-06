@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
-        applicationId "com.d.xrecyclerviewf"
+        applicationId "com.d.xrv"
         minSdkVersion 10
         targetSdkVersion 21
         versionCode 1
