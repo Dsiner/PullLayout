@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/llyt_style0"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -17,7 +18,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
-            android:id="@+id/tv_des"
+            android:id="@+id/tv_style0"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
@@ -25,7 +26,7 @@
             android:textSize="16dp" />
 
         <ImageView
-            android:id="@+id/iv_handler"
+            android:id="@+id/iv_style0_handler"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:scaleType="centerCrop"
@@ -33,7 +34,16 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/v_style0"
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_gravity="bottom"
         android:background="#e3e4e5" />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_style1"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="@drawable/corner_bg_touch_normal"
+        android:gravity="center" />
+</FrameLayout>

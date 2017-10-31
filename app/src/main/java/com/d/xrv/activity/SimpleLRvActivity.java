@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Simple Type
  * Created by D on 2017/4/26.
  */
-public class SimpleLRvActivity extends Activity {
+public class SimpleLrvActivity extends Activity {
     private ArrayList<Bean> datas;
 
     @Override

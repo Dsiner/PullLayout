@@ -17,19 +17,19 @@ public class Factory {
     public static ArrayList<Bean> createMList() {
         ArrayList<Bean> datas = new ArrayList<>();
 
-        Bean bean = new Bean(10, 0, "", "simple type list");
+        Bean bean = new Bean(10, 0, "", "Simple Type List");
         datas.add(bean);
 
-        bean = new Bean(10, 1, "", "multiple type list");
+        bean = new Bean(10, 1, "", "Multiple Type List");
         datas.add(bean);
 
-        bean = new Bean(10, 2, "", "simple type pull xlist");
+        bean = new Bean(10, 2, "", "Simple Type Pull Xlist");
         datas.add(bean);
 
-        bean = new Bean(10, 3, "", "multiple type pull xlist");
+        bean = new Bean(10, 3, "", "Multiple Type Pull Xlist");
         datas.add(bean);
 
-        bean = new Bean(10, 4, "", "item touch");
+        bean = new Bean(10, 4, "", "Item Touch");
         datas.add(bean);
 
         return datas;

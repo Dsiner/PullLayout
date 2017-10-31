@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Multiple Type
  * Created by D on 2017/2/26.
  */
-public class MultipleLRvActivity extends Activity {
+public class MultipleLrvActivity extends Activity {
     private ArrayList<Bean> datas;
 
     @Override

@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Simple Type
  * Created by D on 2017/4/26.
  */
-public class SimpleXRvActivity extends Activity {
+public class SimpleXrvActivity extends Activity {
     private ArrayList<Bean> datas;
     private int refreshTime;
     private int times;

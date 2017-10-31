@@ -6,11 +6,11 @@ import android.view.View;
 
 import com.d.lib.xrv.adapter.CommonAdapter;
 import com.d.lib.xrv.adapter.CommonHolder;
-import com.d.xrv.activity.ItemTouchRvActivity;
-import com.d.xrv.activity.MultipleLRvActivity;
-import com.d.xrv.activity.MultipleXRvActivity;
-import com.d.xrv.activity.SimpleLRvActivity;
-import com.d.xrv.activity.SimpleXRvActivity;
+import com.d.xrv.activity.ItemTouchActivity;
+import com.d.xrv.activity.MultipleLrvActivity;
+import com.d.xrv.activity.MultipleXrvActivity;
+import com.d.xrv.activity.SimpleLrvActivity;
+import com.d.xrv.activity.SimpleXrvActivity;
 import com.d.xrv.model.Bean;
 
 import java.util.List;
@@ -35,19 +35,19 @@ class MainAdapter extends CommonAdapter<Bean> {
                 switch (item.index) {
                     case 0:
                     default:
-                        clz = SimpleLRvActivity.class;
+                        clz = SimpleLrvActivity.class;
                         break;
                     case 1:
-                        clz = MultipleLRvActivity.class;
+                        clz = MultipleLrvActivity.class;
                         break;
                     case 2:
-                        clz = SimpleXRvActivity.class;
+                        clz = SimpleXrvActivity.class;
                         break;
                     case 3:
-                        clz = MultipleXRvActivity.class;
+                        clz = MultipleXrvActivity.class;
                         break;
                     case 4:
-                        clz = ItemTouchRvActivity.class;
+                        clz = ItemTouchActivity.class;
                         break;
                 }
                 mContext.startActivity(new Intent(mContext, clz));

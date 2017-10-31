@@ -22,23 +22,26 @@ import java.util.ArrayList;
  * Simple Type
  * Created by D on 2017/4/26.
  */
-public class ItemTouchRvActivity extends Activity implements OnStartDragListener {
+public class ItemTouchActivity extends Activity implements OnStartDragListener {
     private ArrayList<Bean> datas;
     private RecyclerView recyclerView;
+    private ItemTouchAdapter adapter;
     private SpaceItemDecoration itemDecoration;
     private ItemTouchHelper itemTouchHelper;
-    private boolean isllayoutManager;
+    private boolean isLinear = true;//true：线性，false：网格
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_itemtouch_rv);
+        setContentView(R.layout.activity_itemtouch);
         datas = Factory.createDatas();
         init();
         findViewById(R.id.btn_toggle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setLayoutManager();
+                isLinear = !isLinear;
+                setLayoutManager(isLinear);
+                adapter.toggle(isLinear);
             }
         });
     }
@@ -48,9 +51,10 @@ public class ItemTouchRvActivity extends Activity implements OnStartDragListener
         recyclerView = (RecyclerView) this.findViewById(R.id.rv_list);
         recyclerView.setHasFixedSize(true);
         //step9-2:为RecyclerView指定布局管理对象
-        setLayoutManager();
+        setLayoutManager(isLinear);
         //step9-3:setAdapter
-        ItemTouchAdapter adapter = new ItemTouchAdapter(this, datas, R.layout.item_touch);
+        adapter = new ItemTouchAdapter(this, datas, R.layout.item_touch);
+        adapter.toggle(isLinear);
         adapter.setOnStartDragListener(this);
         recyclerView.setAdapter(adapter);
         //step9-4:关联ItemTouchHelper
@@ -60,20 +64,19 @@ public class ItemTouchRvActivity extends Activity implements OnStartDragListener
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void setLayoutManager() {
-        if (isllayoutManager) {
+    private void setLayoutManager(boolean isLinear) {
+        if (isLinear) {
+            //线性布局
+            recyclerView.removeItemDecoration(itemDecoration);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } else {
             //网格布局
             if (itemDecoration == null) {
                 itemDecoration = new SpaceItemDecoration(10);
             }
             recyclerView.addItemDecoration(itemDecoration);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
-        } else {
-            //线性布局
-            recyclerView.removeItemDecoration(itemDecoration);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
-        isllayoutManager = !isllayoutManager;
     }
 
     @Override

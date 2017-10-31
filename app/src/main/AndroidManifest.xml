@@ -16,10 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.d.xrv.activity.SimpleLRvActivity" />
-        <activity android:name="com.d.xrv.activity.MultipleLRvActivity" />
-        <activity android:name="com.d.xrv.activity.SimpleXRvActivity" />
-        <activity android:name="com.d.xrv.activity.MultipleXRvActivity" />
-        <activity android:name="com.d.xrv.activity.ItemTouchRvActivity" />
+        <activity android:name="com.d.xrv.activity.SimpleLrvActivity" />
+        <activity android:name="com.d.xrv.activity.MultipleLrvActivity" />
+        <activity android:name="com.d.xrv.activity.SimpleXrvActivity" />
+        <activity android:name="com.d.xrv.activity.MultipleXrvActivity" />
+        <activity android:name="com.d.xrv.activity.ItemTouchActivity" />
     </application>
 </manifest>
