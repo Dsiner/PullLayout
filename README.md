@@ -5,8 +5,8 @@
 
 ## Demo
 <p>
-   <img src="https://github.com/Dsiner/xRecyclerViewF/blob/master/screenshot/screenshot00.gif" width="320" alt="Screenshot"/>
-   <img src="https://github.com/Dsiner/xRecyclerViewF/blob/master/screenshot/screenshot01.gif" width="320" alt="Screenshot"/>
+   <img src="https://github.com/Dsiner/Resouce/blob/master/lib/Xrv/xrv_list.gif" width="320" alt="Screenshot"/>
+   <img src="https://github.com/Dsiner/Resouce/blob/master/lib/Xrv/xrv_drag.gif" width="320" alt="Screenshot"/>
 </p>
 
 ## Setup
