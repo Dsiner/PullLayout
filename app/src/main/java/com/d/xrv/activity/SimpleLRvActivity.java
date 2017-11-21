@@ -3,11 +3,11 @@ package com.d.xrv.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.d.lib.xrv.LRecyclerView;
 import com.d.xrv.Factory;
 import com.d.xrv.R;
 import com.d.xrv.adapter.SimpleAdapter;
 import com.d.xrv.model.Bean;
-import com.d.lib.xrv.LRecyclerView;
 
 import java.util.ArrayList;
 

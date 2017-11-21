@@ -6,16 +6,14 @@ import android.support.design.widget.AppBarLayout;
  * OnOffsetChangedListener
  * Created by jianghejie on 16/6/19.
  */
-
 public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
+    private State mCurrentState = State.IDLE;
 
     public enum State {
         EXPANDED,
         COLLAPSED,
         IDLE
     }
-
-    private State mCurrentState = State.IDLE;
 
     @Override
     public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {

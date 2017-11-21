@@ -123,19 +123,9 @@ public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if (canLoadMore) {
-            if (adapter != null) {
-                return getHeadersCount() + adapter.getItemCount() + 2;
-            } else {
-                return getHeadersCount() + 2;
-            }
-        } else {
-            if (adapter != null) {
-                return getHeadersCount() + adapter.getItemCount() + 1;
-            } else {
-                return getHeadersCount() + 1;
-            }
-        }
+        return 1 + getHeadersCount()
+                + (adapter != null ? adapter.getItemCount() : 0)
+                + (canLoadMore ? 1 : 0);
     }
 
     @Override
@@ -157,7 +147,7 @@ public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (adjPosition < adapterCount) {
                 int type = adapter.getItemViewType(adjPosition);
                 if (isReservedItemViewType(type)) {
-                    throw new IllegalStateException("XRecyclerView require itemViewType in adapter should be less than 10000 ");
+                    throw new IllegalStateException("XRecyclerView require itemViewType in adapter should be less than 10000");
                 }
                 return type;
             }
@@ -222,8 +212,7 @@ public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-        if (lp != null
-                && lp instanceof StaggeredGridLayoutManager.LayoutParams
+        if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams
                 && (isHeader(holder.getLayoutPosition()) || isRefreshHeader(holder.getLayoutPosition()) || isFooter(holder.getLayoutPosition()))) {
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
             p.setFullSpan(true);

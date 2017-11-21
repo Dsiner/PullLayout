@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.d.lib.xrv.XRecyclerView;
+import com.d.lib.xrv.adapter.MultiItemTypeSupport;
+import com.d.lib.xrv.listener.IRecyclerView;
 import com.d.xrv.Factory;
 import com.d.xrv.R;
 import com.d.xrv.adapter.MultipleAdapter;
 import com.d.xrv.model.Bean;
-import com.d.lib.xrv.XRecyclerView;
-import com.d.lib.xrv.adapter.MultiItemTypeSupport;
-import com.d.lib.xrv.listener.IRecyclerView;
 
 import java.util.ArrayList;
 
