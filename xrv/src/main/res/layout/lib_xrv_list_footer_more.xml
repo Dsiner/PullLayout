@@ -18,6 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:gravity="center"
-        android:text="@string/list_loading"
-        android:textColor="@color/pull_refresh_text" />
+        android:text="@string/lib_xrv_list_loading"
+        android:textColor="@color/lib_xrv_pull_refresh_text" />
 </LinearLayout>

@@ -24,7 +24,7 @@
                 android:layout_width="35dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_pulltorefresh_arrow" />
+                android:src="@drawable/lib_xrv_ic_pulltorefresh_arrow" />
 
             <!-- 进度条 -->
             <com.d.lib.xrv.view.LoadingView
@@ -48,8 +48,8 @@
                 android:id="@+id/tv_head_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/list_header_hint_release"
-                android:textColor="@color/pull_refresh_text"
+                android:text="@string/lib_xrv_list_header_hint_release"
+                android:textColor="@color/lib_xrv_pull_refresh_text"
                 android:textSize="15sp" />
 
             <!-- 最近更新 -->
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="上次更新:"
-                android:textColor="@color/pull_refresh_text"
+                android:textColor="@color/lib_xrv_pull_refresh_text"
                 android:textSize="13sp" />
         </LinearLayout>
     </RelativeLayout>

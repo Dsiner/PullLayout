@@ -53,7 +53,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
     private void initView() {
         // 初始情况，设置下拉刷新view高度为0
         mContainer = (LinearLayout) LayoutInflater.from(getContext()).inflate(
-                R.layout.list_head, null);
+                R.layout.lib_xrv_list_head, null);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         lp.setMargins(0, 0, 0, 0);
         this.setLayoutParams(lp);
@@ -113,20 +113,20 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
                 if (mState == ListState.STATE_REFRESHING) {
                     imgHeadArrow.clearAnimation();
                 }
-                tvHeadTip.setText(getResources().getString(R.string.list_header_hint_normal));
+                tvHeadTip.setText(getResources().getString(R.string.lib_xrv_list_header_hint_normal));
                 break;
             case ListState.STATE_RELEASE_TO_REFRESH:
                 if (mState != ListState.STATE_RELEASE_TO_REFRESH) {
                     imgHeadArrow.clearAnimation();
                     imgHeadArrow.startAnimation(mRotateUpAnim);
-                    tvHeadTip.setText(getResources().getString(R.string.list_header_hint_release));
+                    tvHeadTip.setText(getResources().getString(R.string.lib_xrv_list_header_hint_release));
                 }
                 break;
             case ListState.STATE_REFRESHING:
-                tvHeadTip.setText(getResources().getString(R.string.list_refreshing));
+                tvHeadTip.setText(getResources().getString(R.string.lib_xrv_list_refreshing));
                 break;
             case ListState.STATE_DONE:
-                tvHeadTip.setText(getResources().getString(R.string.list_refresh_done));
+                tvHeadTip.setText(getResources().getString(R.string.lib_xrv_list_refresh_done));
                 break;
             default:
         }
@@ -231,7 +231,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
      */
     public void updateTime() {
         if (tvHeadLastUpdateTime != null) {
-            tvHeadLastUpdateTime.setText(getResources().getString(R.string.list_header_last_time)
+            tvHeadLastUpdateTime.setText(getResources().getString(R.string.lib_xrv_list_header_last_time)
                     + new SimpleDateFormat(DATE_FORMAT_STR, Locale.CHINA)
                     .format(new Date()));
         }

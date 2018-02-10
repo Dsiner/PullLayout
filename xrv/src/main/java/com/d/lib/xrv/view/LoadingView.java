@@ -50,7 +50,7 @@ public class LoadingView extends View {
 
     private void init() {
         isFirst = true;
-        color = getResources().getColor(R.color.pull_refresh_text);
+        color = getResources().getColor(R.color.lib_xrv_pull_refresh_text);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         minAlpha = 50;
         daration = 1000;

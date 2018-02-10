@@ -28,13 +28,13 @@ public class LoadingMoreFooter extends LinearLayout implements View.OnClickListe
 
     public void initView(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View root = inflater.inflate(R.layout.list_footer_more, this);
+        View root = inflater.inflate(R.layout.lib_xrv_list_footer_more, this);
         setLayoutParams(new RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         ldvLoading = (LoadingView) root.findViewById(R.id.ldv_loading);
         tvLoadMore = (TextView) root.findViewById(R.id.tv_load_more);
-        tvLoadMore.setText(getResources().getString(R.string.list_loading));
+        tvLoadMore.setText(getResources().getString(R.string.lib_xrv_list_loading));
     }
 
     public void setProgressStyle(int style) {
@@ -45,25 +45,25 @@ public class LoadingMoreFooter extends LinearLayout implements View.OnClickListe
             case ListState.STATE_LOADING:
                 setOnClickListener(null);
                 ldvLoading.setVisibility(View.VISIBLE);
-                tvLoadMore.setText(getResources().getString(R.string.list_loading));
+                tvLoadMore.setText(getResources().getString(R.string.lib_xrv_list_loading));
                 this.setVisibility(View.VISIBLE);
                 break;
             case ListState.STATE_COMPLETE:
                 setOnClickListener(null);
                 ldvLoading.setVisibility(View.GONE);
-                tvLoadMore.setText(getResources().getString(R.string.list_loading_complete));
+                tvLoadMore.setText(getResources().getString(R.string.lib_xrv_list_loading_complete));
                 this.setVisibility(View.GONE);
                 break;
             case ListState.STATE_NOMORE:
                 setOnClickListener(null);
                 ldvLoading.setVisibility(View.GONE);
-                tvLoadMore.setText(getResources().getString(R.string.list_nomore));
+                tvLoadMore.setText(getResources().getString(R.string.lib_xrv_list_nomore));
                 this.setVisibility(View.VISIBLE);
                 break;
             case ListState.STATE_LOADMORE_ERROR:
                 setOnClickListener(this);
                 ldvLoading.setVisibility(View.GONE);
-                tvLoadMore.setText(getResources().getString(R.string.list_load_more_error));
+                tvLoadMore.setText(getResources().getString(R.string.lib_xrv_list_load_more_error));
                 this.setVisibility(View.VISIBLE);
                 break;
         }
