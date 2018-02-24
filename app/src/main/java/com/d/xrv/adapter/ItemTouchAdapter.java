@@ -52,7 +52,7 @@ public class ItemTouchAdapter extends CommonAdapter<Bean> {
 
     private void gridConvert(final CommonHolder holder, Bean item) {
         final TextView tvHandler = holder.getView(R.id.tv_style1);
-        tvHandler.setText(item.name);
+        tvHandler.setText(item.content);
         tvHandler.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -81,7 +81,7 @@ public class ItemTouchAdapter extends CommonAdapter<Bean> {
     }
 
     private void linearConvert(final CommonHolder holder, Bean item) {
-        holder.setText(R.id.tv_style0, item.name);
+        holder.setText(R.id.tv_style0, item.content);
         ImageView ivHandler = holder.getView(R.id.iv_style0_handler);
         ivHandler.setOnTouchListener(new View.OnTouchListener() {
             @Override

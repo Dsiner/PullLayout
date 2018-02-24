@@ -30,16 +30,16 @@ public class MultipleAdapter extends CommonAdapter<Bean> {
         //先判断mLayoutId布局类型，后通过通用holder方法赋值
         switch (holder.mLayoutId) {
             case R.layout.item_0:
-                holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
+                holder.setText(R.id.tv_des, "P:" + position + "_" + item.content);
                 break;
             case R.layout.item_1:
-                holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
+                holder.setText(R.id.tv_des, "P:" + position + "_" + item.content);
                 break;
             case R.layout.item_2:
-                holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
+                holder.setText(R.id.tv_des, "P:" + position + "_" + item.content);
                 break;
             case R.layout.item_3:
-                holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
+                holder.setText(R.id.tv_des, "P:" + position + "_" + item.content);
                 break;
         }
     }

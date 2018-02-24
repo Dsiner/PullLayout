@@ -10,21 +10,17 @@ import android.view.View;
 
 import com.d.lib.xrv.itemtouchhelper.OnStartDragListener;
 import com.d.lib.xrv.itemtouchhelper.SimpleItemTouchHelperCallback;
-import com.d.xrv.Factory;
 import com.d.xrv.R;
 import com.d.xrv.adapter.ItemTouchAdapter;
 import com.d.xrv.adapter.SpaceItemDecoration;
-import com.d.xrv.model.Bean;
-
-import java.util.ArrayList;
+import com.d.xrv.presenter.Factory;
 
 /**
  * Simple Type
  * Created by D on 2017/4/26.
  */
 public class ItemTouchActivity extends Activity implements OnStartDragListener {
-    private ArrayList<Bean> datas;
-    private RecyclerView recyclerView;
+    private RecyclerView rvList;
     private ItemTouchAdapter adapter;
     private SpaceItemDecoration itemDecoration;
     private ItemTouchHelper itemTouchHelper;
@@ -34,7 +30,6 @@ public class ItemTouchActivity extends Activity implements OnStartDragListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itemtouch);
-        datas = Factory.createDatas();
         init();
         findViewById(R.id.btn_toggle).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,34 +43,34 @@ public class ItemTouchActivity extends Activity implements OnStartDragListener {
 
     private void init() {
         //step9-1:获取引用-!!!!!!!!!!不要使用XRecyclerView
-        recyclerView = (RecyclerView) this.findViewById(R.id.rv_list);
-        recyclerView.setHasFixedSize(true);
+        rvList = (RecyclerView) this.findViewById(R.id.rv_list);
+        rvList.setHasFixedSize(true);
         //step9-2:为RecyclerView指定布局管理对象
         setLayoutManager(isLinear);
         //step9-3:setAdapter
-        adapter = new ItemTouchAdapter(this, datas, R.layout.item_touch);
+        adapter = new ItemTouchAdapter(this, Factory.createDatas(15), R.layout.item_touch);
         adapter.toggle(isLinear);
         adapter.setOnStartDragListener(this);
-        recyclerView.setAdapter(adapter);
+        rvList.setAdapter(adapter);
         //step9-4:关联ItemTouchHelper
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         //!!!!!!!!!!不要使用XRecyclerView-重要的事情说三遍
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        itemTouchHelper.attachToRecyclerView(rvList);
     }
 
     private void setLayoutManager(boolean isLinear) {
         if (isLinear) {
             //线性布局
-            recyclerView.removeItemDecoration(itemDecoration);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            rvList.removeItemDecoration(itemDecoration);
+            rvList.setLayoutManager(new LinearLayoutManager(this));
         } else {
             //网格布局
             if (itemDecoration == null) {
                 itemDecoration = new SpaceItemDecoration(10);
             }
-            recyclerView.addItemDecoration(itemDecoration);
-            recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
+            rvList.addItemDecoration(itemDecoration);
+            rvList.setLayoutManager(new GridLayoutManager(this, 4));
         }
     }
 

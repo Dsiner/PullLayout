@@ -5,33 +5,29 @@ import android.os.Bundle;
 
 import com.d.lib.xrv.LRecyclerView;
 import com.d.lib.xrv.adapter.MultiItemTypeSupport;
-import com.d.xrv.Factory;
 import com.d.xrv.R;
 import com.d.xrv.adapter.MultipleAdapter;
 import com.d.xrv.model.Bean;
-
-import java.util.ArrayList;
+import com.d.xrv.presenter.Factory;
 
 /**
  * Multiple Type
  * Created by D on 2017/2/26.
  */
 public class MultipleLrvActivity extends Activity {
-    private ArrayList<Bean> datas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_lrv);
-        datas = Factory.createDatas();
         init();
     }
 
     private void init() {
         //step1:获取引用
-        LRecyclerView recyclerView = (LRecyclerView) this.findViewById(R.id.lrv_list);
+        LRecyclerView rvList = (LRecyclerView) this.findViewById(R.id.lrv_list);
         //step2:new Adapter
-        MultipleAdapter adapter = new MultipleAdapter(this, datas, new MultiItemTypeSupport<Bean>() {
+        MultipleAdapter adapter = new MultipleAdapter(this, Factory.createDatas(15), new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
                 //step2-2:根据type返回layout布局
@@ -56,6 +52,6 @@ public class MultipleLrvActivity extends Activity {
             }
         });
         //step3:setAdapter
-        recyclerView.setAdapter(adapter);
+        rvList.setAdapter(adapter);
     }
 }

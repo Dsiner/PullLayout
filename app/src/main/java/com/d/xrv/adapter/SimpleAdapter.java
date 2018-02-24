@@ -26,6 +26,6 @@ public class SimpleAdapter extends CommonAdapter<Bean> {
     @Override
     public void convert(int position, CommonHolder holder, Bean item) {
         //通过通用holder方法赋值
-        holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
+        holder.setText(R.id.tv_des, "P:" + position + "_" + item.content);
     }
 }

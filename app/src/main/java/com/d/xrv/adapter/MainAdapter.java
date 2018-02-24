@@ -1,4 +1,4 @@
-package com.d.xrv;
+package com.d.xrv.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.d.lib.xrv.adapter.CommonAdapter;
 import com.d.lib.xrv.adapter.CommonHolder;
+import com.d.xrv.R;
 import com.d.xrv.activity.ItemTouchActivity;
 import com.d.xrv.activity.MultipleLrvActivity;
 import com.d.xrv.activity.MultipleXrvActivity;
@@ -19,8 +20,9 @@ import java.util.List;
  * MainAdapter
  * Created by D on 2017/4/26.
  */
-class MainAdapter extends CommonAdapter<Bean> {
-    MainAdapter(Context context, List<Bean> datas, int layoutId) {
+public class MainAdapter extends CommonAdapter<Bean> {
+
+    public MainAdapter(Context context, List<Bean> datas, int layoutId) {
         super(context, datas, layoutId);
     }
 

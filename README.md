@@ -1,4 +1,4 @@
-# Commen RecyclerView for Android
+# Common RecyclerView for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [ ![Download](https://api.bintray.com/packages/dsiner/maven/xrv/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
@@ -23,7 +23,6 @@ or Gradle:
 compile 'com.dsiner.lib:xrv:1.1.0'
 ```
 
-
 ## Usage
 ```xml
     <com.d.lib.xrv.XRecyclerView
@@ -35,19 +34,18 @@ compile 'com.dsiner.lib:xrv:1.1.0'
 #### Step1. 获取引用
 ```java
         //step1:获取引用
-        XRecyclerView recyclerView = (XRecyclerView) this.findViewById(R.id.xrv_list);
+        XRecyclerView xrvList = (XRecyclerView) this.findViewById(R.id.xrv_list);
 ```
     
 #### Step2. 设置LayoutManager
 ```java
-        recyclerView.showAsList();//listview展现形式
+        xrvList.showAsList();//listview展现形式
 ```
-
 
 #### Step3. setHeader(可选)
 ```java
         View header = LayoutInflater.from(this).inflate(R.layout.view_header, (ViewGroup) findViewById(android.R.id.content), false);
-        recyclerView.addHeaderView(header);
+        xrvList.addHeaderView(header);
 ```
 #### Step4-1. new Adapter(SimpleType)
 ```java
@@ -131,12 +129,12 @@ compile 'com.dsiner.lib:xrv:1.1.0'
 
 #### Step5. setAdapter
 ```java
-        recyclerView.setAdapter(adapter);
+        xrvList.setAdapter(adapter);
 ```
 
 #### Step6. setListener
 ```java
-        recyclerView.setLoadingListener(new IRecyclerView.LoadingListener() {
+        xrvList.setLoadingListener(new IRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 ...
