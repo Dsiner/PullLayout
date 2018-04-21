@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [ ![Download](https://api.bintray.com/packages/dsiner/maven/xrv/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
+[![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
 
 ## Demo
 <p>
@@ -15,12 +16,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>xrv</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:xrv:1.1.0'
+compile 'com.dsiner.lib:xrv:1.1.1'
 ```
 
 ## Usage
