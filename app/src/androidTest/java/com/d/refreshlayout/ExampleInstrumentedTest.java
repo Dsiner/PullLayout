@@ -1,4 +1,4 @@
-package com.d.xrefreshlayout;
+package com.d.refreshlayout;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -17,10 +17,10 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
-    public void useAppContext() throws Exception {
+    public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.d.xrefreshlayout", appContext.getPackageName());
+        assertEquals("com.d.refreshlayout", appContext.getPackageName());
     }
 }
