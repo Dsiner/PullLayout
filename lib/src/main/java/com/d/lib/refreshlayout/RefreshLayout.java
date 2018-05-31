@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -22,23 +23,28 @@ import java.lang.ref.WeakReference;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class RefreshLayout extends ViewGroup {
+    private final static int GRAVITY_TOP = 0x1;
+    private final static int GRAVITY_BOTTOM = 0x2;
+    private final static int GRAVITY_LEFT = 0x4;
+    private final static int GRAVITY_RIGHT = 0x8;
 
     private int width;
     private int height;
 
     private int touchSlop;
-    private int slideSlop;
     private int duration = 210;
     private float dX, dY;//TouchEvent_ACTION_DOWN坐标(dX,dY)
-    private float lastY;//TouchEvent最后一次坐标(lastX,lastY)
+    private float lastX, lastY;//TouchEvent最后一次坐标(lastX,lastY)
     private boolean isEventValid = true;//本次touch事件是否有效
-    private boolean isMoveValid;
+    private boolean isMoveValidX, isMoveValidY;
     private boolean isRunning;
     private ValueAnimator animation;
     private AnimUpdateListener animUpdateListener;
     private AnimListenerAdapter animListenerAdapter;
     private float factor;//进度因子:0-1
-    private int curY, dstY;
+    private int curX, curY, dst;
+    private boolean enable;
+    private int gravity;
 
     static class AnimListenerAdapter extends AnimatorListenerAdapter {
         private final WeakReference<RefreshLayout> reference;
@@ -55,7 +61,6 @@ public class RefreshLayout extends ViewGroup {
             RefreshLayout view = reference.get();
             view.factor = 1;
         }
-
 
         @Override
         public void onAnimationEnd(Animator animation) {
@@ -91,9 +96,14 @@ public class RefreshLayout extends ViewGroup {
             }
             RefreshLayout view = reference.get();
             view.factor = (float) animation.getAnimatedValue();//更新进度因子
-            float scrollY = view.curY + (view.dstY - view.curY) * view.factor;
-            view.scrollTo(0, (int) scrollY);
-            view.postInvalidate();//刷新
+            if (view.dst == -1) {
+                float scrollY = view.curY - view.curY * view.factor;
+                view.scrollTo(0, (int) scrollY);
+            } else if (view.dst == 1) {
+                float scrollX = view.curX - view.curX * view.factor;
+                view.scrollTo((int) scrollX, 0);
+            }
+            view.postInvalidate();
         }
 
         private boolean isFinish() {
@@ -117,12 +127,19 @@ public class RefreshLayout extends ViewGroup {
 
     public RefreshLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initTypedArray(context, attrs);
         init(context);
+    }
+
+    private void initTypedArray(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.lib_refresh_RefreshLayout);
+        enable = typedArray.getBoolean(R.styleable.lib_refresh_RefreshLayout_lib_refresh_refreshlayout_enable, true);
+        gravity = typedArray.getInt(R.styleable.lib_refresh_RefreshLayout_lib_refresh_refreshlayout_gravity, 0x11);
+        typedArray.recycle();
     }
 
     private void init(Context context) {
         touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        slideSlop = UIUtil.dip2px(context, 45);
         animation = ValueAnimator.ofFloat(0f, 1f);
         animation.setDuration(duration);
         animation.setInterpolator(new LinearInterpolator());
@@ -169,14 +186,18 @@ public class RefreshLayout extends ViewGroup {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (!enable) {
+            return super.dispatchTouchEvent(ev);
+        }
         final float eX = ev.getX();
         final float eY = ev.getY();
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 stop();
-                dX = eX;
+                lastX = dX = eX;
                 lastY = dY = eY;
-                isMoveValid = false;
+                isMoveValidX = false;
+                isMoveValidY = false;
                 isEventValid = true;
                 super.dispatchTouchEvent(ev);
                 return true;
@@ -184,13 +205,43 @@ public class RefreshLayout extends ViewGroup {
                 if (!isEventValid) {
                     return false;
                 }
-                int offset = (int) (lastY - eY);
+                int offsetX = (int) (lastX - eX);
+                int offsetY = (int) (lastY - eY);
+                boolean canScrollTop = getScrollY() + offsetY >= 0;
+                boolean canScrollBottom = getScrollY() + offsetY <= 0;
+                boolean canScrollLeft = getScrollX() + offsetX >= 0;
+                boolean canScrollRight = getScrollX() + offsetX <= 0;
+                lastX = eX;
                 lastY = eY;
-                if (!isMoveValid && Math.abs(eY - dY) > touchSlop && Math.abs(eY - dY) > Math.abs(eX - dX)) {
-                    isMoveValid = true;
+                if (!(isMoveValidX || isMoveValidY)) {
+                    if (Math.abs(eX - dX) > touchSlop && Math.abs(eX - dX) > Math.abs(eY - dY)) {
+                        isMoveValidX = true;
+                    } else if (Math.abs(eY - dY) > touchSlop && Math.abs(eY - dY) > Math.abs(eX - dX)) {
+                        isMoveValidY = true;
+                    }
                 }
-                if (isMoveValid) {
-                    scrollBy(0, (int) (offset * 0.4f));
+                if (isMoveValidX) {
+                    if (getScrollY() != 0) {
+                        scrollTo(0, 0);
+                    }
+                    if (!isGravityEnable(GRAVITY_LEFT) && (getScrollX() < 0 || !canScrollLeft)) {
+                        scrollBy(0, 0);
+                    } else if (!isGravityEnable(GRAVITY_RIGHT) && (getScrollX() > 0 || !canScrollRight)) {
+                        scrollBy(0, 0);
+                    } else {
+                        scrollBy((int) (offsetX * 0.4f), 0);
+                    }
+                } else if (isMoveValidY) {
+                    if (getScrollX() != 0) {
+                        scrollTo(0, 0);
+                    }
+                    if (!isGravityEnable(GRAVITY_TOP) && (getScrollY() < 0 || !canScrollTop)) {
+                        scrollBy(0, 0);
+                    } else if (!isGravityEnable(GRAVITY_BOTTOM) && (getScrollY() > 0 || !canScrollBottom)) {
+                        scrollBy(0, 0);
+                    } else {
+                        scrollBy(0, (int) (offsetY * 0.4f));
+                    }
                 } else {
                     super.dispatchTouchEvent(ev);
                 }
@@ -200,9 +251,13 @@ public class RefreshLayout extends ViewGroup {
                 if (!isEventValid) {
                     return false;
                 }
-                if (isMoveValid) {
-                    dealUp(getScrollY());
-                    isMoveValid = false;
+                if (isMoveValidX) {
+                    dealUp(true);
+                    isMoveValidX = false;
+                    return true;
+                } else if (isMoveValidY) {
+                    dealUp(false);
+                    isMoveValidY = false;
                     return true;
                 }
                 break;
@@ -210,10 +265,26 @@ public class RefreshLayout extends ViewGroup {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void dealUp(int scrollY) {
+    private void dealUp(boolean horizontal) {
+        curX = getScrollX();
         curY = getScrollY();
-        dstY = 0;
+        dst = horizontal ? 1 : -1;
         start();
+    }
+
+    private boolean isGravityEnable(int g) {
+        switch (g) {
+            case GRAVITY_TOP:
+                return (gravity & 0x1) != 0;
+            case GRAVITY_BOTTOM:
+                return (gravity & 0x2) != 0;
+            case GRAVITY_LEFT:
+                return (gravity & 0x4) != 0;
+            case GRAVITY_RIGHT:
+                return (gravity & 0x8) != 0;
+            default:
+                return false;
+        }
     }
 
     public void start() {
