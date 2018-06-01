@@ -150,8 +150,6 @@ public class RefreshLayout extends ViewGroup {
         animation.setInterpolator(new DecelerateInterpolator());
         animUpdateListener = new AnimUpdateListener(this);
         animListenerAdapter = new AnimListenerAdapter(this);
-        animation.addUpdateListener(animUpdateListener);
-        animation.addListener(animListenerAdapter);
     }
 
     @Override
@@ -213,8 +211,6 @@ public class RefreshLayout extends ViewGroup {
                 }
                 int offsetX = (int) (lastX - eX);
                 int offsetY = (int) (lastY - eY);
-                boolean scrollVertically = offsetY > 0;
-                boolean scrollHorizontally = offsetX > 0;
                 boolean canScrollTop = isAbsList() ? ViewCompat.canScrollVertically(getChildAt(0), -1)
                         : getScrollY() + offsetY >= 0;
                 boolean canScrollBottom = isAbsList() ? ViewCompat.canScrollVertically(getChildAt(0), 1)
@@ -236,60 +232,12 @@ public class RefreshLayout extends ViewGroup {
                     if (getScrollY() != 0) {
                         scrollTo(0, 0);
                     }
-                    if (!isGravityEnable(GRAVITY_LEFT) && (!canScrollLeft || getScrollX() < 0)) {
-                        super.dispatchTouchEvent(ev);
-                        scrollBy(0, 0);
-                    } else if (!isGravityEnable(GRAVITY_RIGHT) && (!canScrollRight) || getScrollX() > 0) {
-                        super.dispatchTouchEvent(ev);
-                        scrollBy(0, 0);
-                    } else {
-                        if (!scrollHorizontally && (!canScrollLeft || getScrollX() > 0)
-                                || scrollHorizontally && (!canScrollRight || getScrollX() < 0)) {
-                            if (!cancle[0]) {
-                                cancle[0] = true;
-                                ev.setAction(MotionEvent.ACTION_CANCEL);
-                                super.dispatchTouchEvent(ev);
-                            }
-                            scrollBy((int) (offsetX * dampFactor), 0);
-                        } else {
-                            if (cancle[0]) {
-                                cancle[0] = false;
-                                dX = eX;
-                                dY = eY;
-                                ev.setAction(MotionEvent.ACTION_DOWN);
-                            }
-                            super.dispatchTouchEvent(ev);
-                        }
-                    }
+                    dealMove(true, ev, offsetX, canScrollLeft, canScrollRight);
                 } else if (isMoveValidY) {
                     if (getScrollX() != 0) {
                         scrollTo(0, 0);
                     }
-                    if (!isGravityEnable(GRAVITY_TOP) && (!canScrollTop || getScrollY() < 0)) {
-                        super.dispatchTouchEvent(ev);
-                        scrollBy(0, 0);
-                    } else if (!isGravityEnable(GRAVITY_BOTTOM) && (!canScrollBottom || getScrollY() > 0)) {
-                        super.dispatchTouchEvent(ev);
-                        scrollBy(0, 0);
-                    } else {
-                        if (!scrollVertically && (!canScrollTop || getScrollY() > 0)
-                                || scrollVertically && (!canScrollBottom || getScrollY() < 0)) {
-                            if (!cancle[0]) {
-                                cancle[0] = true;
-                                cancle[1] = false;
-                                ev.setAction(MotionEvent.ACTION_CANCEL);
-                                super.dispatchTouchEvent(ev);
-                            }
-                            scrollBy(0, (int) (offsetY * dampFactor));
-                        } else {
-                            if (cancle[0]) {
-                                cancle[0] = false;
-                                cancle[1] = true;
-                                ev.setAction(MotionEvent.ACTION_DOWN);
-                            }
-                            super.dispatchTouchEvent(ev);
-                        }
-                    }
+                    dealMove(false, ev, offsetY, canScrollTop, canScrollBottom);
                 } else {
                     super.dispatchTouchEvent(ev);
                 }
@@ -315,6 +263,84 @@ public class RefreshLayout extends ViewGroup {
                 break;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private void dealMove(boolean orientation, MotionEvent ev, int offset,
+                          boolean canScrollN, boolean canScrollP) {
+        boolean isPositive = offset > 0;
+        int scroll = orientation ? getScrollX() : getScrollY();
+
+        int gravityN = orientation ? GRAVITY_LEFT : GRAVITY_TOP;
+        int gravityP = orientation ? GRAVITY_RIGHT : GRAVITY_BOTTOM;
+
+        if (isPositive) {
+            if (isGravityEnable(gravityP)) {
+                if (scroll < 0) {
+                    intercept(orientation, ev, offset);
+                } else {
+                    if (canScrollP) {
+                        releaseIntercept(ev);
+                    } else {
+                        intercept(orientation, ev, offset);
+                    }
+                }
+            } else {
+                if (scroll < 0) {
+                    intercept(orientation, ev, offset);
+                } else {
+                    if (canScrollP) {
+                        releaseIntercept(ev);
+                    } else {
+                        scrollTo(0, 0);
+                    }
+                }
+            }
+        } else {
+            if (isGravityEnable(gravityN)) {
+                if (scroll > 0) {
+                    intercept(orientation, ev, offset);
+                } else {
+                    if (canScrollN) {
+                        releaseIntercept(ev);
+                    } else {
+                        intercept(orientation, ev, offset);
+                    }
+                }
+            } else {
+                if (scroll > 0) {
+                    intercept(orientation, ev, offset);
+                } else {
+                    if (canScrollN) {
+                        releaseIntercept(ev);
+                    } else {
+                        scrollTo(0, 0);
+                    }
+                }
+            }
+        }
+    }
+
+    private void intercept(boolean orientation, MotionEvent ev, int offset) {
+        if (!cancle[0]) {
+            cancle[0] = true;
+            cancle[1] = false;
+            ev.setAction(MotionEvent.ACTION_CANCEL);
+            super.dispatchTouchEvent(ev);
+        }
+        if (orientation) {
+            scrollBy((int) (offset * dampFactor), 0);
+        } else {
+            scrollBy(0, (int) (offset * dampFactor));
+        }
+    }
+
+    private void releaseIntercept(MotionEvent ev) {
+        if (cancle[0]) {
+            cancle[0] = false;
+            cancle[1] = true;
+            ev.setAction(MotionEvent.ACTION_DOWN);
+        }
+        super.dispatchTouchEvent(ev);
     }
 
     private void dealUp(boolean horizontal) {
@@ -348,6 +374,8 @@ public class RefreshLayout extends ViewGroup {
         stop();
         isRunning = true;
         if (animation != null) {
+            animation.addUpdateListener(animUpdateListener);
+            animation.addListener(animListenerAdapter);
             animation.start();
         }
     }
@@ -355,6 +383,8 @@ public class RefreshLayout extends ViewGroup {
     public void stop() {
         isRunning = false;
         if (animation != null) {
+            animation.removeAllUpdateListeners();
+            animation.removeAllListeners();
             animation.end();
         }
     }
