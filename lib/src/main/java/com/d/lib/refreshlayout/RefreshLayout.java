@@ -8,12 +8,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
 
 import java.lang.ref.WeakReference;
 
@@ -32,11 +35,13 @@ public class RefreshLayout extends ViewGroup {
     private int height;
 
     private int touchSlop;
-    private int duration = 210;
+    private int duration = 250;
+    private float dampFactor = 0.6f;//滑动阻尼系数
     private float dX, dY;//TouchEvent_ACTION_DOWN坐标(dX,dY)
     private float lastX, lastY;//TouchEvent最后一次坐标(lastX,lastY)
     private boolean isEventValid = true;//本次touch事件是否有效
     private boolean isMoveValidX, isMoveValidY;
+    private boolean[] cancle = new boolean[2];
     private boolean isRunning;
     private ValueAnimator animation;
     private AnimUpdateListener animUpdateListener;
@@ -142,7 +147,7 @@ public class RefreshLayout extends ViewGroup {
         touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         animation = ValueAnimator.ofFloat(0f, 1f);
         animation.setDuration(duration);
-        animation.setInterpolator(new LinearInterpolator());
+        animation.setInterpolator(new DecelerateInterpolator());
         animUpdateListener = new AnimUpdateListener(this);
         animListenerAdapter = new AnimListenerAdapter(this);
         animation.addUpdateListener(animUpdateListener);
@@ -199,6 +204,7 @@ public class RefreshLayout extends ViewGroup {
                 isMoveValidX = false;
                 isMoveValidY = false;
                 isEventValid = true;
+                cancle[0] = cancle[1] = false;
                 super.dispatchTouchEvent(ev);
                 return true;
             case MotionEvent.ACTION_MOVE:
@@ -207,10 +213,16 @@ public class RefreshLayout extends ViewGroup {
                 }
                 int offsetX = (int) (lastX - eX);
                 int offsetY = (int) (lastY - eY);
-                boolean canScrollTop = getScrollY() + offsetY >= 0;
-                boolean canScrollBottom = getScrollY() + offsetY <= 0;
-                boolean canScrollLeft = getScrollX() + offsetX >= 0;
-                boolean canScrollRight = getScrollX() + offsetX <= 0;
+                boolean scrollVertically = offsetY > 0;
+                boolean scrollHorizontally = offsetX > 0;
+                boolean canScrollTop = isAbsList() ? ViewCompat.canScrollVertically(getChildAt(0), -1)
+                        : getScrollY() + offsetY >= 0;
+                boolean canScrollBottom = isAbsList() ? ViewCompat.canScrollVertically(getChildAt(0), 1)
+                        : getScrollY() + offsetY <= 0;
+                boolean canScrollLeft = isAbsList() ? ViewCompat.canScrollHorizontally(getChildAt(0), -1)
+                        : getScrollX() + offsetX >= 0;
+                boolean canScrollRight = isAbsList() ? ViewCompat.canScrollHorizontally(getChildAt(0), 1)
+                        : getScrollX() + offsetX <= 0;
                 lastX = eX;
                 lastY = eY;
                 if (!(isMoveValidX || isMoveValidY)) {
@@ -224,23 +236,59 @@ public class RefreshLayout extends ViewGroup {
                     if (getScrollY() != 0) {
                         scrollTo(0, 0);
                     }
-                    if (!isGravityEnable(GRAVITY_LEFT) && (getScrollX() < 0 || !canScrollLeft)) {
+                    if (!isGravityEnable(GRAVITY_LEFT) && (!canScrollLeft || getScrollX() < 0)) {
+                        super.dispatchTouchEvent(ev);
                         scrollBy(0, 0);
-                    } else if (!isGravityEnable(GRAVITY_RIGHT) && (getScrollX() > 0 || !canScrollRight)) {
+                    } else if (!isGravityEnable(GRAVITY_RIGHT) && (!canScrollRight) || getScrollX() > 0) {
+                        super.dispatchTouchEvent(ev);
                         scrollBy(0, 0);
                     } else {
-                        scrollBy((int) (offsetX * 0.4f), 0);
+                        if (!scrollHorizontally && (!canScrollLeft || getScrollX() > 0)
+                                || scrollHorizontally && (!canScrollRight || getScrollX() < 0)) {
+                            if (!cancle[0]) {
+                                cancle[0] = true;
+                                ev.setAction(MotionEvent.ACTION_CANCEL);
+                                super.dispatchTouchEvent(ev);
+                            }
+                            scrollBy((int) (offsetX * dampFactor), 0);
+                        } else {
+                            if (cancle[0]) {
+                                cancle[0] = false;
+                                dX = eX;
+                                dY = eY;
+                                ev.setAction(MotionEvent.ACTION_DOWN);
+                            }
+                            super.dispatchTouchEvent(ev);
+                        }
                     }
                 } else if (isMoveValidY) {
                     if (getScrollX() != 0) {
                         scrollTo(0, 0);
                     }
-                    if (!isGravityEnable(GRAVITY_TOP) && (getScrollY() < 0 || !canScrollTop)) {
+                    if (!isGravityEnable(GRAVITY_TOP) && (!canScrollTop || getScrollY() < 0)) {
+                        super.dispatchTouchEvent(ev);
                         scrollBy(0, 0);
-                    } else if (!isGravityEnable(GRAVITY_BOTTOM) && (getScrollY() > 0 || !canScrollBottom)) {
+                    } else if (!isGravityEnable(GRAVITY_BOTTOM) && (!canScrollBottom || getScrollY() > 0)) {
+                        super.dispatchTouchEvent(ev);
                         scrollBy(0, 0);
                     } else {
-                        scrollBy(0, (int) (offsetY * 0.4f));
+                        if (!scrollVertically && (!canScrollTop || getScrollY() > 0)
+                                || scrollVertically && (!canScrollBottom || getScrollY() < 0)) {
+                            if (!cancle[0]) {
+                                cancle[0] = true;
+                                cancle[1] = false;
+                                ev.setAction(MotionEvent.ACTION_CANCEL);
+                                super.dispatchTouchEvent(ev);
+                            }
+                            scrollBy(0, (int) (offsetY * dampFactor));
+                        } else {
+                            if (cancle[0]) {
+                                cancle[0] = false;
+                                cancle[1] = true;
+                                ev.setAction(MotionEvent.ACTION_DOWN);
+                            }
+                            super.dispatchTouchEvent(ev);
+                        }
                     }
                 } else {
                     super.dispatchTouchEvent(ev);
@@ -251,6 +299,10 @@ public class RefreshLayout extends ViewGroup {
                 if (!isEventValid) {
                     return false;
                 }
+                if (cancle[1]) {
+                    ev.setAction(MotionEvent.ACTION_CANCEL);
+                }
+                super.dispatchTouchEvent(ev);
                 if (isMoveValidX) {
                     dealUp(true);
                     isMoveValidX = false;
@@ -285,6 +337,11 @@ public class RefreshLayout extends ViewGroup {
             default:
                 return false;
         }
+    }
+
+    private boolean isAbsList() {
+        View view = getChildAt(0);
+        return view instanceof AbsListView || view instanceof RecyclerView;
     }
 
     public void start() {
