@@ -1,4 +1,4 @@
-package com.d.lib.refreshlayout;
+package com.d.lib.refreshlayout.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,10 +12,10 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 /**
- * util
+ * Util
  * Created by D on 2017/4/19.
  */
-public class UIUtil {
+public class Util {
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
      */
@@ -123,11 +123,11 @@ public class UIUtil {
      */
     public static void autoSize(TextView textView, String text, float maxWidth, float dpMin, float dpMax) {
         Paint paint = textView.getPaint();
-        float minSize = UIUtil.dip2px(textView.getContext(), dpMin);
-        float textSize = UIUtil.dip2px(textView.getContext(), dpMax);
+        float minSize = Util.dip2px(textView.getContext(), dpMin);
+        float textSize = Util.dip2px(textView.getContext(), dpMax);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         //获得当前TextView的有效宽度
-        int availableWidth = UIUtil.dip2px(textView.getContext(), maxWidth);
+        int availableWidth = Util.dip2px(textView.getContext(), maxWidth);
         float textWidth = paint.measureText(text);
         while (textWidth > availableWidth) {
             if (textSize < minSize) {

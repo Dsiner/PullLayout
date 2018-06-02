@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lib_refresh_color_main">#5F89FF</color>
+    <color name="lib_refresh_color_error">#FF735C</color>
+</resources>

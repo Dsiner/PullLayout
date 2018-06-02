@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.d.refreshlayout.activity.FreshActivity" />
         <activity android:name="com.d.refreshlayout.activity.ViewActivity" />
         <activity android:name="com.d.refreshlayout.activity.ListViewActivity" />
         <activity android:name="com.d.refreshlayout.activity.RecyclerViewActivity" />
