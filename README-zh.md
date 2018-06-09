@@ -3,7 +3,6 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-9%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=9)
 [![Download](https://api.bintray.com/packages/dsiner/maven/xrv/images/download.svg) ](https://bintray.com/dsiner/maven/xrv/_latestVersion)
-[![Readme](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87-brightgreen.svg)](https://github.com/Dsiner/Xrv/blob/master/README-zh.md)
 
 ## Demo
 <p>
@@ -35,7 +34,6 @@ compile 'com.dsiner.lib:xrv:1.1.1'
 
 #### Step 1. Get reference
 ```java
-        // Step1: Get reference
         XRecyclerView xrvList = (XRecyclerView) this.findViewById(R.id.xrv_list);
 ```
     
@@ -44,18 +42,19 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         xrvList.showAsList(); // LinearLayoutManager
 ```
 
-#### Step 3. Set header (optional)
+#### Step 3. Set header(optional)
 ```java
         View header = LayoutInflater.from(this).inflate(R.layout.view_header, (ViewGroup) findViewById(android.R.id.content), false);
         xrvList.addHeaderView(header);
 ```
+
 #### Step 4-1. New adapter(simple type)
 ```java
         public class SimpleAdapter extends CommonAdapter<Bean> {
             /**
-             * @param context: Context
-             * @param datas: Filled data source
-             * @param layoutId: Single type layout
+             * @param context: 上下文
+             * @param datas: 填充数据源
+             * @param layoutId: 单一类型布局layout
              */
             public SimpleAdapter(Context context, List<Bean> datas, int layoutId) {
                 super(context, datas, layoutId);
@@ -63,7 +62,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         
             @Override
             public void convert(int position, CommonHolder holder, Bean item) {
-                // Assigned by the universal holder method
+                // 通过通用holder方法赋值
                 holder.setText(R.id.tv_des, "P:" + position + "_" + item.name);
             }
         }
@@ -75,9 +74,9 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         public class MultipleAdapter extends CommonAdapter<Bean> {
         
             /**
-             * @param context: Context
-             * @param datas:  Filled data source
-             * @param multiItemTypeSupport: Multiple layout type support
+             * @param context: 上下文
+             * @param datas: 填充数据源
+             * @param multiItemTypeSupport: 多布局类型支持
              */
             public MultipleAdapter(Context context, List<Bean> datas, MultiItemTypeSupport<Bean> multiItemTypeSupport) {
                 super(context, datas, multiItemTypeSupport);
@@ -85,7 +84,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         
             @Override
             public void convert(int position, CommonHolder holder, Bean item) {
-                // Step 4-2-3: First determine the mLayoutId layout type, and then manipulate the controls through the universal holder
+                // step 4-2-3: 先判断mLayoutId布局类型，后通过通用holder操控控件
                 switch (holder.mLayoutId) {
                     case R.layout.item_0:
                         ...
@@ -106,7 +105,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         MultipleAdapter adapter = new MultipleAdapter(MultipleXRvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
-                // Step 4-2-2: Return layout layout based on type
+                // step 4-2-2: 根据type返回layout布局
                 switch (viewType) {
                     case 0:
                         return R.layout.item_0;
@@ -123,7 +122,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
 
             @Override
             public int getItemViewType(int position, Bean bean) {
-                // step 4-2-1: Get type
+                // step 4-2-1: 获取type类型
                 return bean.type;
             }
         });
