@@ -148,6 +148,9 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         });
 ```
 
+## Latest Changes
+- [Changelog.md](CHANGELOG.md)
+
 More usage see [Demo](app/src/main/java/com/d/xrecyclerviewf/MainActivity.java)
 
 ## Thanks
