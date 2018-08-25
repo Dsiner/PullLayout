@@ -1,5 +1,6 @@
 package com.d.xrv.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -50,6 +51,7 @@ public class ItemTouchAdapter extends CommonAdapter<Bean> {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void gridConvert(final CommonHolder holder, Bean item) {
         final TextView tvHandler = holder.getView(R.id.tv_style1);
         tvHandler.setText(item.content);
@@ -57,29 +59,30 @@ public class ItemTouchAdapter extends CommonAdapter<Bean> {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN && getItemCount() > 1 && startDragListener != null) {
-                    // step9-5:只有调用onStartDrag才会触发拖拽 (这里在touch时开始拖拽，当然也可以单击或长按时才开始拖拽)
+                    // Step 9-5: 只有调用onStartDrag才会触发拖拽 (这里在touch时开始拖拽，当然也可以单击或长按时才开始拖拽)
                     startDragListener.onStartDrag(holder);
                     return true;
                 }
                 return false;
             }
         });
-        //step9-7:设置ItemTouchListener
+        // Step 9-7: 设置ItemTouchListener
         holder.setOnItemTouchListener(new ItemTouchHelperViewHolder() {
             @Override
             public void onItemSelected() {
-                //触发拖拽时回调
+                // 触发拖拽时回调
                 tvHandler.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.corner_bg_touch_select));
             }
 
             @Override
             public void onItemClear() {
-                //手指松开时回调
+                // 手指松开时回调
                 tvHandler.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.corner_bg_touch_normal));
             }
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void linearConvert(final CommonHolder holder, Bean item) {
         holder.setText(R.id.tv_style0, item.content);
         ImageView ivHandler = holder.getView(R.id.iv_style0_handler);
@@ -87,24 +90,24 @@ public class ItemTouchAdapter extends CommonAdapter<Bean> {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN && getItemCount() > 1 && startDragListener != null) {
-                    // step9-5:只有调用onStartDrag才会触发拖拽 (这里在touch时开始拖拽，当然也可以单击或长按时才开始拖拽)
+                    // Step 9-5: 只有调用onStartDrag才会触发拖拽 (这里在touch时开始拖拽，当然也可以单击或长按时才开始拖拽)
                     startDragListener.onStartDrag(holder);
                     return true;
                 }
                 return false;
             }
         });
-        //step9-7:设置ItemTouchListener
+        // Step 9-7: 设置ItemTouchListener
         holder.setOnItemTouchListener(new ItemTouchHelperViewHolder() {
             @Override
             public void onItemSelected() {
-                //触发拖拽时回调
+                // 触发拖拽时回调
                 holder.itemView.setBackgroundColor(colorSelected);
             }
 
             @Override
             public void onItemClear() {
-                //手指松开时回调
+                // 手指松开时回调
                 holder.itemView.setBackgroundColor(0);
             }
         });
@@ -112,14 +115,14 @@ public class ItemTouchAdapter extends CommonAdapter<Bean> {
 
     @Override
     public void onItemDismiss(int position) {
-        //9-8:回调、item被删除
+        // Step 9-8: 回调, Item被删除
         mDatas.remove(position);
         notifyItemRemoved(position);
     }
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        //9-9:回调、两个item之间交换位置
+        // Step 9-9: 回调, 两个Item之间交换位置
         if (Math.abs(fromPosition - toPosition) > 1) {
             Bean from = mDatas.get(fromPosition);
             mDatas.remove(fromPosition);

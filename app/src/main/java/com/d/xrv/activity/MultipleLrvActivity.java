@@ -24,13 +24,13 @@ public class MultipleLrvActivity extends Activity {
     }
 
     private void init() {
-        //step1:获取引用
+        // Step 1: 获取引用
         LRecyclerView rvList = (LRecyclerView) this.findViewById(R.id.lrv_list);
-        //step2:new Adapter
+        // step 2: New Adapter
         MultipleAdapter adapter = new MultipleAdapter(this, Factory.createDatas(15), new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
-                //step2-2:根据type返回layout布局
+                // Step 2-2: 根据type返回layout布局
                 switch (viewType) {
                     case 0:
                         return R.layout.item_0;
@@ -47,11 +47,11 @@ public class MultipleLrvActivity extends Activity {
 
             @Override
             public int getItemViewType(int position, Bean bean) {
-                //step2-1:获取type类型
+                // Step 2-1: 获取type类型
                 return bean.type;
             }
         });
-        //step3:setAdapter
+        // Step 3: SetAdapter
         rvList.setAdapter(adapter);
     }
 }

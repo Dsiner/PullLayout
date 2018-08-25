@@ -22,11 +22,11 @@ public class SimpleLrvActivity extends Activity {
     }
 
     private void init() {
-        //step1:获取引用
+        // Step 1: 获取引用
         LRecyclerView lrvList = (LRecyclerView) this.findViewById(R.id.lrv_list);
-        //step2:new Adapter
+        // Step 2: New Adapter
         SimpleAdapter adapter = new SimpleAdapter(this, Factory.createDatas(15), R.layout.item_0);
-        //step3:setAdapter
+        // Step 3: Set Adapter
         lrvList.setAdapter(adapter);
     }
 }

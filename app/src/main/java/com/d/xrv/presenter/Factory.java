@@ -68,10 +68,10 @@ public class Factory {
         final List<Bean> list = new ArrayList<>();
         if (times < 6) {
             if (times % 2 == 0) {
-                //test type loadMoreError
+                // Test type loadMoreError
                 list.clear();
             } else {
-                //test type loadMoreComplete
+                // Test type loadMoreComplete
                 for (int i = 0; i < PAGE_COUNT; i++) {
                     int type = i % 4;
                     Bean bean = new Bean(type, i, "item_0" + (count + i), "mark_" + i);
@@ -79,7 +79,7 @@ public class Factory {
                 }
             }
         } else {
-            //test type noMore
+            // Test type noMore
             for (int i = 0; i < 6; i++) {
                 int type = i % 4;
                 Bean bean = new Bean(type, i, "item_0" + (count + i), "mark_" + i);

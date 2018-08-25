@@ -24,7 +24,7 @@ public class ItemTouchActivity extends Activity implements OnStartDragListener {
     private ItemTouchAdapter adapter;
     private SpaceItemDecoration itemDecoration;
     private ItemTouchHelper itemTouchHelper;
-    private boolean isLinear = true;//true：线性，false：网格
+    private boolean isLinear = true; // true：线性，false：网格
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,30 +42,30 @@ public class ItemTouchActivity extends Activity implements OnStartDragListener {
     }
 
     private void init() {
-        //step9-1:获取引用-!!!!!!!!!!不要使用XRecyclerView
+        // Step 9-1: 获取引用-!!!!!!!!!!不要使用XRecyclerView
         rvList = (RecyclerView) this.findViewById(R.id.rv_list);
         rvList.setHasFixedSize(true);
-        //step9-2:为RecyclerView指定布局管理对象
+        // Step 9-2: 为RecyclerView指定布局管理对象
         setLayoutManager(isLinear);
-        //step9-3:setAdapter
+        // Step 9-3: SetAdapter
         adapter = new ItemTouchAdapter(this, Factory.createDatas(15), R.layout.item_touch);
         adapter.toggle(isLinear);
         adapter.setOnStartDragListener(this);
         rvList.setAdapter(adapter);
-        //step9-4:关联ItemTouchHelper
+        // Step 9-4: 关联ItemTouchHelper
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
-        //!!!!!!!!!!不要使用XRecyclerView-重要的事情说三遍
+        // !!!!!!!!!!不要使用XRecyclerView - 重要的事情说三遍
         itemTouchHelper.attachToRecyclerView(rvList);
     }
 
     private void setLayoutManager(boolean isLinear) {
         if (isLinear) {
-            //线性布局
+            // 线性布局
             rvList.removeItemDecoration(itemDecoration);
             rvList.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            //网格布局
+            // 网格布局
             if (itemDecoration == null) {
                 itemDecoration = new SpaceItemDecoration(10);
             }
@@ -76,7 +76,7 @@ public class ItemTouchActivity extends Activity implements OnStartDragListener {
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        //step9-6:回调、开始拖拽
+        // Step9-6: 回调, 开始拖拽
         itemTouchHelper.startDrag(viewHolder);
     }
 }

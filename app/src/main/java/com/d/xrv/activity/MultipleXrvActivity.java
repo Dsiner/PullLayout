@@ -36,18 +36,18 @@ public class MultipleXrvActivity extends Activity {
     }
 
     private void init() {
-        //step1:获取引用
+        // Step 1: 获取引用
         final XRecyclerView xrvList = (XRecyclerView) this.findViewById(R.id.xrv_list);
-        //step2:设置LayoutManager
-        xrvList.showAsList();//listview展现形式
-        //step3:setHeader(可选)
+        // Step 2: 设置LayoutManager, ListView展现形式
+        xrvList.showAsList();
+        // Step 3: Set Header(可选)
         View header = LayoutInflater.from(this).inflate(R.layout.view_header, (ViewGroup) findViewById(android.R.id.content), false);
         xrvList.addHeaderView(header);
-        //step4:new Adapter
+        // Step 4: New Adapter
         adapter = new MultipleAdapter(MultipleXrvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
-                //step4-2:根据type返回layout布局
+                // Step 4-2: 根据Type返回Layout布局
                 switch (viewType) {
                     case 0:
                         return R.layout.item_0;
@@ -64,13 +64,13 @@ public class MultipleXrvActivity extends Activity {
 
             @Override
             public int getItemViewType(int position, Bean bean) {
-                //step4-1:获取type类型
+                // Step 4-1: 获取Type类型
                 return bean.type;
             }
         });
-        //step5:setAdapter
+        // Step 5: Set Adapter
         xrvList.setAdapter(adapter);
-        //step6:setListener
+        // Step 6: Set Listener
         xrvList.setLoadingListener(new IRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -97,18 +97,18 @@ public class MultipleXrvActivity extends Activity {
                     public void onSuccess(@NonNull List<Bean> result) {
                         if (times < 6) {
                             if (times % 2 == 0) {
-                                //test type loadMoreError
+                                // Test type loadMoreError
                                 adapter.notifyDataSetChanged();
                                 xrvList.loadMoreError();
                             } else {
-                                //test type loadMoreComplete
+                                // Test type loadMoreComplete
                                 datas.addAll(result);
                                 adapter.setDatas(datas);
                                 adapter.notifyDataSetChanged();
                                 xrvList.loadMoreComplete();
                             }
                         } else {
-                            //test type noMore
+                            // Test type noMore
                             datas.addAll(result);
                             adapter.setDatas(datas);
                             adapter.notifyDataSetChanged();

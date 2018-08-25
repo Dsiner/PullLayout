@@ -33,15 +33,15 @@ public class SimpleXrvActivity extends Activity {
     }
 
     private void init() {
-        //step1:获取引用
+        // Step 1: 获取引用
         final XRecyclerView xrvList = (XRecyclerView) this.findViewById(R.id.xrv_list);
-        //step2:设置LayoutManager
-        xrvList.showAsList();//listview展现形式
-        //step3:new Adapter
+        // Step 2: 设置LayoutManager, ListView展现形式
+        xrvList.showAsList();
+        // Step 3: New Adapter
         adapter = new SimpleAdapter(this, new ArrayList<Bean>(), R.layout.item_0);
-        //step4:setAdapter
+        // Step 4: Set Adapter
         xrvList.setAdapter(adapter);
-        //step5:setListener
+        // Step 5: setListener
         xrvList.setLoadingListener(new IRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -67,18 +67,18 @@ public class SimpleXrvActivity extends Activity {
                     public void onSuccess(@NonNull List<Bean> result) {
                         if (times < 6) {
                             if (times % 2 == 0) {
-                                //test type loadMoreError
+                                // Test type loadMoreError
                                 adapter.notifyDataSetChanged();
                                 xrvList.loadMoreError();
                             } else {
-                                //test type loadMoreComplete
+                                // Test type loadMoreComplete
                                 datas.addAll(result);
                                 adapter.setDatas(datas);
                                 adapter.notifyDataSetChanged();
                                 xrvList.loadMoreComplete();
                             }
                         } else {
-                            //test type noMore
+                            // Test type noMore
                             datas.addAll(result);
                             adapter.setDatas(datas);
                             adapter.notifyDataSetChanged();

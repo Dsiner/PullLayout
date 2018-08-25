@@ -191,7 +191,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
             setState(ListState.STATE_REFRESHING);
             isOnRefresh = true;
         }
-        // refreshing and header isn't shown fully. do nothing.
+        // Refreshing and header isn't shown fully. do nothing.
 //        if (mState == ListState.STATE_REFRESHING && height <= mMeasuredHeight) {
 //            //return;
 //        }
