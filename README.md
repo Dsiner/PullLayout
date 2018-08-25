@@ -35,7 +35,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
 
 #### Step 1. Get reference
 ```java
-        // Step1: Get reference
+        // Step 1: Get reference
         XRecyclerView xrvList = (XRecyclerView) this.findViewById(R.id.xrv_list);
 ```
     
@@ -123,7 +123,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
 
             @Override
             public int getItemViewType(int position, Bean bean) {
-                // step 4-2-1: Get type
+                // Step 4-2-1: Get type
                 return bean.type;
             }
         });

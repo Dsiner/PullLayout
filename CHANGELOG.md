@@ -3,7 +3,7 @@ Changelog
 
 Version: 1.1.2
 --------------------------------
-- Bug fixed
+- Bug fixed: Unable to load next page when the first page is not full
 - Optimization
 - Gradle: upgrade to 4.4
 

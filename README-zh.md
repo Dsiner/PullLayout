@@ -84,7 +84,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         
             @Override
             public void convert(int position, CommonHolder holder, Bean item) {
-                // step 4-2-3: 先判断mLayoutId布局类型，后通过通用holder操控控件
+                // Step 4-2-3: 先判断mLayoutId布局类型，后通过通用holder操控控件
                 switch (holder.mLayoutId) {
                     case R.layout.item_0:
                         ...
@@ -105,7 +105,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         MultipleAdapter adapter = new MultipleAdapter(MultipleXRvActivity.this, datas, new MultiItemTypeSupport<Bean>() {
             @Override
             public int getLayoutId(int viewType) {
-                // step 4-2-2: 根据type返回layout布局
+                // Step 4-2-2: 根据type返回layout布局
                 switch (viewType) {
                     case 0:
                         return R.layout.item_0;
@@ -122,7 +122,7 @@ compile 'com.dsiner.lib:xrv:1.1.1'
 
             @Override
             public int getItemViewType(int position, Bean bean) {
-                // step 4-2-1: 获取type类型
+                // Step 4-2-1: 获取type类型
                 return bean.type;
             }
         });
