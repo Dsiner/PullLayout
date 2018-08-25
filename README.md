@@ -17,12 +17,15 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>xrv</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.dsiner.lib:xrv:1.1.1'
+    implementation 'com.dsiner.lib:xrv:1.1.2'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.nineoldandroids:library:2.4.0'
 ```
 
 ## Usage
@@ -149,10 +152,10 @@ compile 'com.dsiner.lib:xrv:1.1.1'
         });
 ```
 
+More usage see [Demo](app/src/main/java/com/d/xrecyclerviewf/MainActivity.java)
+
 ## Latest Changes
 - [Changelog.md](CHANGELOG.md)
-
-More usage see [Demo](app/src/main/java/com/d/xrecyclerviewf/MainActivity.java)
 
 ## Thanks
 - [XRecyclerView](https://github.com/jianghejie/XRecyclerView)  - RecyclerView that implements pullrefresh , loadingmore and header featrues
