@@ -84,9 +84,9 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     }
 
     /**
-     * @param position
-     * @param holder
-     * @param item     position对应的数据Bean
+     * @param position Position
+     * @param holder   Holder
+     * @param item     Position位置对应的数据Item
      */
     public abstract void convert(int position, CommonHolder holder, T item);
 

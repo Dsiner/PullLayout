@@ -3,11 +3,9 @@ package com.d.lib.refreshlayout;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -25,7 +23,6 @@ import java.lang.ref.WeakReference;
  * RefreshLayout
  * Created by D on 2018/5/29.
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class RefreshLayout extends ViewGroup {
     private final static int GRAVITY_TOP = 0x1;
     private final static int GRAVITY_BOTTOM = 0x2;

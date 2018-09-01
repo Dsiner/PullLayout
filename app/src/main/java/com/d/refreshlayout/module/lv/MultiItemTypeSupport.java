@@ -5,9 +5,9 @@ package com.d.refreshlayout.module.lv;
  * Created by D on 2017/4/25.
  */
 public interface MultiItemTypeSupport<T> {
-    public int getLayoutId(int position, T t);
+    int getLayoutId(int position, T t);
 
-    public int getViewTypeCount();
+    int getViewTypeCount();
 
-    public int getItemViewType(int position, T t);
+    int getItemViewType(int position, T t);
 }

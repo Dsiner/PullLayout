@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:lib_refresh_refreshlayout_enable="true"
-        app:lib_refresh_refreshlayout_gravity="top|left|right">
+        app:lib_refresh_refreshlayout_gravity="top|bottom|left|right">
 
         <LinearLayout
             android:layout_width="match_parent"
