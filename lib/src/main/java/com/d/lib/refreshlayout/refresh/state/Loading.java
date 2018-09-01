@@ -37,7 +37,7 @@ public class Loading extends State {
         private final WeakReference<Loading> reference;
 
         AnimUpdateListener(Loading view) {
-            this.reference = new WeakReference<Loading>(view);
+            this.reference = new WeakReference<>(view);
         }
 
         @Override
@@ -49,7 +49,7 @@ public class Loading extends State {
                 return;
             }
             view.factor = (float) animation.getAnimatedValue();
-            view.view.postInvalidate();
+            view.view.invalidate();
         }
     }
 

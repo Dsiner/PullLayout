@@ -8,8 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Build;
 import android.os.Handler;
 import android.view.View;
@@ -31,9 +29,6 @@ public class Success extends State {
     protected Paint paint;
     protected Paint paintText;
     protected float textHeight;
-    private Rect rect;
-    private RectF rectF;
-    private float rectRadius;
 
     private ValueAnimator animator;
     private float factor;
@@ -46,7 +41,7 @@ public class Success extends State {
         private final WeakReference<Success> reference;
 
         AnimListenerAdapter(Success view) {
-            this.reference = new WeakReference<Success>(view);
+            this.reference = new WeakReference<>(view);
         }
 
         @Override
@@ -74,7 +69,7 @@ public class Success extends State {
         private final WeakReference<Success> reference;
 
         AnimUpdateListener(Success view) {
-            this.reference = new WeakReference<Success>(view);
+            this.reference = new WeakReference<>(view);
         }
 
         @Override
@@ -87,7 +82,7 @@ public class Success extends State {
             }
             view.step = 1;
             view.factor = (float) animation.getAnimatedValue();
-            view.view.postInvalidate();
+            view.view.invalidate();
         }
     }
 
@@ -96,7 +91,7 @@ public class Success extends State {
         private final WeakReference<Success> reference;
 
         Task(Success view) {
-            this.reference = new WeakReference<Success>(view);
+            this.reference = new WeakReference<>(view);
         }
 
         @Override
@@ -141,11 +136,8 @@ public class Success extends State {
         paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        rect = new Rect();
-        rectF = new RectF();
-
         animator = ValueAnimator.ofFloat(0f, 1f);
-        animator.setDuration(1000);
+        animator.setDuration(450);
         animator.setInterpolator(new LinearInterpolator());
         animator.addListener(new AnimListenerAdapter(this));
         animator.addUpdateListener(new AnimUpdateListener(this));
@@ -170,11 +162,9 @@ public class Success extends State {
             sign.onDraw(canvas);
             return;
         }
-        float offset = width / 2f * factor;
-        float radius = rectRadius * (1 - factor);
-        rect.set((int) (width / 2f - offset), 0, (int) (width / 2f + offset), height);
-        rectF.set(rect);
-        canvas.drawRoundRect(rectF, radius, radius, paint);//在原有矩形基础上，画成圆角矩形
+        float start = height * 0.35f / 2f;
+        float end = (float) Math.sqrt(height / 2f * height / 2f + width / 2f * width / 2f) + 1;
+        canvas.drawCircle(width / 2f, height / 2f, start + (end - start) * factor, paint);
 
         canvas.drawText(content, width / 2f, height / 2 + textHeight / 2, paintText);
     }
@@ -183,6 +173,5 @@ public class Success extends State {
     public void setMeasuredDimension(int measuredWidth, int measuredHeight) {
         super.setMeasuredDimension(measuredWidth, measuredHeight);
         sign.setMeasuredDimension(measuredWidth, measuredHeight);
-        rectRadius = height / 3f;
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import com.d.refreshlayout.activity.FreshActivity;
 import com.d.refreshlayout.activity.ListViewActivity;
 import com.d.refreshlayout.activity.RecyclerViewActivity;
+import com.d.refreshlayout.activity.ScrollViewActivity;
 import com.d.refreshlayout.activity.ViewActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
+            }
+        });
+
+        findViewById(R.id.btn_scrollview).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
             }
         });
     }

@@ -22,6 +22,7 @@
         <activity android:name="com.d.refreshlayout.activity.ViewActivity" />
         <activity android:name="com.d.refreshlayout.activity.ListViewActivity" />
         <activity android:name="com.d.refreshlayout.activity.RecyclerViewActivity" />
+        <activity android:name="com.d.refreshlayout.activity.ScrollViewActivity" />
     </application>
 
 </manifest>
