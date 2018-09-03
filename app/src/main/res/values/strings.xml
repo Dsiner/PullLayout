@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RefreshLayout</string>
+    <string name="page_provide">页面由refreshlayout.lib.d.com提供</string>
+    <string name="technical_support">Dsiner@github.com提供技术支持</string>
 </resources>

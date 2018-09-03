@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="页面由refreshlayout.lib.d.com提供"
+            android:text="@string/page_provide"
             android:textColor="#7d7d7d"
             android:textSize="15dp" />
 
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Dsiner@github.com提供技术支持"
+            android:text="@string/technical_support"
             android:textColor="#7d7d7d"
             android:textSize="15dp" />
     </LinearLayout>

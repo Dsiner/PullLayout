@@ -25,14 +25,14 @@ public class ScrollViewActivity extends AppCompatActivity {
         findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "button", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Button", Toast.LENGTH_SHORT).show();
             }
         });
 
         findViewById(R.id.tv_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "textview", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "TextView", Toast.LENGTH_SHORT).show();
             }
         });
     }

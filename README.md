@@ -5,6 +5,11 @@
 
 > Damping effect.
 
+## Demo
+<p>
+   <img src="https://github.com/Dsiner/Resouce/blob/master/lib/RefreshLayout/refreshlayout.gif" width="320" alt="Screenshot"/>
+</p>
+
 ## Support
 - [x] ViewGroup
 - [x] ListView
