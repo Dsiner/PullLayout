@@ -60,5 +60,6 @@ public class Discon extends State {
         canvas.rotate(90);
         canvas.drawRect(rectF, paint);
         canvas.rotate(-135);
+        canvas.translate(-width / 2, -height / 2);
     }
 }
