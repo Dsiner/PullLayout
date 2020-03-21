@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="lib_refresh_RefreshLayout">
-        <attr name="lib_refresh_refreshlayout_enable" format="boolean" />
-        <attr name="lib_refresh_refreshlayout_gravity">
+    <declare-styleable name="lib_pull_PullLayout">
+        <attr name="lib_pull_pulllayout_enable" format="boolean" />
+        <attr name="lib_pull_pulllayout_gravity">
             <flag name="top" value="1" />
             <flag name="bottom" value="2" />
             <flag name="left" value="4" />

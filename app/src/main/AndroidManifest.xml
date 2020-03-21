@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.d.refreshlayout">
+    package="com.d.pulllayout">
 
     <application
         android:allowBackup="true"
@@ -10,19 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.d.refreshlayout.MainActivity">
+        <activity android:name="com.d.pulllayout.MainActivity">
+
+        </activity>
+
+        <activity android:name="com.d.pulllayout.pull.activity.FreshActivity" />
+        <activity android:name="com.d.pulllayout.pull.activity.ViewActivity" />
+        <activity android:name="com.d.pulllayout.pull.activity.ListViewActivity" />
+        <activity android:name="com.d.pulllayout.pull.activity.RecyclerViewActivity" />
+        <activity android:name="com.d.pulllayout.pull.activity.ScrollViewActivity" />
+
+        <activity android:name="com.d.pulllayout.rv.PullRecyclerViewActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.d.refreshlayout.activity.FreshActivity" />
-        <activity android:name="com.d.refreshlayout.activity.ViewActivity" />
-        <activity android:name="com.d.refreshlayout.activity.ListViewActivity" />
-        <activity android:name="com.d.refreshlayout.activity.RecyclerViewActivity" />
-        <activity android:name="com.d.refreshlayout.activity.ScrollViewActivity" />
+        <activity android:name="com.d.pulllayout.rv.activity.SimpleActivity" />
+        <activity android:name="com.d.pulllayout.rv.activity.MultipleActivity" />
+        <activity android:name="com.d.pulllayout.rv.activity.ItemTouchActivity" />
     </application>
 
 </manifest>

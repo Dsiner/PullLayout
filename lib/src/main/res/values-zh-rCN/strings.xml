@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="lib_pull_list_header_last_time">上次更新:</string>
+
+    <string name="lib_pull_list_refresh_none">向下拉动可以刷新</string>
+    <string name="lib_pull_list_refresh_expanded">松开可以刷新</string>
+    <string name="lib_pull_list_refresh_loading">加载中...</string>
+    <string name="lib_pull_list_refresh_success">刷新成功</string>
+    <string name="lib_pull_list_refresh_error">刷新失败</string>
+
+    <string name="lib_pull_list_load_more_none">向上拉动可以更多</string>
+    <string name="lib_pull_list_load_more_expanded">松开可以加载更多</string>
+    <string name="lib_pull_list_load_more_loading">加载中...</string>
+    <string name="lib_pull_list_load_more_nomore">没有更多内容了</string>
+    <string name="lib_pull_list_load_more_success">加载完成</string>
+    <string name="lib_pull_list_load_more_error">加载失败，点击重试!</string>
+</resources>

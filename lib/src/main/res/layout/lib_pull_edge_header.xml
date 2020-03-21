@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom">
+
+    <!-- Content -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <!-- Arrow image, progress bar -->
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp">
+
+            <ImageView
+                android:id="@+id/img_head_arrow"
+                android:layout_width="35dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/lib_pull_ic_pull_arrow" />
+
+            <!-- Progress bar -->
+            <com.d.lib.pulllayout.edge.arrow.LoadingView
+                android:id="@+id/ldv_loading"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <!-- Prompt, recent update -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <!-- Prompt -->
+            <TextView
+                android:id="@+id/tv_head_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lib_pull_list_refresh_expanded"
+                android:textColor="@color/lib_pull_pull_refresh_text"
+                android:textSize="15sp" />
+
+            <!-- Recently updated -->
+            <TextView
+                android:id="@+id/tv_head_last_update_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/lib_pull_list_header_last_time"
+                android:textColor="@color/lib_pull_pull_refresh_text"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

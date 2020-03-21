@@ -1,4 +1,4 @@
-# RefreshLayout for Android
+# PullLayout for Android
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-11%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=11)
@@ -7,7 +7,7 @@
 
 ## Demo
 <p>
-   <img src="https://github.com/Dsiner/Resouce/blob/master/lib/RefreshLayout/refreshlayout.gif" width="320" alt="Screenshot"/>
+   <img src="https://github.com/Dsiner/Resouce/blob/master/lib/PullLayout/pulllayout.gif" width="320" alt="Screenshot"/>
 </p>
 
 ## Support
@@ -18,20 +18,20 @@
 
 ## Usage
 ```java
-    <com.d.lib.refreshlayout.RefreshLayout
+    <com.d.lib.pulllayout.PullLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:lib_refresh_refreshlayout_enable="true"
-        app:lib_refresh_refreshlayout_gravity="top|left|right">
+        app:lib_pull_pulllayout_enable="true"
+        app:lib_pull_pulllayout_gravity="top|left|right">
 
         <ViewGroup
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.d.lib.refreshlayout.RefreshLayout>
+    </com.d.lib.pulllayout.PullLayout>
 ```
 
-More usage see [Demo](app/src/main/java/com/d/refreshlayout/MainActivity.java)
+More usage see [Demo](app/src/main/java/com/d/pulllayout/MainActivity.java)
 
 ## Licence
 

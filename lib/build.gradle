@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    resourcePrefix 'lib_refresh_'
+    resourcePrefix 'lib_pull_'
 
     defaultConfig {
         minSdkVersion 11
@@ -28,5 +28,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
+    compileOnly 'com.android.support:design:27.1.1'
     compileOnly 'com.android.support:recyclerview-v7:27.1.1'
 }
