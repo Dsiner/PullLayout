@@ -11,7 +11,11 @@
         android:theme="@style/AppTheme">
 
         <activity android:name="com.d.pulllayout.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name="com.d.pulllayout.pull.activity.FreshActivity" />
@@ -21,11 +25,7 @@
         <activity android:name="com.d.pulllayout.pull.activity.ScrollViewActivity" />
 
         <activity android:name="com.d.pulllayout.rv.PullRecyclerViewActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.d.pulllayout.rv.activity.SimpleActivity" />
         <activity android:name="com.d.pulllayout.rv.activity.MultipleActivity" />

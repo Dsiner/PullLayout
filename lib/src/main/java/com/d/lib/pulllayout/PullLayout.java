@@ -37,24 +37,21 @@ public class PullLayout extends ViewGroup {
 
     private int mTouchSlop;
     private int mDuration = 250;
-    private float mDampFactor = 0.6f; // 滑动阻尼系数
+    private float mDampFactor = 0.6f;
     private int mPullPointerId = INVALID_POINTER;
-    private float mDX, mDY; // TouchEvent_ACTION_DOWN坐标(dX,dY)
-    private float mLastX, mLastY; // TouchEvent最后一次坐标(lastX,lastY)
-    private boolean mIsEventValid = true; // 本次touch事件是否有效
-    private boolean mIsMoveValidX, mIsMoveValidY;
+    private int mTouchX, mTouchY;
+    private int mLastTouchX, mLastTouchY;
+    private final int[] mPullOffset = new int[2];
+    private int mPullState = Pullable.PULL_STATE_IDLE;
+    private boolean mCanPullHorizontally;
+    private boolean mCanPullVertically;
 
-    /**
-     * [0]: 外部拦截/Scroll
-     * [1]: 外部拦截停止, 重新事件分发/NestedScroll
-     */
-    private boolean[] mCancel = new boolean[2];
     private boolean mIsRunning;
     private ValueAnimator mAnimation;
     private AnimUpdateListener mAnimUpdateListener;
     private AnimListenerAdapter mAnimListenerAdapter;
-    private float mFactor; // 进度因子:0-1
-    private int mCurX, mCurY, mDst;
+    private float mFactor;
+    private int mPullX, mPullY;
     private boolean mEnable;
     private int mGravity;
 
@@ -108,13 +105,9 @@ public class PullLayout extends ViewGroup {
             }
             PullLayout view = reference.get();
             view.mFactor = (float) animation.getAnimatedValue();
-            if (view.mDst == -1) {
-                float scrollY = view.mCurY - view.mCurY * view.mFactor;
-                view.scrollTo(0, (int) scrollY);
-            } else if (view.mDst == 1) {
-                float scrollX = view.mCurX - view.mCurX * view.mFactor;
-                view.scrollTo((int) scrollX, 0);
-            }
+            float scrollX = view.mPullX - view.mPullX * view.mFactor;
+            float scrollY = view.mPullY - view.mPullY * view.mFactor;
+            view.scrollTo((int) scrollX, (int) scrollY);
             view.invalidate();
         }
 
@@ -199,27 +192,32 @@ public class PullLayout extends ViewGroup {
         if (!mEnable || getChildCount() <= 0) {
             return super.dispatchTouchEvent(ev);
         }
-        final int actionIndex = ev.getActionIndex();
-        final float eX = ev.getX();
-        final float eY = ev.getY();
 
-        switch (ev.getAction()) {
+        final boolean[] canNestedScrollHorizontally = canNestedScrollHorizontally();
+        final boolean[] canNestedScrollVertically = canNestedScrollVertically();
+
+        final int action = ev.getActionMasked();
+        final int actionIndex = ev.getActionIndex();
+
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 stop();
                 mPullPointerId = ev.getPointerId(0);
-                mLastX = mDX = eX;
-                mLastY = mDY = eY;
-                mIsMoveValidX = false;
-                mIsMoveValidY = false;
-                mIsEventValid = true;
-                mCancel[0] = mCancel[1] = false;
-                super.dispatchTouchEvent(ev);
-                return true;
+                mLastTouchX = mTouchX = (int) (ev.getX() + 0.5f);
+                mLastTouchY = mTouchY = (int) (ev.getY() + 0.5f);
+                mPullOffset[0] = 0;
+                mPullOffset[1] = 0;
+                mCanPullHorizontally = false;
+                mCanPullVertically = false;
+                break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
-                mPullPointerId = ev.getPointerId(actionIndex);
-                mLastX = mDX = eX;
-                mLastY = mDY = eY;
+                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
+                    mPullPointerId = ev.getPointerId(actionIndex);
+                    mLastTouchX = mTouchX = (int) (ev.getX(actionIndex) + 0.5f);
+                    mLastTouchY = mTouchY = (int) (ev.getY(actionIndex) + 0.5f);
+                    return true;
+                }
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -229,60 +227,96 @@ public class PullLayout extends ViewGroup {
                             + mPullPointerId + " not found. Did any MotionEvents get skipped?");
                     return super.dispatchTouchEvent(ev);
                 }
-                if (!mIsEventValid) {
-                    return super.dispatchTouchEvent(ev);
-                }
-                int offsetX = (int) (mLastX - eX);
-                int offsetY = (int) (mLastY - eY);
-                mLastX = eX;
-                mLastY = eY;
-                if (!(mIsMoveValidX || mIsMoveValidY)) {
-                    if (Math.abs(eX - mDX) > mTouchSlop && Math.abs(eX - mDX) > Math.abs(eY - mDY)) {
-                        mIsMoveValidX = true;
-                    } else if (Math.abs(eY - mDY) > mTouchSlop && Math.abs(eY - mDY) > Math.abs(eX - mDX)) {
-                        mIsMoveValidY = true;
+                final int x = (int) (ev.getX(index) + 0.5f);
+                final int y = (int) (ev.getY(index) + 0.5f);
+
+                if (mPullState != Pullable.PULL_STATE_DRAGGING) {
+                    final int dx = x - mTouchX;
+                    final int dy = y - mTouchY;
+                    boolean startScroll = false;
+                    if (Math.abs(dx) > mTouchSlop && Math.abs(dx) > Math.abs(dy)) {
+                        if (!canNestedScrollHorizontally[0] && mLastTouchX - x < 0
+                                || !canNestedScrollHorizontally[1] && mLastTouchX - x > 0) {
+                            mLastTouchX = mTouchX = x;
+                            mLastTouchY = mTouchY = y;
+                            mCanPullHorizontally = true;
+                            mCanPullVertically = false;
+                            startScroll = true;
+                        }
+                    } else if (Math.abs(dy) > mTouchSlop && Math.abs(dy) > Math.abs(dx)) {
+                        if (!canNestedScrollVertically[0] && mLastTouchY - y < 0
+                                || !canNestedScrollVertically[1] && mLastTouchY - y > 0) {
+                            mLastTouchX = mTouchX = x;
+                            mLastTouchY = mTouchY = y;
+                            mCanPullHorizontally = false;
+                            mCanPullVertically = true;
+                            startScroll = true;
+                        }
+                    }
+                    if (startScroll) {
+                        setPullState(Pullable.PULL_STATE_DRAGGING);
                     }
                 }
-                if (mIsMoveValidX) {
-                    if (getScrollY() != 0) {
-                        scrollTo(getScrollX(), 0);
+                final int dx = mLastTouchX - x;
+                final int dy = mLastTouchY - y;
+                Log.d("dsiner", "dispatchTouchEvent dy: " + dy + " "
+                        + (mPullState == Pullable.PULL_STATE_DRAGGING));
+                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
+                    if (mCanPullHorizontally) {
+                        int offsetOld = mPullOffset[0];
+                        int offset = offsetOld + dx;
+                        offset = offsetOld > 0 ? Math.max(0, offset)
+                                : offsetOld < 0 ? Math.min(0, offset) : offset;
+                        mPullOffset[0] = offset;
+                        float delta = offset * mDampFactor;
+                        delta = delta > 0 ? delta + 0.5f
+                                : delta < 0 ? delta - 0.5f : delta;
+                        scrollTo((int) delta, 0);
+                        if (offset == 0 && offset != offsetOld) {
+                            setPullState(Pullable.PULL_STATE_IDLE);
+                        }
+                    } else if (mCanPullVertically) {
+                        int offsetOld = mPullOffset[1];
+                        int offset = offsetOld + dy;
+                        offset = offsetOld > 0 ? Math.max(0, offset)
+                                : offsetOld < 0 ? Math.min(0, offset) : offset;
+                        mPullOffset[1] = offset;
+                        float delta = offset * mDampFactor;
+                        delta = delta > 0 ? delta + 0.5f
+                                : delta < 0 ? delta - 0.5f : delta;
+                        scrollTo(0, (int) delta);
+                        if (offset == 0 && offset != offsetOld) {
+                            setPullState(Pullable.PULL_STATE_IDLE);
+                        }
                     }
-                    dispatchMove(true, ev, offsetX, offsetY);
-                } else if (mIsMoveValidY) {
-                    if (getScrollX() != 0) {
-                        scrollTo(0, getScrollY());
-                    }
-                    dispatchMove(false, ev, offsetX, offsetY);
-                } else {
-                    super.dispatchTouchEvent(ev);
                 }
-                return true;
+                mLastTouchX = x;
+                mLastTouchY = y;
+                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
+                    return true;
+                }
+                break;
 
             case MotionEvent.ACTION_POINTER_UP:
-                onPointerUp(ev);
+                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
+                    onPointerUp(ev);
+                    return true;
+                }
                 break;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                if (!mIsEventValid) {
-                    return super.dispatchTouchEvent(ev);
+                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
+                    setPullState(Pullable.PULL_STATE_IDLE);
                 }
-                if (mCancel[1]) {
+                if (mCanPullHorizontally || mCanPullVertically) {
                     ev.setAction(MotionEvent.ACTION_CANCEL);
                 }
-                if (mIsMoveValidX) {
-                    super.dispatchTouchEvent(ev);
-                    dealUp(true);
-                    mIsMoveValidX = false;
-                    mIsMoveValidY = false;
-                    return true;
-                } else if (mIsMoveValidY) {
-                    super.dispatchTouchEvent(ev);
-                    dealUp(false);
-                    mIsMoveValidX = false;
-                    mIsMoveValidY = false;
-                    return true;
-                }
+                dispatchUp();
+                mPullOffset[0] = 0;
+                mPullOffset[1] = 0;
+                mCanPullHorizontally = false;
+                mCanPullVertically = false;
                 break;
         }
         return super.dispatchTouchEvent(ev);
@@ -294,105 +328,31 @@ public class PullLayout extends ViewGroup {
             // Pick a new pointer to pick up the slack.
             final int newIndex = actionIndex == 0 ? 1 : 0;
             mPullPointerId = e.getPointerId(newIndex);
-            mLastX = mDX = e.getX(newIndex);
-            mLastY = mDY = e.getY(newIndex);
+            mLastTouchX = mTouchX = (int) (e.getX(newIndex) + 0.5f);
+            mLastTouchY = mTouchY = (int) (e.getY(newIndex) + 0.5f);
         }
     }
 
-    private void dispatchMove(final boolean horizontal, final MotionEvent ev,
-                              final int offsetX, final int offsetY) {
-        final boolean canScrollTop = isAbsList() || isScroller() ? ViewCompat.canScrollVertically(getChildAt(0), -1)
-                : getScrollY() + offsetY >= 0;
-        final boolean canScrollBottom = isAbsList() || isScroller() ? ViewCompat.canScrollVertically(getChildAt(0), 1)
-                : getScrollY() + offsetY <= 0;
-        final boolean canScrollLeft = isAbsList() || isScroller() ? ViewCompat.canScrollHorizontally(getChildAt(0), -1)
-                : getScrollX() + offsetX >= 0;
-        final boolean canScrollRight = isAbsList() || isScroller() ? ViewCompat.canScrollHorizontally(getChildAt(0), 1)
-                : getScrollX() + offsetX <= 0;
-
-        final boolean canScrollN = horizontal ? canScrollLeft : canScrollTop;
-        final boolean canScrollP = horizontal ? canScrollRight : canScrollBottom;
-
-        final int offset = horizontal ? offsetX : offsetY;
-        final boolean isPositive = offset > 0;
-        final int scroll = horizontal ? getScrollX() : getScrollY();
-
-        final int gravityN = horizontal ? GRAVITY_LEFT : GRAVITY_TOP;
-        final int gravityP = horizontal ? GRAVITY_RIGHT : GRAVITY_BOTTOM;
-
-        if (isPositive) {
-            moveImpl(horizontal, ev, offset, canScrollP, gravityP, scroll < 0);
-        } else {
-            moveImpl(horizontal, ev, offset, canScrollN, gravityN, scroll > 0);
-        }
-    }
-
-    private void moveImpl(final boolean horizontal, final MotionEvent ev,
-                          final int offset,
-                          final boolean canScroll, final int gravity,
-                          final boolean isScrollOver) {
-        if (isGravityEnable(gravity)) {
-            if (isScrollOver) {
-                intercept(horizontal, ev, offset);
-            } else {
-                if (canScroll) {
-                    releaseIntercept(ev);
-                } else {
-                    intercept(horizontal, ev, offset);
-                }
-            }
-        } else {
-            if (isScrollOver) {
-                intercept(horizontal, ev, offset);
-            } else {
-                if (canScroll) {
-                    releaseIntercept(ev);
-                } else {
-                    scrollTo(0, 0);
-                    intercept(horizontal, ev, getScrollY());
-                }
-            }
-
-            if (horizontal && gravity == GRAVITY_LEFT && getScrollX() < 0) {
-                scrollTo(0, getScrollY());
-            } else if (horizontal && gravity == GRAVITY_RIGHT && getScrollX() > 0) {
-                scrollTo(0, getScrollY());
-            } else if (!horizontal && gravity == GRAVITY_TOP && getScrollY() < 0) {
-                scrollTo(getScrollX(), 0);
-            } else if (!horizontal && gravity == GRAVITY_BOTTOM && getScrollY() > 0) {
-                scrollTo(getScrollX(), 0);
-            }
-        }
-    }
-
-    private void intercept(final boolean horizontal, final MotionEvent ev, final int offset) {
-        if (!mCancel[0]) {
-            mCancel[0] = true;
-            mCancel[1] = false;
-            ev.setAction(MotionEvent.ACTION_CANCEL);
-            super.dispatchTouchEvent(ev);
-        }
-        if (horizontal) {
-            scrollBy((int) (offset * mDampFactor), 0);
-        } else {
-            scrollBy(0, (int) (offset * mDampFactor));
-        }
-    }
-
-    private void releaseIntercept(final MotionEvent ev) {
-        if (mCancel[0]) {
-            mCancel[0] = false;
-            mCancel[1] = true;
-            ev.setAction(MotionEvent.ACTION_DOWN);
-        }
-        super.dispatchTouchEvent(ev);
-    }
-
-    private void dealUp(final boolean horizontal) {
-        mCurX = getScrollX();
-        mCurY = getScrollY();
-        mDst = horizontal ? 1 : -1;
+    private void dispatchUp() {
+        mPullX = getScrollX();
+        mPullY = getScrollY();
         start();
+    }
+
+    private void setPullState(int state) {
+        mPullState = state;
+    }
+
+    private boolean[] canNestedScrollVertically() {
+        final boolean canScrollTop = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getChildAt(0), -1);
+        final boolean canScrollBottom = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getChildAt(0), 1);
+        return new boolean[]{canScrollTop, canScrollBottom};
+    }
+
+    private boolean[] canNestedScrollHorizontally() {
+        final boolean canScrollLeft = (isAbsList() || isScroller()) && ViewCompat.canScrollHorizontally(getChildAt(0), -1);
+        final boolean canScrollRight = (isAbsList() || isScroller()) && ViewCompat.canScrollHorizontally(getChildAt(0), 1);
+        return new boolean[]{canScrollLeft, canScrollRight};
     }
 
     private boolean isGravityEnable(final int g) {
