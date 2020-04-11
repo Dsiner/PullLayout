@@ -21,17 +21,14 @@ public class FooterView extends EdgeView implements View.OnClickListener {
 
     public FooterView(Context context) {
         super(context);
-        init(context);
     }
 
     public FooterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
     }
 
     public FooterView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
     }
 
     @Override
@@ -45,7 +42,6 @@ public class FooterView extends EdgeView implements View.OnClickListener {
         ldv_loading = (LoadingView) mContainer.findViewById(R.id.ldv_loading);
         tv_load_more = (TextView) mContainer.findViewById(R.id.tv_load_more);
         tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_loading));
-        mMeasuredHeight = Utils.dp2px(context, 50);
     }
 
     @Override

@@ -21,6 +21,7 @@ public abstract class EdgeView extends LinearLayout
     protected LinearLayout mContainer;
     protected int mMeasuredHeight;
     protected int mState = STATE_NONE;
+    private boolean mResizable;
 
     public EdgeView(Context context) {
         super(context);
@@ -46,10 +47,6 @@ public abstract class EdgeView extends LinearLayout
 
         measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mMeasuredHeight = getMeasuredHeight();
-
-        LayoutParams lp = (LayoutParams) mContainer.getLayoutParams();
-        lp.height = 0;
-        mContainer.setLayoutParams(lp);
     }
 
     @Override
@@ -64,7 +61,7 @@ public abstract class EdgeView extends LinearLayout
         if (getVisibleHeight() > 0 || dy > 0) {
             int height = Math.max(0, (int) dy + getVisibleHeight());
             if (mState == STATE_NO_MORE) {
-                height = mMeasuredHeight;
+                height = getExpandedOffset();
             }
             setVisibleHeight(height);
             Log.d("EdgeView", "getVisibleHeight: " + getVisibleHeight());
@@ -77,7 +74,7 @@ public abstract class EdgeView extends LinearLayout
         if (mState == STATE_LOADING) {
             return;
         }
-        if (Math.abs(dy) > mMeasuredHeight) {
+        if (Math.abs(dy) > getExpandedOffset()) {
             setState(STATE_EXPANDED);
         } else {
             setState(STATE_NONE);
@@ -94,13 +91,34 @@ public abstract class EdgeView extends LinearLayout
             setState(STATE_LOADING);
         }
         if (mState == STATE_LOADING) {
-            anim(mMeasuredHeight, null);
+            anim(getExpandedOffset(), null);
         } else {
             anim(0, null);
         }
     }
 
+    @Override
+    public int getExpandedOffset() {
+        return mMeasuredHeight;
+    }
+
+    public boolean resizable() {
+        return mResizable;
+    }
+
+    public void setResizable(boolean enable) {
+        mResizable = enable;
+        if (enable) {
+            LayoutParams lp = (LayoutParams) mContainer.getLayoutParams();
+            lp.height = 0;
+            mContainer.setLayoutParams(lp);
+        }
+    }
+
     protected void reset() {
+        if (!resizable()) {
+            return;
+        }
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 anim(0, new AnimatorListenerAdapter() {
@@ -114,6 +132,9 @@ public abstract class EdgeView extends LinearLayout
     }
 
     protected void anim(final int dest, final AnimatorListenerAdapter listener) {
+        if (!resizable()) {
+            return;
+        }
         ValueAnimator anim = ValueAnimator.ofInt(getVisibleHeight(), dest);
         anim.setDuration(300);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

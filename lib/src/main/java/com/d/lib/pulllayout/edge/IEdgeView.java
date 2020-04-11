@@ -15,6 +15,8 @@ public interface IEdgeView extends IState {
 
     void onPullStateChanged(int newState);
 
+    int getExpandedOffset();
+
     interface OnClickListener {
         /**
          * Called when a view has been clicked.

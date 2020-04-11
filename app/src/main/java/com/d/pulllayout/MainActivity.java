@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.d.pulllayout.pull.activity.FreshActivity;
 import com.d.pulllayout.pull.activity.ListViewActivity;
+import com.d.pulllayout.pull.activity.RecyclerLayoutActivity;
 import com.d.pulllayout.pull.activity.RecyclerViewActivity;
 import com.d.pulllayout.pull.activity.ScrollViewActivity;
 import com.d.pulllayout.pull.activity.ViewActivity;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_scrollview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
+                startActivity(new Intent(MainActivity.this, RecyclerLayoutActivity.class));
             }
         });
     }

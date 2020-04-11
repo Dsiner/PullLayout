@@ -63,12 +63,15 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
 
     @NonNull
     protected IEdgeView getHeader() {
-        return new HeaderView(getContext());
+        HeaderView view = new HeaderView(getContext());
+        view.setResizable(true);
+        return view;
     }
 
     @NonNull
     protected IEdgeView getFooter() {
         FooterView view = new FooterView(getContext());
+        view.setResizable(true);
         view.setOnFooterClickListener(new IEdgeView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -392,7 +395,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         }
     }
 
-    void dispatchOnPullStateChanged(int state) {
+    private void dispatchOnPullStateChanged(int state) {
         // Listeners go last. All other internal state is consistent by this point.
         if (mOnPullListeners != null) {
             for (int i = mOnPullListeners.size() - 1; i >= 0; i--) {
@@ -422,7 +425,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
      * Add a listener that will be notified of any changes in pull state or position.
      *
      * <p>Components that add a listener should take care to remove it when finished.
-     * Other components that take ownership of a view may call {@link #clearOnScrollListeners()}
+     * Other components that take ownership of a view may call {@link #clearOnPullScrollListeners()}
      * to remove all attached listeners.</p>
      *
      * @param listener listener to set or null to clear

@@ -20,18 +20,15 @@ public class FooterView extends EdgeView implements View.OnClickListener {
 
     public FooterView(Context context) {
         super(context);
-        init(context);
     }
 
     public FooterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public FooterView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
     }
 
     @Override

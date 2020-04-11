@@ -22,19 +22,21 @@ import android.widget.ScrollView;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * PullLayout
  * Created by D on 2018/5/29.
  */
-public class PullLayout extends ViewGroup {
-    private static final int INVALID_POINTER = -1;
-    private static final int INVALID_ORIENTATION = -1;
+public class PullLayout extends ViewGroup implements Pullable {
+    protected static final int INVALID_POINTER = -1;
+    protected static final int INVALID_ORIENTATION = -1;
 
-    private final static int GRAVITY_TOP = 0x1;
-    private final static int GRAVITY_BOTTOM = 0x2;
-    private final static int GRAVITY_LEFT = 0x4;
-    private final static int GRAVITY_RIGHT = 0x8;
+    protected final static int GRAVITY_TOP = 0x1;
+    protected final static int GRAVITY_BOTTOM = 0x2;
+    protected final static int GRAVITY_LEFT = 0x4;
+    protected final static int GRAVITY_RIGHT = 0x8;
 
     @IntDef({HORIZONTAL, VERTICAL})
     @Retention(RetentionPolicy.SOURCE)
@@ -44,26 +46,27 @@ public class PullLayout extends ViewGroup {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
 
-    private int mWidth;
-    private int mHeight;
+    protected int mWidth;
+    protected int mHeight;
 
-    private int mTouchSlop;
-    private int mDuration = 250;
-    private float mDampFactor = 0.6f;
-    private int mOrientation = INVALID_ORIENTATION;
-    private int mPullPointerId = INVALID_POINTER;
-    private int mTouchX, mTouchY;
-    private int mLastTouchX, mLastTouchY;
-    private final int[] mPullOffset = new int[2];
-    private int mPullState = Pullable.PULL_STATE_IDLE;
+    protected int mTouchSlop;
+    protected int mDuration = 250;
+    protected float mDampFactor = 0.6f;
+    protected int mOrientation = INVALID_ORIENTATION;
+    protected int mPullPointerId = INVALID_POINTER;
+    protected int mTouchX, mTouchY;
+    protected int mLastTouchX, mLastTouchY;
+    protected final int[] mPullOffset = new int[2];
+    protected int mPullState = Pullable.PULL_STATE_IDLE;
 
-    private ValueAnimator mAnimation;
-    private AnimUpdateListener mAnimUpdateListener;
-    private AnimListenerAdapter mAnimListenerAdapter;
-    private float mFactor;
-    private int mPullX, mPullY;
-    private boolean mEnable;
-    private int mGravity;
+    protected ValueAnimator mAnimation;
+    protected AnimUpdateListener mAnimUpdateListener;
+    protected AnimListenerAdapter mAnimListenerAdapter;
+
+    protected boolean mEnable;
+    protected int mGravity;
+    protected Pullable.OnRefreshListener mOnRefreshListener;
+    protected List<Pullable.OnPullListener> mOnPullListeners;
 
     static class AnimListenerAdapter extends AnimatorListenerAdapter {
         private final WeakReference<PullLayout> reference;
@@ -78,7 +81,7 @@ public class PullLayout extends ViewGroup {
                 return;
             }
             PullLayout view = reference.get();
-            view.mFactor = 1;
+            view.mAnimUpdateListener.factor = 1;
             view.setPullState(Pullable.PULL_STATE_IDLE);
         }
 
@@ -88,7 +91,7 @@ public class PullLayout extends ViewGroup {
                 return;
             }
             PullLayout view = reference.get();
-            view.mFactor = 1;
+            view.mAnimUpdateListener.factor = 1;
             view.setPullState(Pullable.PULL_STATE_IDLE);
         }
 
@@ -102,9 +105,18 @@ public class PullLayout extends ViewGroup {
 
     static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
         private final WeakReference<PullLayout> reference;
+        private int x, y, destX, destY;
+        private float factor;
 
         AnimUpdateListener(PullLayout view) {
             this.reference = new WeakReference<>(view);
+        }
+
+        void ofInt(int x, int y, int destX, int destY) {
+            this.x = x;
+            this.y = y;
+            this.destX = destX;
+            this.destY = destY;
         }
 
         @Override
@@ -113,10 +125,10 @@ public class PullLayout extends ViewGroup {
                 return;
             }
             PullLayout view = reference.get();
-            view.mFactor = (float) animation.getAnimatedValue();
-            float scrollX = view.mPullX - view.mPullX * view.mFactor;
-            float scrollY = view.mPullY - view.mPullY * view.mFactor;
-            view.scrollTo((int) scrollX, (int) scrollY);
+            factor = (float) animation.getAnimatedValue();
+            int scrollX = (int) (x + (destX - x) * factor);
+            int scrollY = (int) (y + (destY - y) * factor);
+            view.scrollTo(scrollX, scrollY);
             view.invalidate();
             view.setPullState(Pullable.PULL_STATE_SETTLING);
         }
@@ -163,7 +175,7 @@ public class PullLayout extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int count = getChildCount();
         if (count > 0) {
-            View child = getChildAt(0);
+            View child = getNestedChild();
             child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
         }
     }
@@ -208,43 +220,39 @@ public class PullLayout extends ViewGroup {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                cancelAnim();
                 mPullPointerId = ev.getPointerId(0);
                 mLastTouchX = mTouchX = (int) (ev.getX() + 0.5f);
                 mLastTouchY = mTouchY = (int) (ev.getY() + 0.5f);
                 mPullOffset[0] = 0;
                 mPullOffset[1] = 0;
                 if (getScrollX() != 0) {
+                    scrollTo(getScrollX(), 0);
                     mOrientation = HORIZONTAL;
-                    setPullState(Pullable.PULL_STATE_DRAGGING);
-                    mPullOffset[0] += getScrollX();
                 } else if (getScrollY() != 0) {
+                    scrollTo(0, getScrollY());
                     mOrientation = VERTICAL;
-                    setPullState(Pullable.PULL_STATE_DRAGGING);
-                    mPullOffset[1] += getScrollY();
                 } else {
                     mOrientation = INVALID_ORIENTATION;
-                    setPullState(Pullable.PULL_STATE_IDLE);
                 }
-                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
-                    return false;
-                }
-                break;
+                setPullState(Pullable.PULL_STATE_IDLE);
+                super.dispatchTouchEvent(ev);
+                return true;
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 mPullPointerId = ev.getPointerId(actionIndex);
                 mLastTouchX = mTouchX = (int) (ev.getX(actionIndex) + 0.5f);
                 mLastTouchY = mTouchY = (int) (ev.getY(actionIndex) + 0.5f);
-                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
-                    return true;
-                }
-                break;
+                super.dispatchTouchEvent(ev);
+                return true;
 
             case MotionEvent.ACTION_MOVE:
                 final int index = ev.findPointerIndex(mPullPointerId);
                 if (index < 0) {
                     Log.e("PullLayout", "Error processing scroll; pointer index for id "
                             + mPullPointerId + " not found. Did any MotionEvents get skipped?");
-                    return super.dispatchTouchEvent(ev);
+                    super.dispatchTouchEvent(ev);
+                    return true;
                 }
                 final int x = (int) (ev.getX(index) + 0.5f);
                 final int y = (int) (ev.getY(index) + 0.5f);
@@ -255,31 +263,36 @@ public class PullLayout extends ViewGroup {
                     boolean startScroll = false;
                     if (mOrientation != VERTICAL
                             && Math.abs(dx) > mTouchSlop && Math.abs(dx) > Math.abs(dy)) {
-                        if (!canNestedScrollHorizontally[0] && mLastTouchX - x < 0
+                        if (getScrollX() != 0
+                                || !canNestedScrollHorizontally[0] && mLastTouchX - x < 0
                                 || !canNestedScrollHorizontally[1] && mLastTouchX - x > 0) {
                             mLastTouchX = mTouchX = x;
                             mLastTouchY = mTouchY = y;
                             mOrientation = HORIZONTAL;
+                            mPullOffset[0] = (int) (getScrollX() / mDampFactor);
+                            mPullOffset[1] = 0;
                             startScroll = true;
                         }
                     } else if (mOrientation != HORIZONTAL
                             && Math.abs(dy) > mTouchSlop && Math.abs(dy) > Math.abs(dx)) {
-                        if (!canNestedScrollVertically[0] && mLastTouchY - y < 0
+                        if (getScrollY() != 0
+                                || !canNestedScrollVertically[0] && mLastTouchY - y < 0
                                 || !canNestedScrollVertically[1] && mLastTouchY - y > 0) {
                             mLastTouchX = mTouchX = x;
                             mLastTouchY = mTouchY = y;
                             mOrientation = VERTICAL;
+                            mPullOffset[0] = 0;
+                            mPullOffset[1] = (int) (getScrollY() / mDampFactor);
                             startScroll = true;
                         }
                     }
                     if (startScroll) {
                         setPullState(Pullable.PULL_STATE_DRAGGING);
+                        return true;
                     }
                 }
                 final int dx = mLastTouchX - x;
                 final int dy = mLastTouchY - y;
-                Log.d("dsiner", "dispatchTouchEvent dy: " + dy + " "
-                        + (mPullState == Pullable.PULL_STATE_DRAGGING));
                 if (mPullState == Pullable.PULL_STATE_DRAGGING) {
                     if (mOrientation == HORIZONTAL) {
                         int offsetOld = mPullOffset[0];
@@ -291,8 +304,15 @@ public class PullLayout extends ViewGroup {
                         delta = delta > 0 ? delta + 0.5f
                                 : delta < 0 ? delta - 0.5f : delta;
                         scrollTo((int) delta, 0);
-                        if (offset == 0 && offset != offsetOld) {
+                        if (getScrollX() == 0 && offset != offsetOld) {
+                            mLastTouchX = mTouchX = x;
+                            mLastTouchY = mTouchY = y;
                             setPullState(Pullable.PULL_STATE_IDLE);
+                            if (ev.getPointerCount() == 1) {
+                                ev.setAction(MotionEvent.ACTION_POINTER_DOWN);
+                                super.dispatchTouchEvent(ev);
+                            }
+                            return true;
                         }
                     } else if (mOrientation == VERTICAL) {
                         int offsetOld = mPullOffset[1];
@@ -304,24 +324,29 @@ public class PullLayout extends ViewGroup {
                         delta = delta > 0 ? delta + 0.5f
                                 : delta < 0 ? delta - 0.5f : delta;
                         scrollTo(0, (int) delta);
-                        if (offset == 0 && offset != offsetOld) {
+                        if (getScrollY() == 0 && offset != offsetOld) {
+                            mLastTouchX = mTouchX = x;
+                            mLastTouchY = mTouchY = y;
                             setPullState(Pullable.PULL_STATE_IDLE);
+                            if (ev.getPointerCount() == 1) {
+                                ev.setAction(MotionEvent.ACTION_POINTER_DOWN);
+                                super.dispatchTouchEvent(ev);
+                            }
+                            return true;
                         }
                     }
                 }
                 mLastTouchX = x;
                 mLastTouchY = y;
-                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
-                    return true;
+                if (mPullState != Pullable.PULL_STATE_DRAGGING) {
+                    super.dispatchTouchEvent(ev);
                 }
-                break;
+                return true;
 
             case MotionEvent.ACTION_POINTER_UP:
-                if (mPullState == Pullable.PULL_STATE_DRAGGING) {
-                    onPointerUp(ev);
-                    return true;
-                }
-                break;
+                onPointerUp(ev);
+                super.dispatchTouchEvent(ev);
+                return true;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -331,16 +356,23 @@ public class PullLayout extends ViewGroup {
                 if (mOrientation != INVALID_ORIENTATION) {
                     ev.setAction(MotionEvent.ACTION_CANCEL);
                 }
-                onActionUp();
+                if (!isLoading()) {
+                    onActionUp(0, 0);
+                }
                 mPullOffset[0] = 0;
                 mPullOffset[1] = 0;
                 mOrientation = INVALID_ORIENTATION;
-                break;
+                super.dispatchTouchEvent(ev);
+                return true;
         }
         return super.dispatchTouchEvent(ev);
     }
 
-    private void onPointerUp(MotionEvent e) {
+    protected boolean isLoading() {
+        return false;
+    }
+
+    protected void onPointerUp(MotionEvent e) {
         final int actionIndex = e.getActionIndex();
         if (e.getPointerId(actionIndex) == mPullPointerId) {
             // Pick a new pointer to pick up the slack.
@@ -351,29 +383,63 @@ public class PullLayout extends ViewGroup {
         }
     }
 
-    private void onActionUp() {
-        mPullX = getScrollX();
-        mPullY = getScrollY();
-        startAnim();
+    protected void onActionUp(int destX, int destY) {
+        startAnim(destX, destY);
     }
 
-    private void setPullState(int state) {
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        dispatchOnPullScrolled(l, t);
+    }
+
+    @Override
+    public int getPullState() {
+        return mPullState;
+    }
+
+    @Override
+    public void setPullState(int state) {
+        if (state == mPullState) {
+            return;
+        }
         mPullState = state;
+        dispatchOnPullStateChanged(state);
     }
 
-    private boolean[] canNestedScrollVertically() {
-        final boolean canScrollTop = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getChildAt(0), -1);
-        final boolean canScrollBottom = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getChildAt(0), 1);
+    @Override
+    public boolean canPullDown() {
+        return true;
+    }
+
+    @Override
+    public boolean canPullUp() {
+        return true;
+    }
+
+    @Override
+    public void setCanPullDown(boolean enable) {
+
+    }
+
+    @Override
+    public void setCanPullUp(boolean enable) {
+
+    }
+
+    protected boolean[] canNestedScrollVertically() {
+        final boolean canScrollTop = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getNestedChild(), -1);
+        final boolean canScrollBottom = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getNestedChild(), 1);
         return new boolean[]{canScrollTop, canScrollBottom};
     }
 
-    private boolean[] canNestedScrollHorizontally() {
-        final boolean canScrollLeft = (isAbsList() || isScroller()) && ViewCompat.canScrollHorizontally(getChildAt(0), -1);
-        final boolean canScrollRight = (isAbsList() || isScroller()) && ViewCompat.canScrollHorizontally(getChildAt(0), 1);
+    protected boolean[] canNestedScrollHorizontally() {
+        final boolean canScrollLeft = (isAbsList() || isScroller()) && ViewCompat.canScrollHorizontally(getNestedChild(), -1);
+        final boolean canScrollRight = (isAbsList() || isScroller()) && ViewCompat.canScrollHorizontally(getNestedChild(), 1);
         return new boolean[]{canScrollLeft, canScrollRight};
     }
 
-    private boolean isGravityEnable(final int g) {
+    protected boolean isGravityEnable(final int g) {
         switch (g) {
             case GRAVITY_TOP:
                 return (mGravity & 0x1) != 0;
@@ -389,17 +455,22 @@ public class PullLayout extends ViewGroup {
     }
 
     private boolean isAbsList() {
-        View view = getChildAt(0);
+        View view = getNestedChild();
         return view instanceof AbsListView || view instanceof RecyclerView;
     }
 
     private boolean isScroller() {
-        View view = getChildAt(0);
+        View view = getNestedChild();
         return view instanceof ScrollView;
     }
 
-    public void startAnim() {
+    protected View getNestedChild() {
+        return getChildAt(0);
+    }
+
+    public void startAnim(int destX, int destY) {
         cancelAnim();
+        mAnimUpdateListener.ofInt(getScrollX(), getScrollY(), destX, destY);
         mAnimation.addUpdateListener(mAnimUpdateListener);
         mAnimation.addListener(mAnimListenerAdapter);
         mAnimation.start();
@@ -411,5 +482,67 @@ public class PullLayout extends ViewGroup {
         mAnimation.removeAllListeners();
         mAnimation.cancel();
         return running;
+    }
+
+    protected void dispatchOnPullStateChanged(int state) {
+        // Listeners go last. All other internal state is consistent by this point.
+        if (mOnPullListeners != null) {
+            for (int i = mOnPullListeners.size() - 1; i >= 0; i--) {
+                mOnPullListeners.get(i).onPullStateChanged(this, state);
+            }
+        }
+    }
+
+    protected void dispatchOnPullScrolled(int hresult, int vresult) {
+        // Pass the real deltas to onScrolled
+        if (mOnPullListeners != null) {
+            for (int i = mOnPullListeners.size() - 1; i >= 0; i--) {
+                mOnPullListeners.get(i).onPulled(this, hresult, vresult);
+            }
+        }
+    }
+
+    /**
+     * Set the listener to be notified when a refresh is triggered via the swipe
+     * gesture.
+     */
+    public void setOnPullListener(OnRefreshListener listener) {
+        this.mOnRefreshListener = listener;
+    }
+
+    /**
+     * Add a listener that will be notified of any changes in pull state or position.
+     *
+     * <p>Components that add a listener should take care to remove it when finished.
+     * Other components that take ownership of a view may call {@link #clearOnPullScrollListeners()}
+     * to remove all attached listeners.</p>
+     *
+     * @param listener listener to set or null to clear
+     */
+    public void addOnPullScrollListener(OnPullListener listener) {
+        if (mOnPullListeners == null) {
+            mOnPullListeners = new ArrayList<>();
+        }
+        mOnPullListeners.add(listener);
+    }
+
+    /**
+     * Remove a listener that was notified of any changes in pull state or position.
+     *
+     * @param listener listener to set or null to clear
+     */
+    public void removeOnPullScrollListener(OnPullListener listener) {
+        if (mOnPullListeners != null) {
+            mOnPullListeners.remove(listener);
+        }
+    }
+
+    /**
+     * Remove all secondary listener that were notified of any changes in pull state or position.
+     */
+    public void clearOnPullScrollListeners() {
+        if (mOnPullListeners != null) {
+            mOnPullListeners.clear();
+        }
     }
 }

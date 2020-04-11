@@ -32,17 +32,14 @@ public class HeaderView extends EdgeView {
 
     public HeaderView(Context context) {
         super(context);
-        init(context);
     }
 
     public HeaderView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
     }
 
     public HeaderView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
     }
 
     @Override
@@ -57,7 +54,6 @@ public class HeaderView extends EdgeView {
         tv_head_tip = (TextView) mContainer.findViewById(R.id.tv_head_tip);
         ldv_loading = (LoadingView) mContainer.findViewById(R.id.ldv_loading);
         tv_head_last_update_time = (TextView) mContainer.findViewById(R.id.tv_head_last_update_time);
-        mMeasuredHeight = Utils.dp2px(context, 60);
         initAnim();
         updateTime();
     }
@@ -130,13 +126,6 @@ public class HeaderView extends EdgeView {
                 break;
         }
         mState = state;
-    }
-
-    @Override
-    public void onPulled(float dx, float dy) {
-        super.onPulled(dx, dy);
-        Log.d("EdgeView", "mState: " + mState+" "+tv_head_tip.getText());
-
     }
 
     private void updateTime() {
