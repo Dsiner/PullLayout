@@ -16,6 +16,7 @@ import android.view.ViewParent;
 
 import com.d.lib.pulllayout.AppBarStateChangeListener;
 import com.d.lib.pulllayout.Pullable;
+import com.d.lib.pulllayout.Refreshable;
 import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.lib.pulllayout.edge.IState;
 import com.d.lib.pulllayout.edge.arrow.FooterView;
@@ -26,7 +27,11 @@ import com.d.lib.pulllayout.rv.adapter.WrapAdapterDataObserver;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PullRecyclerView extends RecyclerView implements Pullable {
+/**
+ * PullRecyclerView
+ * Created by D on 2020/3/21.
+ */
+public class PullRecyclerView extends RecyclerView implements Pullable, Refreshable {
     private static final int INVALID_POINTER = -1;
 
     @NonNull
@@ -43,8 +48,8 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
     private int mPullState = Pullable.PULL_STATE_IDLE;
     private AppBarStateChangeListener.State mAppbarState = AppBarStateChangeListener.State.EXPANDED;
     private WrapAdapter mWrapAdapter;
-    private OnRefreshListener mOnRefreshListener;
     private List<OnPullListener> mOnPullListeners;
+    private OnRefreshListener mOnRefreshListener;
 
     public PullRecyclerView(Context context) {
         this(context, null);
@@ -59,6 +64,9 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         mHeaderView = getHeader();
         mFooterView = getFooter();
         mHeaderList = new HeaderList();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        setLayoutManager(layoutManager);
     }
 
     @NonNull
@@ -84,11 +92,13 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         return view;
     }
 
+    @Override
     public void reset() {
         loadMoreSuccess();
         refreshSuccess();
     }
 
+    @Override
     public void refresh() {
         if (!canPullDown() || isLoading()) {
             return;
@@ -99,6 +109,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         }
     }
 
+    @Override
     public void loadMore() {
         if (!canPullUp() || isLoading()) {
             return;
@@ -109,24 +120,29 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         }
     }
 
+    @Override
     public void refreshSuccess() {
         mHeaderView.setState(IState.STATE_SUCCESS);
         mFooterView.setState(IState.STATE_NONE);
     }
 
+    @Override
     public void refreshError() {
         mHeaderView.setState(IState.STATE_SUCCESS);
         mFooterView.setState(IState.STATE_NONE);
     }
 
+    @Override
     public void loadMoreSuccess() {
         mFooterView.setState(IState.STATE_SUCCESS);
     }
 
+    @Override
     public void loadMoreError() {
         mFooterView.setState(IState.STATE_ERROR);
     }
 
+    @Override
     public void loadMoreNoMore() {
         mFooterView.setState(IState.STATE_NO_MORE);
     }
@@ -166,7 +182,13 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
     }
 
     public boolean removeHeaderView(View v) {
-        return mHeaderList.remove(v);
+        if (mHeaderList.remove(v)) {
+            if (mWrapAdapter != null) {
+                mWrapAdapter.notifyDataSetChanged();
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -413,23 +435,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         }
     }
 
-    /**
-     * Set the listener to be notified when a refresh is triggered via the swipe
-     * gesture.
-     */
-    public void setOnPullListener(OnRefreshListener listener) {
-        this.mOnRefreshListener = listener;
-    }
-
-    /**
-     * Add a listener that will be notified of any changes in pull state or position.
-     *
-     * <p>Components that add a listener should take care to remove it when finished.
-     * Other components that take ownership of a view may call {@link #clearOnPullScrollListeners()}
-     * to remove all attached listeners.</p>
-     *
-     * @param listener listener to set or null to clear
-     */
+    @Override
     public void addOnPullScrollListener(OnPullListener listener) {
         if (mOnPullListeners == null) {
             mOnPullListeners = new ArrayList<>();
@@ -437,23 +443,22 @@ public class PullRecyclerView extends RecyclerView implements Pullable {
         mOnPullListeners.add(listener);
     }
 
-    /**
-     * Remove a listener that was notified of any changes in pull state or position.
-     *
-     * @param listener listener to set or null to clear
-     */
+    @Override
     public void removeOnPullScrollListener(OnPullListener listener) {
         if (mOnPullListeners != null) {
             mOnPullListeners.remove(listener);
         }
     }
 
-    /**
-     * Remove all secondary listener that were notified of any changes in pull state or position.
-     */
+    @Override
     public void clearOnPullScrollListeners() {
         if (mOnPullListeners != null) {
             mOnPullListeners.clear();
         }
+    }
+
+    @Override
+    public void setOnRefreshListener(OnRefreshListener listener) {
+        this.mOnRefreshListener = listener;
     }
 }

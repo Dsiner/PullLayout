@@ -23,12 +23,12 @@ public class RecyclerAdapter extends CommonAdapter<String> {
     @Override
     public void convert(final int position, CommonHolder holder, String item) {
         holder.setText(R.id.tv_item, "" + position);
-        holder.setOnClickListener(R.id.tv_item, new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "Click at: " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        holder.setOnClickListener(R.id.tv_item, new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mContext, "Click at: " + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

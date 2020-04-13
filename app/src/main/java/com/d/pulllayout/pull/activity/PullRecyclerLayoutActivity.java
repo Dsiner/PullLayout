@@ -18,8 +18,8 @@ import java.util.List;
  * RecyclerLayoutActivity
  * Created by D on 2018/5/31.
  */
-public class RecyclerLayoutActivity extends AppCompatActivity {
-    public static PullRecyclerLayout prl_list;
+public class PullRecyclerLayoutActivity extends AppCompatActivity {
+    private PullRecyclerLayout prl_list;
     private RecyclerView rv_list;
 
     @Override
@@ -41,7 +41,7 @@ public class RecyclerLayoutActivity extends AppCompatActivity {
     @NonNull
     private List<String> getDatas() {
         List<String> datas = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 20; i++) {
             datas.add("" + i);
         }
         return datas;

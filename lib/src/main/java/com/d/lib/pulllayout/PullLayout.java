@@ -65,7 +65,6 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     protected boolean mEnable;
     protected int mGravity;
-    protected Pullable.OnRefreshListener mOnRefreshListener;
     protected List<Pullable.OnPullListener> mOnPullListeners;
 
     static class AnimListenerAdapter extends AnimatorListenerAdapter {
@@ -157,8 +156,8 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     private void initTypedArray(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.lib_pull_PullLayout);
-        mEnable = typedArray.getBoolean(R.styleable.lib_pull_PullLayout_lib_pull_pulllayout_enable, true);
-        mGravity = typedArray.getInt(R.styleable.lib_pull_PullLayout_lib_pull_pulllayout_gravity, 0x11);
+        mEnable = typedArray.getBoolean(R.styleable.lib_pull_PullLayout_lib_pull_enable, true);
+        mGravity = typedArray.getInt(R.styleable.lib_pull_PullLayout_lib_pull_gravity, 0x11);
         typedArray.recycle();
     }
 
@@ -502,23 +501,7 @@ public class PullLayout extends ViewGroup implements Pullable {
         }
     }
 
-    /**
-     * Set the listener to be notified when a refresh is triggered via the swipe
-     * gesture.
-     */
-    public void setOnPullListener(OnRefreshListener listener) {
-        this.mOnRefreshListener = listener;
-    }
-
-    /**
-     * Add a listener that will be notified of any changes in pull state or position.
-     *
-     * <p>Components that add a listener should take care to remove it when finished.
-     * Other components that take ownership of a view may call {@link #clearOnPullScrollListeners()}
-     * to remove all attached listeners.</p>
-     *
-     * @param listener listener to set or null to clear
-     */
+    @Override
     public void addOnPullScrollListener(OnPullListener listener) {
         if (mOnPullListeners == null) {
             mOnPullListeners = new ArrayList<>();
@@ -526,20 +509,14 @@ public class PullLayout extends ViewGroup implements Pullable {
         mOnPullListeners.add(listener);
     }
 
-    /**
-     * Remove a listener that was notified of any changes in pull state or position.
-     *
-     * @param listener listener to set or null to clear
-     */
+    @Override
     public void removeOnPullScrollListener(OnPullListener listener) {
         if (mOnPullListeners != null) {
             mOnPullListeners.remove(listener);
         }
     }
 
-    /**
-     * Remove all secondary listener that were notified of any changes in pull state or position.
-     */
+    @Override
     public void clearOnPullScrollListeners() {
         if (mOnPullListeners != null) {
             mOnPullListeners.clear();

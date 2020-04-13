@@ -1,6 +1,7 @@
 package com.d.lib.pulllayout.lv.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +16,20 @@ import java.util.List;
  */
 public abstract class CommonAdapter<T> extends BaseAdapter {
     protected Context mContext;
+    @NonNull
     protected List<T> mDatas;
     protected LayoutInflater mInflater;
     protected int mLayoutId;
     protected MultiItemTypeSupport<T> mMultiItemTypeSupport;
 
-    public CommonAdapter(Context context, List<T> datas, int layoutId) {
+    public CommonAdapter(@NonNull Context context, List<T> datas, int layoutId) {
         mContext = context;
         mDatas = datas == null ? new ArrayList<T>() : datas;
         mInflater = LayoutInflater.from(mContext);
         mLayoutId = layoutId;
     }
 
-    public CommonAdapter(Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
+    public CommonAdapter(@NonNull Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
         mContext = context;
         mDatas = datas == null ? new ArrayList<T>() : datas;
         mInflater = LayoutInflater.from(mContext);
@@ -80,7 +82,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final CommonHolder holder = getViewHolder(position, convertView, parent);
         convert(position, holder, getItem(position));
-        return holder.itemView();
+        return holder.itemView;
     }
 
     /**

@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="lib_pull_PullLayout">
-        <attr name="lib_pull_pulllayout_enable" format="boolean" />
-        <attr name="lib_pull_pulllayout_gravity">
+        <attr name="lib_pull_enable" format="boolean" />
+        <attr name="lib_pull_gravity">
             <flag name="top" value="1" />
             <flag name="bottom" value="2" />
             <flag name="left" value="4" />
             <flag name="right" value="8" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="lib_pull_PullRecyclerLayout">
+        <attr name="lib_pull_type">
+            <flag name="recyclerView" value="1" />
+            <flag name="listView" value="2" />
         </attr>
     </declare-styleable>
 </resources>

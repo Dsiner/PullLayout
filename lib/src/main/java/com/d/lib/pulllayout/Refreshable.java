@@ -1,0 +1,43 @@
+package com.d.lib.pulllayout;
+
+/**
+ * Refreshable
+ * Created by D on 2017/4/26.
+ */
+public interface Refreshable {
+
+    void reset();
+
+    void refresh();
+
+    void loadMore();
+
+    void refreshSuccess();
+
+    void refreshError();
+
+    void loadMoreSuccess();
+
+    void loadMoreError();
+
+    void loadMoreNoMore();
+
+    /**
+     * Set the listener to be notified when a refresh is triggered via the swipe
+     * gesture.
+     */
+    void setOnRefreshListener(OnRefreshListener listener);
+
+    /**
+     * Classes that wish to be notified when the swipe gesture correctly
+     * triggers a refresh should implement this interface.
+     */
+    interface OnRefreshListener {
+        /**
+         * Called when a swipe gesture triggers a refresh.
+         */
+        void onRefresh();
+
+        void onLoadMore();
+    }
+}

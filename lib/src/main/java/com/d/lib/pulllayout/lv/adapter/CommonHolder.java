@@ -21,17 +21,17 @@ import android.widget.TextView;
  * Created by D on 2017/4/25.
  */
 public class CommonHolder {
-    public final View mItemView;
-    public final int mLayoutId;
+    public final View itemView;
+    public final int layoutId;
     private int mPosition;
     private final SparseArray<View> mViews;
 
     private CommonHolder(Context context, ViewGroup parent, int layoutId, int position) {
-        this.mLayoutId = layoutId;
+        this.layoutId = layoutId;
         this.mPosition = position;
         this.mViews = new SparseArray<>();
-        this.mItemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        this.mItemView.setTag(this);
+        this.itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
+        this.itemView.setTag(this);
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class CommonHolder {
             return new CommonHolder(context, parent, layoutId, position);
         }
         CommonHolder holder = (CommonHolder) convertView.getTag();
-        if (holder.mLayoutId != layoutId) {
+        if (holder.layoutId != layoutId) {
             return new CommonHolder(context, parent, layoutId, position);
         }
         holder.mPosition = position;
@@ -53,17 +53,13 @@ public class CommonHolder {
         return mPosition;
     }
 
-    public View itemView() {
-        return mItemView;
-    }
-
     /**
      * Finds the first descendant view with the given ID
      */
     public <T extends View> T getView(@IdRes int id) {
         View view = mViews.get(id);
         if (view == null) {
-            view = mItemView.findViewById(id);
+            view = itemView.findViewById(id);
             mViews.put(id, view);
         }
         return (T) view;

@@ -18,18 +18,19 @@ import java.util.List;
  */
 public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder> implements ItemTouchHelperAdapter {
     protected Context mContext;
+    @NonNull
     protected List<T> mDatas;
     protected int mLayoutId;
     protected MultiItemTypeSupport<T> mMultiItemTypeSupport;
     protected OnStartDragListener mStartDragListener;
 
-    public CommonAdapter(Context context, List<T> datas, int layoutId) {
+    public CommonAdapter(@NonNull Context context, List<T> datas, int layoutId) {
         mContext = context;
         mDatas = datas == null ? new ArrayList<T>() : datas;
         mLayoutId = layoutId;
     }
 
-    public CommonAdapter(Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
+    public CommonAdapter(@NonNull Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
         mContext = context;
         mDatas = datas == null ? new ArrayList<T>() : datas;
         this.mMultiItemTypeSupport = multiItemTypeSupport;
@@ -65,7 +66,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
             }
         }
         CommonHolder holder = CommonHolder.createViewHolder(mContext, parent, layoutId);
-        onViewHolderCreated(holder, holder.itemView());
+        onViewHolderCreated(holder, holder.itemView);
         return holder;
     }
 
@@ -85,7 +86,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
     /**
      * @param position The position of the item within the adapter's data set.
      * @param holder   Holder
-     * @param item     Position对应的数据
+     * @param item     Data
      */
     public abstract void convert(int position, CommonHolder holder, T item);
 

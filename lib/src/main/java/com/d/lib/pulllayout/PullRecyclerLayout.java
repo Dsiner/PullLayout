@@ -1,23 +1,34 @@
 package com.d.lib.pulllayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ListView;
 
 import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.lib.pulllayout.edge.IState;
 import com.d.lib.pulllayout.edge.arrow.FooterView;
 import com.d.lib.pulllayout.edge.arrow.HeaderView;
 
-public class PullRecyclerLayout extends PullLayout {
+/**
+ * PullRecyclerLayout
+ * Created by D on 2020/3/21.
+ */
+public class PullRecyclerLayout extends PullLayout implements Refreshable {
+    private static final int TYPE_RECYCLERVIEW = 1;
+    private static final int TYPE_LISTVIEW = 2;
+
     @NonNull
     private final IEdgeView mHeaderView;
     @NonNull
     private final IEdgeView mFooterView;
-    private final RecyclerView mRecyclerView;
+    private final View mRecyclerList;
+    private final int mType;
+    private OnRefreshListener mOnRefreshListener;
 
     public PullRecyclerLayout(Context context) {
         this(context, null);
@@ -29,11 +40,16 @@ public class PullRecyclerLayout extends PullLayout {
 
     public PullRecyclerLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.lib_pull_PullRecyclerLayout);
+        mType = typedArray.getInt(R.styleable.lib_pull_PullRecyclerLayout_lib_pull_type, 1);
+        typedArray.recycle();
+
         mHeaderView = getHeader();
         mFooterView = getFooter();
-        mRecyclerView = new RecyclerView(context);
+        mRecyclerList = mType == TYPE_LISTVIEW ? new ListView(context) : new RecyclerView(context);
         addView((View) mHeaderView);
-        addView(mRecyclerView);
+        addView(mRecyclerList);
         addView((View) mFooterView);
     }
 
@@ -57,11 +73,13 @@ public class PullRecyclerLayout extends PullLayout {
         return view;
     }
 
+    @Override
     public void reset() {
         loadMoreSuccess();
         refreshSuccess();
     }
 
+    @Override
     public void refresh() {
         if (!canPullDown() || isLoading()) {
             return;
@@ -72,6 +90,7 @@ public class PullRecyclerLayout extends PullLayout {
         }
     }
 
+    @Override
     public void loadMore() {
         if (!canPullUp() || isLoading()) {
             return;
@@ -82,31 +101,41 @@ public class PullRecyclerLayout extends PullLayout {
         }
     }
 
+    @Override
     public void refreshSuccess() {
         startAnim(0, 0);
         mHeaderView.setState(IState.STATE_SUCCESS);
         mFooterView.setState(IState.STATE_NONE);
     }
 
+    @Override
     public void refreshError() {
         startAnim(0, 0);
         mHeaderView.setState(IState.STATE_SUCCESS);
         mFooterView.setState(IState.STATE_NONE);
     }
 
+    @Override
     public void loadMoreSuccess() {
         startAnim(0, 0);
         mFooterView.setState(IState.STATE_SUCCESS);
     }
 
+    @Override
     public void loadMoreError() {
         startAnim(0, 0);
         mFooterView.setState(IState.STATE_ERROR);
     }
 
+    @Override
     public void loadMoreNoMore() {
         startAnim(0, 0);
         mFooterView.setState(IState.STATE_NO_MORE);
+    }
+
+    @Override
+    public void setOnRefreshListener(OnRefreshListener listener) {
+        this.mOnRefreshListener = listener;
     }
 
     @Override
@@ -122,11 +151,11 @@ public class PullRecyclerLayout extends PullLayout {
             View header = (View) mHeaderView;
             header.layout(0, -header.getMeasuredHeight(),
                     header.getMeasuredWidth(), 0);
-            mRecyclerView.layout(0, 0,
-                    mRecyclerView.getMeasuredWidth(), mRecyclerView.getMeasuredHeight());
+            mRecyclerList.layout(0, 0,
+                    mRecyclerList.getMeasuredWidth(), mRecyclerList.getMeasuredHeight());
             View footer = (View) mFooterView;
-            footer.layout(0, mRecyclerView.getMeasuredHeight(),
-                    footer.getMeasuredWidth(), mRecyclerView.getMeasuredHeight() + footer.getMeasuredHeight());
+            footer.layout(0, mRecyclerList.getMeasuredHeight(),
+                    footer.getMeasuredWidth(), mRecyclerList.getMeasuredHeight() + footer.getMeasuredHeight());
         }
     }
 
@@ -177,7 +206,7 @@ public class PullRecyclerLayout extends PullLayout {
 
     @Override
     protected View getNestedChild() {
-        return mRecyclerView;
+        return mRecyclerList;
     }
 
     @Override

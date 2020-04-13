@@ -17,15 +17,13 @@ import android.widget.TextView;
 import com.d.lib.pulllayout.rv.itemtouchhelper.ItemTouchHelperViewHolder;
 
 public class CommonHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
-    public final View mItemView;
-    public final int mLayoutId;
+    public final int layoutId;
     private final SparseArray<View> mViews;
     private ItemTouchHelperViewHolder mItemTouchListener;
 
     private CommonHolder(View itemView, int layoutId) {
         super(itemView);
-        this.mItemView = itemView;
-        this.mLayoutId = layoutId;
+        this.layoutId = layoutId;
         this.mViews = new SparseArray<>();
     }
 
@@ -40,17 +38,13 @@ public class CommonHolder extends RecyclerView.ViewHolder implements ItemTouchHe
         return new CommonHolder(itemView, layoutId);
     }
 
-    public View itemView() {
-        return mItemView;
-    }
-
     /**
      * Finds the first descendant view with the given ID
      */
     public <T extends View> T getView(@IdRes int id) {
         View view = mViews.get(id);
         if (view == null) {
-            view = mItemView.findViewById(id);
+            view = itemView.findViewById(id);
             mViews.put(id, view);
         }
         return (T) view;

@@ -9,6 +9,6 @@
         android:id="@+id/prl_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:lib_pull_pulllayout_enable="true"
-        app:lib_pull_pulllayout_gravity="top|left|right|bottom" />
+        app:lib_pull_enable="true"
+        app:lib_pull_gravity="top|left|right|bottom" />
 </FrameLayout>

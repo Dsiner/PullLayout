@@ -47,17 +47,27 @@ public interface Pullable {
     void setCanPullUp(boolean enable);
 
     /**
-     * Classes that wish to be notified when the swipe gesture correctly
-     * triggers a refresh should implement this interface.
+     * Add a listener that will be notified of any changes in pull state or position.
+     *
+     * <p>Components that add a listener should take care to remove it when finished.
+     * Other components that take ownership of a view may call {@link #clearOnPullScrollListeners()}
+     * to remove all attached listeners.</p>
+     *
+     * @param listener listener to set or null to clear
      */
-    interface OnRefreshListener {
-        /**
-         * Called when a swipe gesture triggers a refresh.
-         */
-        void onRefresh();
+    void addOnPullScrollListener(OnPullListener listener);
 
-        void onLoadMore();
-    }
+    /**
+     * Remove a listener that was notified of any changes in pull state or position.
+     *
+     * @param listener listener to set or null to clear
+     */
+    void removeOnPullScrollListener(OnPullListener listener);
+
+    /**
+     * Remove all secondary listener that were notified of any changes in pull state or position.
+     */
+    void clearOnPullScrollListeners();
 
     abstract class OnPullListener {
 

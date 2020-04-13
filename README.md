@@ -21,8 +21,8 @@
     <com.d.lib.pulllayout.PullLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:lib_pull_pulllayout_enable="true"
-        app:lib_pull_pulllayout_gravity="top|left|right">
+        app:lib_pull_enable="true"
+        app:lib_pull_gravity="top|left|right">
 
         <ViewGroup
             android:layout_width="match_parent"
