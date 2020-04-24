@@ -138,7 +138,6 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         this.mOnRefreshListener = listener;
     }
 
-    @Override
     protected boolean isLoading() {
         return mHeaderView.getState() == IState.STATE_LOADING
                 || mFooterView.getState() == IState.STATE_LOADING;
@@ -174,6 +173,9 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         switch (action) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                if (mOrientation == INVALID_ORIENTATION) {
+                    return super.dispatchTouchEvent(ev);
+                }
                 if (mPullState == Pullable.PULL_STATE_DRAGGING) {
                     if (canPullDown() && getScrollY() < -mHeaderView.getExpandedOffset()) {
                         if (mHeaderView.getState() == IState.STATE_EXPANDED) {
@@ -183,7 +185,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                             mHeaderView.setState(IState.STATE_LOADING);
                         }
                         if (mHeaderView.getState() == IState.STATE_LOADING) {
-                            onActionUp(getScrollX(), -mHeaderView.getExpandedOffset());
+                            onReleaseUp(getScrollX(), -mHeaderView.getExpandedOffset());
                         }
                     } else if (canPullUp() && getScrollY() > mFooterView.getExpandedOffset()) {
                         if (mFooterView.getState() == IState.STATE_EXPANDED) {
@@ -193,11 +195,15 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                             mFooterView.setState(IState.STATE_LOADING);
                         }
                         if (mFooterView.getState() == IState.STATE_LOADING) {
-                            onActionUp(getScrollX(), mFooterView.getExpandedOffset());
+                            onReleaseUp(getScrollX(), mFooterView.getExpandedOffset());
                         }
+                    } else {
+                        onReleaseUp(0, 0);
                     }
                     setPullState(Pullable.PULL_STATE_IDLE);
                 }
+                mOrientation = INVALID_ORIENTATION;
+                ev.setAction(MotionEvent.ACTION_CANCEL);
                 super.dispatchTouchEvent(ev);
                 return true;
         }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.d.lib.pulllayout.R;
 import com.d.lib.pulllayout.edge.EdgeView;
 import com.d.lib.pulllayout.edge.IEdgeView;
-import com.d.lib.pulllayout.util.Utils;
 
 public class FooterView extends EdgeView implements View.OnClickListener {
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import com.d.lib.pulllayout.R;
 import com.d.lib.pulllayout.edge.EdgeView;
-import com.d.lib.pulllayout.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
