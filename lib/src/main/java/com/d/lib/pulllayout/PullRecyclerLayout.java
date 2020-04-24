@@ -3,6 +3,7 @@ package com.d.lib.pulllayout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -45,9 +46,19 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         mType = typedArray.getInt(R.styleable.lib_pull_PullRecyclerLayout_lib_pull_type, 1);
         typedArray.recycle();
 
+        if (mType == TYPE_LISTVIEW) {
+            mRecyclerList = new ListView(context);
+        } else {
+            RecyclerView view = new RecyclerView(context);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            view.setLayoutManager(layoutManager);
+            mRecyclerList = view;
+        }
+
         mHeaderView = getHeader();
         mFooterView = getFooter();
-        mRecyclerList = mType == TYPE_LISTVIEW ? new ListView(context) : new RecyclerView(context);
+
         addView((View) mHeaderView);
         addView(mRecyclerList);
         addView((View) mFooterView);
@@ -211,7 +222,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     }
 
     @Override
-    protected View getNestedChild() {
+    public View getNestedChild() {
         return mRecyclerList;
     }
 
