@@ -1,4 +1,4 @@
-package com.d.lib.pulllayout;
+package com.d.lib.pulllayout.util;
 
 import android.support.design.widget.AppBarLayout;
 

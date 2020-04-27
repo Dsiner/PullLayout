@@ -1,6 +1,6 @@
-package com.d.lib.pulllayout;
+package com.d.lib.pulllayout.loader;
 
-import com.d.lib.pulllayout.rv.adapter.CommonAdapter;
+import com.d.lib.pulllayout.Refreshable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,12 @@ public class CommonLoader<T> {
     public int page = 1;
 
     private Refreshable mRefreshable;
-    private CommonAdapter<T> mAdapter;
+    private RecyclerAdapter<T> mAdapter;
     private List<T> mDatas;
     private int mPageCount = PAGE_COUNT;
     private OnLoaderListener mListener;
 
-    public CommonLoader(Refreshable refreshable, CommonAdapter<T> adapter) {
+    public CommonLoader(Refreshable refreshable, RecyclerAdapter<T> adapter) {
         this.mDatas = new ArrayList<T>();
         this.mRefreshable = refreshable;
         this.mAdapter = adapter;
@@ -133,14 +133,14 @@ public class CommonLoader<T> {
         }
     }
 
-    private void initList(List<T> cacher) {
+    private void initList(List<T> caches) {
         if (page == 1) {
             mDatas.clear();
-            mDatas.addAll(cacher);
+            mDatas.addAll(caches);
             mAdapter.setDatas(mDatas);
             mAdapter.notifyDataSetChanged();
         } else {
-            mDatas.addAll(cacher);
+            mDatas.addAll(caches);
             mAdapter.setDatas(mDatas);
             mAdapter.notifyDataSetChanged();
         }

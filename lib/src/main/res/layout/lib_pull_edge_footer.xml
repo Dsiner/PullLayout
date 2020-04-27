@@ -8,21 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="15dp">
+        android:orientation="horizontal">
 
         <com.d.lib.pulllayout.edge.arrow.LoadingView
             android:id="@+id/ldv_loading"
             android:layout_width="12dp"
             android:layout_height="12dp"
+            android:layout_marginRight="10dp"
             android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_load_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
             android:text="@string/lib_pull_list_load_more_loading"
             android:textColor="@color/lib_pull_pull_refresh_text" />
     </LinearLayout>

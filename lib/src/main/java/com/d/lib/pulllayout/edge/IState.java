@@ -12,7 +12,7 @@ public interface IState {
     int STATE_ERROR = 4;
     int STATE_NO_MORE = 5;
 
-    void setState(int state);
+    boolean setState(int state);
 
     int getState();
 }

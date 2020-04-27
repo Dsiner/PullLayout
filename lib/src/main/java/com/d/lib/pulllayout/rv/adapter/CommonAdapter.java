@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.d.lib.pulllayout.loader.RecyclerAdapter;
 import com.d.lib.pulllayout.rv.itemtouchhelper.ItemTouchHelperAdapter;
 import com.d.lib.pulllayout.rv.itemtouchhelper.OnStartDragListener;
 
@@ -16,7 +17,8 @@ import java.util.List;
  * CommonAdapter for RecyclerView
  * Created by D on 2017/4/25.
  */
-public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder> implements ItemTouchHelperAdapter {
+public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder>
+        implements RecyclerAdapter<T>, ItemTouchHelperAdapter {
     protected Context mContext;
     @NonNull
     protected List<T> mDatas;
@@ -32,10 +34,11 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
 
     public CommonAdapter(@NonNull Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
         mContext = context;
-        mDatas = datas == null ? new ArrayList<T>() : datas;
+        mDatas = datas == null ? new ArrayList<T>() : new ArrayList<>(datas);
         this.mMultiItemTypeSupport = multiItemTypeSupport;
     }
 
+    @Override
     public void setDatas(List<T> datas) {
         if (mDatas != null && datas != null) {
             mDatas.clear();
@@ -43,6 +46,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
         }
     }
 
+    @Override
     public List<T> getDatas() {
         return mDatas;
     }

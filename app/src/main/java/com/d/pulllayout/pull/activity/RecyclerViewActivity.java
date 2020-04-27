@@ -24,7 +24,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pull_recyclerview);
-        rv_list = (RecyclerView) findViewById(R.id.rv_list);
+        rv_list =  findViewById(R.id.rv_list);
         init();
     }
 

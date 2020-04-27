@@ -20,7 +20,7 @@ public class RippleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void bindView() {
-        ripple_view = (RippleView) findViewById(R.id.ripple_view);
+        ripple_view = findViewById(R.id.ripple_view);
 
         MainActivity.setOnClick(this, this, R.id.btn_done,
                 R.id.btn_loading,

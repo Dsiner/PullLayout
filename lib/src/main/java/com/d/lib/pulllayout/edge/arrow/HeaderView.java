@@ -48,12 +48,16 @@ public class HeaderView extends EdgeView {
     @Override
     protected void init(@NonNull final Context context) {
         super.init(context);
+        bindView();
+        initAnim();
+        updateTime();
+    }
+
+    private void bindView() {
         img_head_arrow = (ImageView) mContainer.findViewById(R.id.img_head_arrow);
         tv_head_tip = (TextView) mContainer.findViewById(R.id.tv_head_tip);
         ldv_loading = (LoadingView) mContainer.findViewById(R.id.ldv_loading);
         tv_head_last_update_time = (TextView) mContainer.findViewById(R.id.tv_head_last_update_time);
-        initAnim();
-        updateTime();
     }
 
     private void initAnim() {
@@ -68,10 +72,11 @@ public class HeaderView extends EdgeView {
     }
 
     @Override
-    public void setState(int state) {
+    public boolean setState(int state) {
         if (mState == state) {
-            return;
+            return false;
         }
+        mState = state;
         switch (state) {
             case STATE_NONE:
                 img_head_arrow.setVisibility(View.VISIBLE);
@@ -83,8 +88,8 @@ public class HeaderView extends EdgeView {
                     img_head_arrow.clearAnimation();
                 }
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_none));
-                tv_head_tip.invalidate();
-                tv_head_tip.requestLayout();
+//                tv_head_tip.invalidate();
+//                tv_head_tip.requestLayout();
                 break;
 
             case STATE_EXPANDED:
@@ -93,8 +98,8 @@ public class HeaderView extends EdgeView {
                 img_head_arrow.clearAnimation();
                 img_head_arrow.startAnimation(mRotateUpAnim);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_expanded));
-                tv_head_tip.invalidate();
-                tv_head_tip.requestLayout();
+//                tv_head_tip.invalidate();
+//                tv_head_tip.requestLayout();
                 break;
 
             case STATE_LOADING:
@@ -102,7 +107,6 @@ public class HeaderView extends EdgeView {
                 img_head_arrow.setVisibility(View.INVISIBLE);
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_loading));
-                anim(mMeasuredHeight, null);
                 break;
 
             case STATE_SUCCESS:
@@ -111,7 +115,6 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_success));
                 updateTime();
-                reset();
                 break;
 
             case STATE_ERROR:
@@ -120,10 +123,9 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_error));
                 updateTime();
-                reset();
                 break;
         }
-        mState = state;
+        return true;
     }
 
     private void updateTime() {

@@ -6,14 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.lib.pulllayout.edge.IState;
 import com.d.lib.pulllayout.edge.arrow.FooterView;
 import com.d.lib.pulllayout.edge.arrow.HeaderView;
+import com.d.lib.pulllayout.util.ScrollChangeHelper;
 
 /**
  * PullRecyclerLayout
@@ -27,7 +30,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     private final IEdgeView mHeaderView;
     @NonNull
     private final IEdgeView mFooterView;
-    private final View mRecyclerList;
+    private View mRecyclerList;
     private final int mType;
     private OnRefreshListener mOnRefreshListener;
 
@@ -43,7 +46,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         super(context, attrs, defStyleAttr);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.lib_pull_PullRecyclerLayout);
-        mType = typedArray.getInt(R.styleable.lib_pull_PullRecyclerLayout_lib_pull_type, 1);
+        mType = typedArray.getInt(R.styleable.lib_pull_PullRecyclerLayout_lib_pull_type, TYPE_RECYCLERVIEW);
         typedArray.recycle();
 
         if (mType == TYPE_LISTVIEW) {
@@ -60,7 +63,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         mFooterView = getFooter();
 
         addView((View) mHeaderView);
-        addView(mRecyclerList);
+        setNestedChild(mRecyclerList);
         addView((View) mFooterView);
     }
 
@@ -92,7 +95,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
 
     @Override
     public void refresh() {
-        if (!canPullDown() || isLoading()) {
+        if (isLoading()) {
             return;
         }
         mHeaderView.setState(IState.STATE_LOADING);
@@ -103,7 +106,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
 
     @Override
     public void loadMore() {
-        if (!canPullUp() || isLoading()) {
+        if (isLoading() || mFooterView.getState() == IState.STATE_NO_MORE) {
             return;
         }
         mFooterView.setState(IState.STATE_LOADING);
@@ -114,39 +117,43 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
 
     @Override
     public void refreshSuccess() {
-        startAnim(0, 0);
+        onScrollTo(0, 0);
         mHeaderView.setState(IState.STATE_SUCCESS);
         mFooterView.setState(IState.STATE_NONE);
     }
 
     @Override
     public void refreshError() {
-        startAnim(0, 0);
+        onScrollTo(0, 0);
         mHeaderView.setState(IState.STATE_SUCCESS);
         mFooterView.setState(IState.STATE_NONE);
     }
 
     @Override
     public void loadMoreSuccess() {
-        startAnim(0, 0);
+        onScrollTo(0, 0);
         mFooterView.setState(IState.STATE_SUCCESS);
     }
 
     @Override
     public void loadMoreError() {
-        startAnim(0, 0);
+        onScrollTo(0, 0);
         mFooterView.setState(IState.STATE_ERROR);
     }
 
     @Override
     public void loadMoreNoMore() {
-        startAnim(0, 0);
+        onScrollTo(0, 0);
         mFooterView.setState(IState.STATE_NO_MORE);
     }
 
     @Override
     public void setOnRefreshListener(OnRefreshListener listener) {
         this.mOnRefreshListener = listener;
+    }
+
+    public boolean autoLoadMore() {
+        return true;
     }
 
     protected boolean isLoading() {
@@ -156,16 +163,21 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int count = getChildCount();
-        if (count >= 3) {
+        Log.d("PullRecyclerLayout", "onLayout changed: " + changed
+                + " l: " + l + " t: " + t + " r: " + r + " b: " + b);
+        final int childCount = getChildCount();
+        if (childCount >= 3) {
             View header = (View) mHeaderView;
             header.layout(0, -header.getMeasuredHeight(),
                     header.getMeasuredWidth(), 0);
+            mRecyclerList = getChildAt(1);
             mRecyclerList.layout(0, 0,
                     mRecyclerList.getMeasuredWidth(), mRecyclerList.getMeasuredHeight());
             View footer = (View) mFooterView;
-            footer.layout(0, mRecyclerList.getMeasuredHeight(),
-                    footer.getMeasuredWidth(), mRecyclerList.getMeasuredHeight() + footer.getMeasuredHeight());
+            int footerTop = mRecyclerList.getMeasuredHeight();
+            footerTop = footerTop > 0 ? footerTop : getMeasuredHeight();
+            footer.layout(0, footerTop,
+                    footer.getMeasuredWidth(), footerTop + footer.getMeasuredHeight());
         }
     }
 
@@ -189,27 +201,15 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                 }
                 if (mPullState == Pullable.PULL_STATE_DRAGGING) {
                     if (canPullDown() && getScrollY() < -mHeaderView.getExpandedOffset()) {
-                        if (mHeaderView.getState() == IState.STATE_EXPANDED) {
-                            if (mOnRefreshListener != null) {
-                                mOnRefreshListener.onRefresh();
-                            }
-                            mHeaderView.setState(IState.STATE_LOADING);
-                        }
-                        if (mHeaderView.getState() == IState.STATE_LOADING) {
-                            onReleaseUp(getScrollX(), -mHeaderView.getExpandedOffset());
-                        }
+                        refresh();
+                        onScrollTo(getScrollX(), mHeaderView.getState() == IState.STATE_LOADING
+                                ? -mHeaderView.getExpandedOffset() : 0);
                     } else if (canPullUp() && getScrollY() > mFooterView.getExpandedOffset()) {
-                        if (mFooterView.getState() == IState.STATE_EXPANDED) {
-                            if (mOnRefreshListener != null) {
-                                mOnRefreshListener.onLoadMore();
-                            }
-                            mFooterView.setState(IState.STATE_LOADING);
-                        }
-                        if (mFooterView.getState() == IState.STATE_LOADING) {
-                            onReleaseUp(getScrollX(), mFooterView.getExpandedOffset());
-                        }
+                        loadMore();
+                        onScrollTo(getScrollX(), mFooterView.getState() == IState.STATE_LOADING
+                                ? mFooterView.getExpandedOffset() : 0);
                     } else {
-                        onReleaseUp(0, 0);
+                        onScrollTo(0, 0);
                     }
                     setPullState(Pullable.PULL_STATE_IDLE);
                 }
@@ -222,15 +222,49 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     }
 
     @Override
+    protected boolean[] canNestedScrollHorizontally() {
+        return new boolean[]{true, true};
+    }
+
+    @Override
     public View getNestedChild() {
         return mRecyclerList;
     }
 
-    @Override
-    protected void dispatchOnPullStateChanged(int state) {
-        mHeaderView.onPullStateChanged(state);
-        mFooterView.onPullStateChanged(state);
-        super.dispatchOnPullStateChanged(state);
+    public void setNestedChild(View view) {
+        if (!(view instanceof RecyclerView)
+                && !(view instanceof ListView)) {
+            throw new IllegalArgumentException("View type must be RecyclerView or ListView.");
+        }
+
+        removeView(mRecyclerList);
+        addView(view, 1);
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        view.setLayoutParams(lp);
+        mRecyclerList = view;
+        if (mRecyclerList instanceof RecyclerView) {
+            ScrollChangeHelper.addOnScrollListener((RecyclerView) mRecyclerList, new ScrollChangeHelper.OnScrollListener() {
+                @Override
+                public void onBottom() {
+                    if (!autoLoadMore() || mFooterView.getState() == IState.STATE_ERROR) {
+                        return;
+                    }
+                    loadMore();
+                }
+            });
+        } else if (mRecyclerList instanceof ListView) {
+            ScrollChangeHelper.setOnScrollListener((ListView) mRecyclerList, new ScrollChangeHelper.OnScrollListener() {
+                @Override
+                public void onBottom() {
+                    if (!autoLoadMore() || mFooterView.getState() == IState.STATE_ERROR) {
+                        return;
+                    }
+                    loadMore();
+                }
+            });
+        }
+        requestLayout();
     }
 
     @Override

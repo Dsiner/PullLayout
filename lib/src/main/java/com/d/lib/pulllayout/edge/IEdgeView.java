@@ -9,11 +9,7 @@ import android.view.View;
 public interface IEdgeView extends IState {
     float DRAG_FACTOR = 3.0f;
 
-    void dispatchPulled(float dx, float dy);
-
     void onPulled(float dx, float dy);
-
-    void onPullStateChanged(int newState);
 
     int getExpandedOffset();
 

@@ -70,8 +70,11 @@ public class RippleView extends View implements IState {
     }
 
     @Override
-    public void setState(int state) {
-        this.mState = state;
+    public boolean setState(int state) {
+        if (mState == state) {
+            return false;
+        }
+        mState = state;
         mAttacher.stop();
         switch (state) {
             case STATE_NONE:
@@ -95,6 +98,7 @@ public class RippleView extends View implements IState {
         }
         mAttacher.reStart();
         invalidate();
+        return true;
     }
 
     @Override

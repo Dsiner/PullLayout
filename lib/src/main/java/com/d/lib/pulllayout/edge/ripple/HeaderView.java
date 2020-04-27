@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 
 import com.d.lib.pulllayout.R;
 import com.d.lib.pulllayout.edge.EdgeView;
@@ -33,36 +32,20 @@ public class HeaderView extends EdgeView {
     @Override
     protected void init(@NonNull final Context context) {
         super.init(context);
-        setGravity(Gravity.BOTTOM);
-        mContainer.setGravity(Gravity.BOTTOM);
+        bindView();
+    }
+
+    private void bindView() {
         mRippleView = (RippleView) findViewById(R.id.rv_ripple);
     }
 
     @Override
-    public void setState(int state) {
+    public boolean setState(int state) {
         if (mState == state) {
-            return;
-        }
-        mRippleView.setState(state);
-        switch (state) {
-            case STATE_NONE:
-                break;
-
-            case STATE_EXPANDED:
-                break;
-
-            case STATE_LOADING:
-                anim(mMeasuredHeight, null);
-                break;
-
-            case STATE_SUCCESS:
-                reset();
-                break;
-
-            case STATE_ERROR:
-                reset();
-                break;
+            return false;
         }
         mState = state;
+        mRippleView.setState(state);
+        return true;
     }
 }

@@ -26,7 +26,7 @@ public class PullRecyclerLayoutActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pull_recyclerlayout);
-        prl_list = (PullRecyclerLayout) findViewById(R.id.prl_list);
+        prl_list =  findViewById(R.id.prl_list);
         rv_list = (RecyclerView) prl_list.getChildAt(1);
         init();
     }

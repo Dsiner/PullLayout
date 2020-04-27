@@ -51,10 +51,11 @@ public class FooterView extends EdgeView implements View.OnClickListener {
     }
 
     @Override
-    public void setState(int state) {
+    public boolean setState(int state) {
         if (mState == state) {
-            return;
+            return false;
         }
+        mState = state;
         switch (state) {
             case STATE_NONE:
                 setOnClickListener(null);
@@ -72,31 +73,27 @@ public class FooterView extends EdgeView implements View.OnClickListener {
                 setOnClickListener(null);
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_loading));
-                anim(mMeasuredHeight, null);
                 break;
 
             case STATE_SUCCESS:
                 setOnClickListener(null);
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_success));
-                reset();
                 break;
 
             case STATE_ERROR:
                 setOnClickListener(this);
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_error));
-                reset();
                 break;
 
             case STATE_NO_MORE:
                 setOnClickListener(null);
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_nomore));
-                anim(mMeasuredHeight, null);
                 break;
         }
-        mState = state;
+        return true;
     }
 
     public void setOnFooterClickListener(IEdgeView.OnClickListener listener) {

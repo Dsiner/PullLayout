@@ -53,31 +53,26 @@ public class FooterView extends EdgeView implements View.OnClickListener {
     }
 
     @Override
-    public void setState(int state) {
+    public boolean setState(int state) {
         if (mState == state) {
-            return;
+            return false;
         }
+        mState = state;
         mRippleView.setState(state);
         switch (state) {
             case STATE_NONE:
             case STATE_EXPANDED:
             case STATE_LOADING:
-                setOnClickListener(null);
-                break;
-
             case STATE_SUCCESS:
+            case STATE_NO_MORE:
                 setOnClickListener(null);
                 break;
 
             case STATE_ERROR:
                 setOnClickListener(this);
                 break;
-
-            case STATE_NO_MORE:
-                setOnClickListener(null);
-                break;
         }
-        mState = state;
+        return true;
     }
 
     public void setOnFooterClickListener(IEdgeView.OnClickListener listener) {

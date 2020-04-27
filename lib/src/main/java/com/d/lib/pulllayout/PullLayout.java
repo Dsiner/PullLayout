@@ -66,6 +66,8 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     protected boolean mEnable;
     protected int mGravity;
+    protected boolean mCanPullDown = true;
+    protected boolean mCanPullUp = true;
     protected List<Pullable.OnPullListener> mOnPullListeners;
 
     static class AnimListenerAdapter extends AnimatorListenerAdapter {
@@ -220,7 +222,7 @@ public class PullLayout extends ViewGroup implements Pullable {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                cancelAnim();
+                onScrollToCancel();
                 mPullPointerId = ev.getPointerId(0);
                 mLastTouchX = mTouchX = (int) (ev.getX() + 0.5f);
                 mLastTouchY = mTouchY = (int) (ev.getY() + 0.5f);
@@ -341,7 +343,7 @@ public class PullLayout extends ViewGroup implements Pullable {
                 }
                 if (mPullState == Pullable.PULL_STATE_DRAGGING) {
                     setPullState(Pullable.PULL_STATE_IDLE);
-                    onReleaseUp(0, 0);
+                    onScrollTo(0, 0);
                 }
                 mOrientation = INVALID_ORIENTATION;
                 ev.setAction(MotionEvent.ACTION_CANCEL);
@@ -381,10 +383,6 @@ public class PullLayout extends ViewGroup implements Pullable {
         }
     }
 
-    protected void onReleaseUp(int destX, int destY) {
-        startAnim(destX, destY);
-    }
-
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
@@ -407,28 +405,28 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     @Override
     public boolean canPullDown() {
-        return true;
+        return mCanPullDown;
     }
 
     @Override
     public boolean canPullUp() {
-        return true;
+        return mCanPullUp;
     }
 
     @Override
     public void setCanPullDown(boolean enable) {
-
+        this.mCanPullDown = enable;
     }
 
     @Override
     public void setCanPullUp(boolean enable) {
-
+        this.mCanPullUp = enable;
     }
 
     protected boolean[] canNestedScrollVertically() {
         final boolean canScrollTop = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getNestedChild(), -1);
         final boolean canScrollBottom = (isAbsList() || isScroller()) && ViewCompat.canScrollVertically(getNestedChild(), 1);
-        return new boolean[]{canScrollTop, canScrollBottom};
+        return new boolean[]{!canPullDown() || canScrollTop, !canPullUp() || canScrollBottom};
     }
 
     protected boolean[] canNestedScrollHorizontally() {
@@ -466,15 +464,15 @@ public class PullLayout extends ViewGroup implements Pullable {
         return getChildAt(0);
     }
 
-    public void startAnim(int destX, int destY) {
-        cancelAnim();
+    public void onScrollTo(int destX, int destY) {
+        onScrollToCancel();
         mAnimUpdateListener.ofInt(getScrollX(), getScrollY(), destX, destY);
         mAnimation.addUpdateListener(mAnimUpdateListener);
         mAnimation.addListener(mAnimListenerAdapter);
         mAnimation.start();
     }
 
-    public boolean cancelAnim() {
+    public boolean onScrollToCancel() {
         boolean running = mAnimation.isRunning();
         mAnimation.removeAllUpdateListeners();
         mAnimation.removeAllListeners();

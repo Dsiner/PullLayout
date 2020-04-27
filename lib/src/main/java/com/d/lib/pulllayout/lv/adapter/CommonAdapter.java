@@ -2,10 +2,11 @@ package com.d.lib.pulllayout.lv.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import com.d.lib.pulllayout.loader.RecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,28 +15,27 @@ import java.util.List;
  * CommonAdapter for ListView
  * Created by D on 2017/4/25.
  */
-public abstract class CommonAdapter<T> extends BaseAdapter {
+public abstract class CommonAdapter<T> extends BaseAdapter
+        implements RecyclerAdapter<T> {
     protected Context mContext;
     @NonNull
     protected List<T> mDatas;
-    protected LayoutInflater mInflater;
     protected int mLayoutId;
     protected MultiItemTypeSupport<T> mMultiItemTypeSupport;
 
     public CommonAdapter(@NonNull Context context, List<T> datas, int layoutId) {
         mContext = context;
-        mDatas = datas == null ? new ArrayList<T>() : datas;
-        mInflater = LayoutInflater.from(mContext);
+        mDatas = datas == null ? new ArrayList<T>() : new ArrayList<>(datas);
         mLayoutId = layoutId;
     }
 
     public CommonAdapter(@NonNull Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
         mContext = context;
         mDatas = datas == null ? new ArrayList<T>() : datas;
-        mInflater = LayoutInflater.from(mContext);
         mMultiItemTypeSupport = multiItemTypeSupport;
     }
 
+    @Override
     public void setDatas(List<T> datas) {
         if (mDatas != null && datas != null) {
             mDatas.clear();
@@ -43,6 +43,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
         }
     }
 
+    @Override
     public List<T> getDatas() {
         return mDatas;
     }
@@ -50,7 +51,7 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         if (mMultiItemTypeSupport != null) {
-            mMultiItemTypeSupport.getItemViewType(position, position < mDatas.size() ? mDatas.get(position) : null);
+            return mMultiItemTypeSupport.getItemViewType(position, position < mDatas.size() ? mDatas.get(position) : null);
         }
         return super.getItemViewType(position);
     }
