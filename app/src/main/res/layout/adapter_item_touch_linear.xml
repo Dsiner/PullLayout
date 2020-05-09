@@ -19,9 +19,9 @@
             android:id="@+id/tv_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="@dimen/lib_pub_dimen_margin"
             android:layout_weight="1"
-            android:textSize="16dp" />
+            android:textSize="@dimen/lib_pub_dimen_text_sub" />
 
         <ImageView
             android:id="@+id/iv_handler"
@@ -31,9 +31,9 @@
             android:src="@drawable/item_touch" />
     </LinearLayout>
 
-    <View
+    <include
+        layout="@layout/lib_pub_layout_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_gravity="bottom"
-        android:background="#e3e4e5" />
+        android:layout_gravity="bottom" />
 </FrameLayout>

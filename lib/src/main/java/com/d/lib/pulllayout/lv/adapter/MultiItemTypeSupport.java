@@ -5,9 +5,9 @@ package com.d.lib.pulllayout.lv.adapter;
  * Created by D on 2017/4/25.
  */
 public interface MultiItemTypeSupport<T> {
-    int getLayoutId(int position, T t);
-
     int getViewTypeCount();
 
     int getItemViewType(int position, T t);
+
+    int getLayoutId(int viewType);
 }

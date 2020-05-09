@@ -7,7 +7,6 @@ import android.view.View;
  * Created by D on 2017/4/25.
  */
 public interface IEdgeView extends IState {
-    float DRAG_FACTOR = 3.0f;
 
     void onPulled(float dx, float dy);
 

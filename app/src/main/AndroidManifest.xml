@@ -8,9 +8,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/lib_pub_AppTheme">
 
-        <activity android:name="com.d.pulllayout.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,16 +18,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.d.pulllayout.edge.RippleActivity" />
-        <activity android:name="com.d.pulllayout.pull.activity.ViewActivity" />
-        <activity android:name="com.d.pulllayout.pull.activity.ListViewActivity" />
-        <activity android:name="com.d.pulllayout.pull.activity.RecyclerViewActivity" />
-        <activity android:name="com.d.pulllayout.pull.activity.ScrollViewActivity" />
-        <activity android:name="com.d.pulllayout.pull.activity.PullRecyclerLayoutActivity" />
+        <activity android:name=".edge.RippleActivity" />
+        <activity android:name=".pull.activity.PullActivity" />
+        <activity android:name=".pull.activity.PullViewActivity" />
+        <activity android:name=".pull.activity.PullListViewActivity" />
+        <activity android:name=".pull.activity.PullRecyclerViewActivity" />
+        <activity android:name=".pull.activity.PullScrollViewActivity" />
 
-        <activity android:name="com.d.pulllayout.rv.activity.SimpleActivity" />
-        <activity android:name="com.d.pulllayout.rv.activity.MultipleActivity" />
-        <activity android:name="com.d.pulllayout.rv.activity.ItemTouchActivity" />
+        <activity android:name=".list.activity.ListActivity" />
+        <activity android:name=".list.activity.CoordinatorTabActivity" />
     </application>
 
 </manifest>

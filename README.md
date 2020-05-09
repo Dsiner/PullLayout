@@ -3,20 +3,22 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![API](https://img.shields.io/badge/API-11%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=11)
 
-> Damping effect.
+> Damping effect & Pull down refresh, load more.
 
 ## Demo
 <p>
    <img src="https://github.com/Dsiner/Resouce/blob/master/lib/PullLayout/pulllayout.gif" width="320" alt="Screenshot"/>
 </p>
 
-## Support
+## Chapter 1 Sliding damping
+
+### Support
 - [x] ViewGroup
 - [x] ListView
 - [x] RecyclerView
 - [x] ScrollView
 
-## Usage
+### Usage
 ```java
     <com.d.lib.pulllayout.PullLayout
         android:layout_width="match_parent"
@@ -30,6 +32,16 @@
 
     </com.d.lib.pulllayout.PullLayout>
 ```
+
+## Chapter 2 Pull down refresh, load more
+
+### Support
+- [x] PullRecyclerView
+- [x] PullRecyclerLayout
+- [x] ListView
+- [x] RecyclerView
+
+
 
 More usage see [Demo](app/src/main/java/com/d/pulllayout/MainActivity.java)
 

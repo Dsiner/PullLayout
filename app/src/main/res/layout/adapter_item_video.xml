@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:gravity="center_vertical"
-    android:paddingLeft="10dp">
+    android:layout_height="120dp"
+    android:paddingLeft="@dimen/lib_pub_dimen_margin">
 
     <FrameLayout
-        android:id="@+id/flyt_block"
+        android:id="@+id/flyt_icon"
         android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center">
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/lib_pub_dimen_margin"
+        android:layout_marginBottom="@dimen/lib_pub_dimen_margin">
 
         <View
             android:layout_width="match_parent"
@@ -20,12 +22,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Video" />
+            android:text="Video"
+            android:textSize="@dimen/lib_pub_dimen_text_small" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/tv_des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp" />
-</LinearLayout>
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/lib_pub_dimen_margin"
+        android:layout_toRightOf="@+id/flyt_icon" />
+
+    <include
+        layout="@layout/lib_pub_layout_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

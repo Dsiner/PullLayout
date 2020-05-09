@@ -6,6 +6,10 @@ package com.d.lib.pulllayout;
  */
 public interface Refreshable {
 
+    boolean autoLoadMore();
+
+    void setAutoLoadMore(boolean enable);
+
     void reset();
 
     void refresh();
@@ -21,6 +25,8 @@ public interface Refreshable {
     void loadMoreError();
 
     void loadMoreNoMore();
+
+    void setVisibility(int visibility);
 
     /**
      * Set the listener to be notified when a refresh is triggered via the swipe

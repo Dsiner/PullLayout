@@ -76,30 +76,23 @@ public class HeaderView extends EdgeView {
         if (mState == state) {
             return false;
         }
-        mState = state;
         switch (state) {
             case STATE_NONE:
+                img_head_arrow.clearAnimation();
                 img_head_arrow.setVisibility(View.VISIBLE);
-                ldv_loading.setVisibility(View.INVISIBLE);
                 if (mState == STATE_EXPANDED) {
-                    img_head_arrow.clearAnimation();
                     img_head_arrow.startAnimation(mRotateDownAnim);
-                } else if (mState == STATE_LOADING) {
-                    img_head_arrow.clearAnimation();
                 }
+                ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_none));
-//                tv_head_tip.invalidate();
-//                tv_head_tip.requestLayout();
                 break;
 
             case STATE_EXPANDED:
-                img_head_arrow.setVisibility(View.VISIBLE);
-                ldv_loading.setVisibility(View.INVISIBLE);
                 img_head_arrow.clearAnimation();
+                img_head_arrow.setVisibility(View.VISIBLE);
                 img_head_arrow.startAnimation(mRotateUpAnim);
+                ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_expanded));
-//                tv_head_tip.invalidate();
-//                tv_head_tip.requestLayout();
                 break;
 
             case STATE_LOADING:
@@ -125,6 +118,7 @@ public class HeaderView extends EdgeView {
                 updateTime();
                 break;
         }
+        mState = state;
         return true;
     }
 

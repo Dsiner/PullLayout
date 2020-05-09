@@ -1,1 +1,2 @@
 -keep class com.d.lib.pulllayout.** {*;}
+-keep interface com.d.lib.pulllayout.** {*;}

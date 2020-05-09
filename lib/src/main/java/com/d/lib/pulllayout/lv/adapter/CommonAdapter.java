@@ -97,10 +97,10 @@ public abstract class CommonAdapter<T> extends BaseAdapter
         if (mMultiItemTypeSupport != null) {
             if (mDatas != null && mDatas.size() > 0) {
                 return CommonHolder.createViewHolder(mContext, convertView, parent,
-                        mMultiItemTypeSupport.getLayoutId(position, mDatas.get(position)), position);
+                        mMultiItemTypeSupport.getLayoutId(getItemViewType(position)), position);
             }
             return CommonHolder.createViewHolder(mContext, convertView, parent,
-                    mMultiItemTypeSupport.getLayoutId(position, null), position);
+                    mMultiItemTypeSupport.getLayoutId(getItemViewType(position)), position);
         }
         return CommonHolder.createViewHolder(mContext, convertView, parent, mLayoutId, position);
     }

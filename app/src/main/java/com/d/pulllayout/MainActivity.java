@@ -1,23 +1,18 @@
 package com.d.pulllayout;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.d.lib.common.component.mvp.MvpBasePresenter;
+import com.d.lib.common.component.mvp.MvpView;
+import com.d.lib.common.component.mvp.app.BaseActivity;
+import com.d.lib.common.util.ViewHelper;
 import com.d.pulllayout.edge.RippleActivity;
-import com.d.pulllayout.pull.activity.ListViewActivity;
-import com.d.pulllayout.pull.activity.PullRecyclerLayoutActivity;
-import com.d.pulllayout.pull.activity.RecyclerViewActivity;
-import com.d.pulllayout.pull.activity.ScrollViewActivity;
-import com.d.pulllayout.pull.activity.ViewActivity;
-import com.d.pulllayout.rv.activity.ItemTouchActivity;
-import com.d.pulllayout.rv.activity.MultipleActivity;
-import com.d.pulllayout.rv.activity.SimpleActivity;
+import com.d.pulllayout.list.activity.CoordinatorTabActivity;
+import com.d.pulllayout.list.activity.ListActivity;
+import com.d.pulllayout.pull.activity.PullActivity;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity<MvpBasePresenter>
         implements View.OnClickListener {
 
     @Override
@@ -27,64 +22,60 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, RippleActivity.class));
                 break;
 
-            case R.id.btn_view:
-                startActivity(new Intent(MainActivity.this, ViewActivity.class));
-                break;
-
-            case R.id.btn_listview:
-                startActivity(new Intent(MainActivity.this, ListViewActivity.class));
-                break;
-
-            case R.id.btn_recyclerview:
-                startActivity(new Intent(MainActivity.this, RecyclerViewActivity.class));
-                break;
-
-            case R.id.btn_scrollview:
-                startActivity(new Intent(MainActivity.this, ScrollViewActivity.class));
+            case R.id.btn_pull:
+                startActivity(new Intent(MainActivity.this, PullActivity.class));
                 break;
 
             case R.id.btn_simple:
-                startActivity(new Intent(MainActivity.this, SimpleActivity.class));
+                ListActivity.openActivity(mActivity, ListActivity.TYPE_SIMPLE);
                 break;
 
             case R.id.btn_multiple:
-                startActivity(new Intent(MainActivity.this, MultipleActivity.class));
+                ListActivity.openActivity(mActivity, ListActivity.TYPE_MULTIPLE);
                 break;
 
             case R.id.btn_item_touch:
-                startActivity(new Intent(MainActivity.this, ItemTouchActivity.class));
+                ListActivity.openActivity(mActivity, ListActivity.TYPE_ITEM_TOUCH);
                 break;
 
-            case R.id.btn_pullrecyclerlayout:
-                startActivity(new Intent(MainActivity.this, PullRecyclerLayoutActivity.class));
+            case R.id.btn_coordinator_list:
+                ListActivity.openActivity(mActivity, ListActivity.TYPE_COORDINATOR_LIST);
+//                startActivity(new Intent(MainActivity.this, CoordinatorListActivity.class));
+                break;
+
+            case R.id.btn_coordinator_tab:
+                startActivity(new Intent(MainActivity.this, CoordinatorTabActivity.class));
                 break;
         }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        bindView();
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
     }
 
-    private void bindView() {
-        setOnClick(this, this, R.id.btn_ripple,
-                R.id.btn_view,
-                R.id.btn_listview,
-                R.id.btn_recyclerview,
-                R.id.btn_scrollview,
+    @Override
+    public MvpBasePresenter getPresenter() {
+        return new MvpBasePresenter(getApplicationContext());
+    }
+
+    @Override
+    protected MvpView getMvpView() {
+        return this;
+    }
+
+    @Override
+    protected void bindView() {
+        ViewHelper.setOnClick(this, this, R.id.btn_ripple,
+                R.id.btn_pull,
                 R.id.btn_simple,
                 R.id.btn_multiple,
                 R.id.btn_item_touch,
-                R.id.btn_pullrecyclerlayout);
+                R.id.btn_coordinator_list,
+                R.id.btn_coordinator_tab);
     }
 
-    public static void setOnClick(Activity activity,
-                                  View.OnClickListener onClickListener,
-                                  @IdRes int... ids) {
-        for (int id : ids) {
-            activity.findViewById(id).setOnClickListener(onClickListener);
-        }
+    @Override
+    protected void init() {
     }
 }

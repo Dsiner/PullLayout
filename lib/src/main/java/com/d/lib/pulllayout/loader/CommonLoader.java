@@ -10,7 +10,7 @@ import java.util.List;
  * Created by D on 2017/8/23.
  */
 public class CommonLoader<T> {
-    public final static int PAGE_COUNT = 10;
+    public final static int PAGE_COUNT = 20; // Number of data per page
 
     public int page = 1;
 
@@ -21,7 +21,7 @@ public class CommonLoader<T> {
     private OnLoaderListener mListener;
 
     public CommonLoader(Refreshable refreshable, RecyclerAdapter<T> adapter) {
-        this.mDatas = new ArrayList<T>();
+        this.mDatas = new ArrayList<>();
         this.mRefreshable = refreshable;
         this.mAdapter = adapter;
         this.mRefreshable.setOnRefreshListener(new Refreshable.OnRefreshListener() {
@@ -47,7 +47,11 @@ public class CommonLoader<T> {
         this.mPageCount = count;
     }
 
-    public void setData(List<T> data) {
+    public List<T> getDatas() {
+        return mDatas;
+    }
+
+    public void loadSuccess(List<T> data) {
         if (data == null) {
             return;
         }
@@ -56,18 +60,44 @@ public class CommonLoader<T> {
         if (page == 1) {
             mRefreshable.refreshSuccess();
         } else {
-            mRefreshable.loadMoreSuccess();
+            if (sizeLoad < mPageCount) {
+                mRefreshable.loadMoreNoMore();
+            } else {
+                mRefreshable.loadMoreSuccess();
+            }
         }
-        if (sizeLoad < mPageCount) {
-            mRefreshable.loadMoreNoMore();
+
+        if (mListener != null) {
+            if (page == 1 && sizeLoad <= 0) {
+                mListener.noContent();
+            } else {
+                mListener.loadSuccess();
+            }
         }
-        if (mListener == null) {
-            return;
-        }
-        if (page == 1 && sizeLoad <= 0) {
-            mListener.noContent();
+    }
+
+    public void loadError() {
+        if (page == 1) {
+            mRefreshable.refreshError();
         } else {
-            mListener.loadSuccess();
+            page--;
+            mRefreshable.loadMoreError();
+        }
+        if (mListener != null) {
+            mListener.loadError(mDatas.size() <= 0);
+        }
+    }
+
+    private void initList(List<T> caches) {
+        if (page == 1) {
+            mDatas.clear();
+            mDatas.addAll(caches);
+            mAdapter.setDatas(mDatas);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            mDatas.addAll(caches);
+            mAdapter.setDatas(mDatas);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -119,35 +149,6 @@ public class CommonLoader<T> {
             mAdapter.setDatas(mDatas);
             mAdapter.notifyDataSetChanged();
         }
-    }
-
-    public void loadError() {
-        if (page == 1) {
-            mRefreshable.refreshError();
-        } else {
-            page--;
-            mRefreshable.loadMoreError();
-        }
-        if (mListener != null) {
-            mListener.loadError(mDatas.size() <= 0);
-        }
-    }
-
-    private void initList(List<T> caches) {
-        if (page == 1) {
-            mDatas.clear();
-            mDatas.addAll(caches);
-            mAdapter.setDatas(mDatas);
-            mAdapter.notifyDataSetChanged();
-        } else {
-            mDatas.addAll(caches);
-            mAdapter.setDatas(mDatas);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    public List<T> getDatas() {
-        return mDatas;
     }
 
     public interface OnLoaderListener {

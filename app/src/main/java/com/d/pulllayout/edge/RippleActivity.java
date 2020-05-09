@@ -1,33 +1,19 @@
 package com.d.pulllayout.edge;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.d.lib.common.component.mvp.MvpBasePresenter;
+import com.d.lib.common.component.mvp.MvpView;
+import com.d.lib.common.component.mvp.app.BaseActivity;
+import com.d.lib.common.util.ViewHelper;
 import com.d.lib.pulllayout.edge.IState;
 import com.d.lib.pulllayout.edge.ripple.RippleView;
-import com.d.pulllayout.MainActivity;
 import com.d.pulllayout.R;
 
-public class RippleActivity extends AppCompatActivity implements View.OnClickListener {
+public class RippleActivity extends BaseActivity<MvpBasePresenter>
+        implements View.OnClickListener {
+
     private RippleView ripple_view;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ripple);
-        bindView();
-    }
-
-    private void bindView() {
-        ripple_view = findViewById(R.id.ripple_view);
-
-        MainActivity.setOnClick(this, this, R.id.btn_done,
-                R.id.btn_loading,
-                R.id.btn_success,
-                R.id.btn_error,
-                R.id.btn_nomore);
-    }
 
     @Override
     public void onClick(View v) {
@@ -52,5 +38,36 @@ public class RippleActivity extends AppCompatActivity implements View.OnClickLis
                 ripple_view.setState(IState.STATE_NO_MORE);
                 break;
         }
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_edge_ripple;
+    }
+
+    @Override
+    public MvpBasePresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    protected MvpView getMvpView() {
+        return null;
+    }
+
+    @Override
+    protected void bindView() {
+        ripple_view = findViewById(R.id.ripple_view);
+
+        ViewHelper.setOnClick(this, this, R.id.btn_done,
+                R.id.btn_loading,
+                R.id.btn_success,
+                R.id.btn_error,
+                R.id.btn_nomore);
+    }
+
+    @Override
+    protected void init() {
+        ripple_view.setState(IState.STATE_LOADING);
     }
 }

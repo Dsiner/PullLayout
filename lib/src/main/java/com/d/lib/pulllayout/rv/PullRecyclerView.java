@@ -3,15 +3,13 @@ package com.d.lib.pulllayout.rv;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
 
 import com.d.lib.pulllayout.Pullable;
 import com.d.lib.pulllayout.Refreshable;
@@ -22,8 +20,9 @@ import com.d.lib.pulllayout.edge.arrow.ExtendFooterView;
 import com.d.lib.pulllayout.edge.arrow.ExtendHeaderView;
 import com.d.lib.pulllayout.rv.adapter.WrapAdapter;
 import com.d.lib.pulllayout.rv.adapter.WrapAdapterDataObserver;
-import com.d.lib.pulllayout.util.AppBarStateChangeListener;
-import com.d.lib.pulllayout.util.ScrollChangeHelper;
+import com.d.lib.pulllayout.util.AppBarHelper;
+import com.d.lib.pulllayout.util.NestedScrollHelper;
+import com.d.lib.pulllayout.util.RecyclerScrollHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +43,11 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
 
     private boolean mCanPullDown = true;
     private boolean mCanPullUp = true;
+    private boolean mAutoLoadMore = true;
     private int mPullPointerId = INVALID_POINTER;
-    private float mLastY = -1;
+    private int mLastY = -1;
     private int mPullState = Pullable.PULL_STATE_IDLE;
-    private AppBarStateChangeListener.State mAppbarState = AppBarStateChangeListener.State.EXPANDED;
+    private AppBarHelper mAppBarHelper;
     private WrapAdapter mWrapAdapter;
     private List<OnPullListener> mOnPullListeners;
     private OnRefreshListener mOnRefreshListener;
@@ -68,7 +68,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         setLayoutManager(layoutManager);
-        ScrollChangeHelper.addOnScrollListener(this, new ScrollChangeHelper.OnScrollListener() {
+        new RecyclerScrollHelper(this).addOnScrollListener(new RecyclerScrollHelper.OnBottomScrollListener() {
             @Override
             public void onBottom() {
                 if (!autoLoadMore() || mFooterView.getState() == IState.STATE_ERROR) {
@@ -77,6 +77,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
                 loadMore();
             }
         });
+        mAppBarHelper = new AppBarHelper(this);
     }
 
     @NonNull
@@ -94,6 +95,16 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
             }
         });
         return view;
+    }
+
+    @Override
+    public boolean autoLoadMore() {
+        return mAutoLoadMore;
+    }
+
+    @Override
+    public void setAutoLoadMore(boolean enable) {
+        mAutoLoadMore = enable;
     }
 
     @Override
@@ -156,18 +167,6 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
                 || mFooterView.getState() == IState.STATE_LOADING;
     }
 
-    private boolean isOnTop() {
-        boolean attached = ((View) mHeaderView).getParent() != null;
-        int offset = ((View) mHeaderView).getBottom();
-        return attached && offset >= 0;
-    }
-
-    private boolean isOnBottom() {
-        boolean attached = ((View) mFooterView).getParent() != null;
-        int offset = ((View) mFooterView).getTop() - getHeight();
-        return attached && offset <= 0;
-    }
-
     public void addHeaderView(@NonNull View view) {
         mHeaderList.add(view);
         if (mWrapAdapter != null) {
@@ -227,41 +226,81 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (!canPullDown() && !canPullUp()) {
+            return super.onInterceptTouchEvent(ev);
+        }
         final int action = ev.getAction();
         final int actionIndex = ev.getActionIndex();
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                mPullPointerId = ev.getPointerId(actionIndex);
-                mLastY = ev.getY();
+                mPullPointerId = ev.getPointerId(0);
+                mLastY = (int) (ev.getY() + 0.5f);
+                setPullState(Pullable.PULL_STATE_IDLE);
+                break;
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (!canPullDown() && !canPullUp()) {
+            return super.onTouchEvent(ev);
+        }
+        final int action = ev.getAction();
+        final int actionIndex = ev.getActionIndex();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                mPullPointerId = ev.getPointerId(0);
+                mLastY = (int) (ev.getY() + 0.5f);
                 setPullState(Pullable.PULL_STATE_IDLE);
                 break;
 
             case MotionEvent.ACTION_POINTER_DOWN:
                 mPullPointerId = ev.getPointerId(actionIndex);
-                mLastY = ev.getY();
+                mLastY = (int) (ev.getY(actionIndex) + 0.5f);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                final float deltaY = ev.getY() - mLastY;
-                mLastY = ev.getY();
-                if (canPullDown() && isOnTop()
-                        && mAppbarState == AppBarStateChangeListener.State.EXPANDED) {
-                    mHeaderView.onDispatchPulled(0, deltaY);
-                    int offset = ((View) mHeaderView).getBottom();
-                    if (offset > 0 && mHeaderView.getState() < IState.STATE_LOADING) {
-                        setPullState(Pullable.PULL_STATE_DRAGGING);
-                        dispatchOnPullScrolled(0, -offset);
+                final int index = ev.findPointerIndex(mPullPointerId);
+                if (index < 0) {
+                    Log.e("PullLayout", "Error processing scroll; pointer index for id "
+                            + mPullPointerId + " not found. Did any MotionEvents get skipped?");
+                    super.onTouchEvent(ev);
+                    return true;
+                }
+
+                final int y = (int) (ev.getY(index) + 0.5f);
+                final int dy = mLastY - y;
+
+                if (canPullDown() && NestedScrollHelper.isOnTop((View) mHeaderView)) {
+                    if (mAppBarHelper.isExpanded() || mPullState == Pullable.PULL_STATE_DRAGGING) {
+                        mHeaderView.onDispatchPulled(0, -dy);
+                        int offset = ((View) mHeaderView).getBottom();
+                        if (offset > 0) {
+                            setPullState(Pullable.PULL_STATE_DRAGGING);
+                            dispatchOnPullScrolled(0, -offset);
+                            mLastY = y;
+                            return false;
+                        } else {
+                            setPullState(Pullable.PULL_STATE_IDLE);
+                        }
                     }
-                } else if (canPullUp() && isOnBottom()) {
-                    mFooterView.onDispatchPulled(0, -deltaY);
+                } else if (canPullUp() && NestedScrollHelper.isOnBottom(PullRecyclerView.this, (View) mFooterView)) {
+                    mFooterView.onDispatchPulled(0, dy);
                     int offset = getHeight() - ((View) mFooterView).getTop();
-                    if (offset > 0 && mFooterView.getState() < IState.STATE_LOADING) {
+                    if (offset > 0) {
                         setPullState(Pullable.PULL_STATE_DRAGGING);
                         dispatchOnPullScrolled(0, offset);
+                    } else {
+                        setPullState(Pullable.PULL_STATE_IDLE);
                     }
+                } else {
+                    setPullState(Pullable.PULL_STATE_IDLE);
                 }
+                mLastY = y;
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
@@ -270,14 +309,13 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                mLastY = -1;
-                if (canPullDown() && isOnTop()
-                        && mAppbarState == AppBarStateChangeListener.State.EXPANDED
-                        && ((View) mHeaderView).getBottom() > mHeaderView.getExpandedOffset()) {
+                if (canPullDown() && NestedScrollHelper.isOnTop((View) mHeaderView)
+                        && ((View) mHeaderView).getBottom() > mHeaderView.getExpandedOffset()
+                        && mAppBarHelper.isExpanded()) {
                     refresh();
                     mHeaderView.onExtendTo(0, mHeaderView.getState() == IState.STATE_LOADING
                             ? mHeaderView.getExpandedOffset() : 0);
-                } else if (canPullUp() && isOnBottom()
+                } else if (canPullUp() && NestedScrollHelper.isOnBottom(PullRecyclerView.this, (View) mFooterView)
                         && getHeight() - ((View) mFooterView).getTop() > mFooterView.getExpandedOffset()) {
                     loadMore();
                     mFooterView.onExtendTo(0, mFooterView.getState() == IState.STATE_LOADING
@@ -287,6 +325,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
                     mFooterView.onExtendTo(0, 0);
                 }
                 setPullState(Pullable.PULL_STATE_IDLE);
+                mLastY = -1;
                 break;
         }
         return super.onTouchEvent(ev);
@@ -298,7 +337,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
             // Pick a new pointer to pick up the slack.
             final int newIndex = actionIndex == 0 ? 1 : 0;
             mPullPointerId = e.getPointerId(newIndex);
-            mLastY = e.getY(newIndex);
+            mLastY = (int) (e.getY(newIndex) + 0.5f);
         }
     }
 
@@ -306,33 +345,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         // Solve the conflict with CollapsingToolbarLayout
-        AppBarLayout appBarLayout = null;
-        ViewParent p = getParent();
-        while (p != null) {
-            if (p instanceof CoordinatorLayout) {
-                break;
-            }
-            p = p.getParent();
-        }
-        if (p instanceof CoordinatorLayout) {
-            CoordinatorLayout coordinatorLayout = (CoordinatorLayout) p;
-            final int childCount = coordinatorLayout.getChildCount();
-            for (int i = childCount - 1; i >= 0; i--) {
-                final View child = coordinatorLayout.getChildAt(i);
-                if (child instanceof AppBarLayout) {
-                    appBarLayout = (AppBarLayout) child;
-                    break;
-                }
-            }
-            if (appBarLayout != null) {
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        mAppbarState = state;
-                    }
-                });
-            }
-        }
+        mAppBarHelper.setOnOffsetChangedListener();
     }
 
     @Override
@@ -355,11 +368,6 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     }
 
     @Override
-    public boolean canPullUp() {
-        return mCanPullUp;
-    }
-
-    @Override
     public void setCanPullDown(boolean enable) {
         this.mCanPullDown = enable;
         if (!enable) {
@@ -369,6 +377,11 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
             mWrapAdapter.setCanPullDown(enable);
             mWrapAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean canPullUp() {
+        return mCanPullUp;
     }
 
     @Override
@@ -432,9 +445,5 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     @Override
     public void setOnRefreshListener(OnRefreshListener listener) {
         this.mOnRefreshListener = listener;
-    }
-
-    public boolean autoLoadMore() {
-        return true;
     }
 }

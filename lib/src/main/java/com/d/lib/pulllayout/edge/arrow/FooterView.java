@@ -40,7 +40,6 @@ public class FooterView extends EdgeView implements View.OnClickListener {
         super.init(context);
         ldv_loading = (LoadingView) mContainer.findViewById(R.id.ldv_loading);
         tv_load_more = (TextView) mContainer.findViewById(R.id.tv_load_more);
-        tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_loading));
     }
 
     @Override

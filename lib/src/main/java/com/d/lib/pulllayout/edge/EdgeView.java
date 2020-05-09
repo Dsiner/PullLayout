@@ -50,7 +50,7 @@ public abstract class EdgeView extends LinearLayout
     @Override
     public void onPulled(float dx, float dy) {
         Log.d("EdgeView", "onPulled: " + dy);
-        if (mState == STATE_LOADING) {
+        if (mState == STATE_LOADING || mState == STATE_NO_MORE) {
             return;
         }
         if (Math.abs(dy) > getExpandedOffset()) {

@@ -6,6 +6,8 @@ package com.d.lib.pulllayout;
  */
 public interface Pullable {
 
+    float DRAG_FACTOR = 0.49f;
+
     /**
      * The Pullable is not currently scrolling.
      *
@@ -40,9 +42,9 @@ public interface Pullable {
 
     boolean canPullDown();
 
-    boolean canPullUp();
-
     void setCanPullDown(boolean enable);
+
+    boolean canPullUp();
 
     void setCanPullUp(boolean enable);
 
