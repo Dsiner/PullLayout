@@ -3,7 +3,6 @@ package com.d.lib.pulllayout.rv;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -39,7 +38,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     @NonNull
     private final IExtendEdgeView mFooterView;
     @NonNull
-    private final HeaderList mHeaderList;
+    private final ItemViewList mHeaderList, mFooterList;
 
     private boolean mCanPullDown = true;
     private boolean mCanPullUp = true;
@@ -64,20 +63,23 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         super(context, attrs, defStyle);
         mHeaderView = getHeader();
         mFooterView = getFooter();
-        mHeaderList = new HeaderList();
+        mHeaderList = new ItemViewList(WrapAdapter.ITEM_VIEW_TYPE_HEADER_LIST_INDEX, 100000);
+        mFooterList = new ItemViewList(WrapAdapter.ITEM_VIEW_TYPE_FOOTER_LIST_INDEX, 100000);
+        mAppBarHelper = new AppBarHelper(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         setLayoutManager(layoutManager);
         new RecyclerScrollHelper(this).addOnScrollListener(new RecyclerScrollHelper.OnBottomScrollListener() {
             @Override
             public void onBottom() {
-                if (!autoLoadMore() || mFooterView.getState() == IState.STATE_ERROR) {
+                if (!canPullUp() || !autoLoadMore()
+                        || NestedScrollHelper.isOnTop((View) mHeaderView)
+                        || mFooterView.getState() == IState.STATE_ERROR) {
                     return;
                 }
                 loadMore();
             }
         });
-        mAppBarHelper = new AppBarHelper(this);
     }
 
     @NonNull
@@ -184,9 +186,26 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         return false;
     }
 
+    public void addFooterView(@NonNull View view) {
+        mFooterList.add(view);
+        if (mWrapAdapter != null) {
+            mWrapAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public boolean removeFooterView(View v) {
+        if (mFooterList.remove(v)) {
+            if (mWrapAdapter != null) {
+                mWrapAdapter.notifyDataSetChanged();
+            }
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void setAdapter(Adapter adapter) {
-        mWrapAdapter = new WrapAdapter(adapter, mHeaderView, mFooterView, mHeaderList);
+        mWrapAdapter = new WrapAdapter(adapter, mHeaderView, mFooterView, mHeaderList, mFooterList);
         mWrapAdapter.setCanPullDown(mCanPullDown);
         mWrapAdapter.setCanPullUp(mCanPullUp);
         WrapAdapterDataObserver adapterDataObserver = new WrapAdapterDataObserver(mWrapAdapter);
@@ -200,28 +219,9 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     @Override
     public Adapter getAdapter() {
         if (mWrapAdapter != null) {
-            return mWrapAdapter.getOriginalAdapter();
+            return mWrapAdapter.getAdapter();
         } else {
             return null;
-        }
-    }
-
-    @Override
-    public void setLayoutManager(LayoutManager layout) {
-        super.setLayoutManager(layout);
-        if (mWrapAdapter != null) {
-            if (layout instanceof GridLayoutManager) {
-                final GridLayoutManager gridManager = ((GridLayoutManager) layout);
-                gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        return (mWrapAdapter.isHeaderList(position)
-                                || mWrapAdapter.isFooter(position)
-                                || mWrapAdapter.isHeader(position))
-                                ? gridManager.getSpanCount() : 1;
-                    }
-                });
-            }
         }
     }
 

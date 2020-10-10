@@ -28,14 +28,14 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
 
     public CommonAdapter(@NonNull Context context, List<T> datas, int layoutId) {
         mContext = context;
-        mDatas = datas == null ? new ArrayList<T>() : datas;
+        mDatas = datas != null ? new ArrayList<>(datas) : new ArrayList<T>();
         mLayoutId = layoutId;
     }
 
     public CommonAdapter(@NonNull Context context, List<T> datas, MultiItemTypeSupport<T> multiItemTypeSupport) {
         mContext = context;
-        mDatas = datas == null ? new ArrayList<T>() : new ArrayList<>(datas);
-        this.mMultiItemTypeSupport = multiItemTypeSupport;
+        mDatas = datas != null ? new ArrayList<>(datas) : new ArrayList<T>();
+        mMultiItemTypeSupport = multiItemTypeSupport;
     }
 
     @Override
@@ -52,9 +52,16 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
     }
 
     @Override
+    public int getItemCount() {
+        return mDatas != null ? mDatas.size() : 0;
+    }
+
+    @Override
     public int getItemViewType(int position) {
         if (mMultiItemTypeSupport != null) {
-            return mMultiItemTypeSupport.getItemViewType(position, position < mDatas.size() ? mDatas.get(position) : null);
+            if (mDatas != null && mDatas.size() > 0) {
+                return mMultiItemTypeSupport.getItemViewType(position, mDatas.get(position));
+            }
         }
         return super.getItemViewType(position);
     }
@@ -69,7 +76,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
                 layoutId = mMultiItemTypeSupport.getLayoutId(viewType);
             }
         }
-        CommonHolder holder = CommonHolder.createViewHolder(mContext, parent, layoutId);
+        CommonHolder holder = CommonHolder.create(mContext, parent, layoutId);
         onViewHolderCreated(holder, holder.itemView);
         return holder;
     }
@@ -77,11 +84,6 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<CommonHolder
     @Override
     public void onBindViewHolder(@NonNull CommonHolder holder, int position) {
         convert(position, holder, mDatas.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDatas == null ? 0 : mDatas.size();
     }
 
     public void onViewHolderCreated(CommonHolder holder, View itemView) {

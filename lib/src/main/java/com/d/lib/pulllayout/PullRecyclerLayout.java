@@ -20,6 +20,7 @@ import com.d.lib.pulllayout.edge.IState;
 import com.d.lib.pulllayout.edge.arrow.FooterView;
 import com.d.lib.pulllayout.edge.arrow.HeaderView;
 import com.d.lib.pulllayout.loader.RecyclerAdapter;
+import com.d.lib.pulllayout.util.NestedScrollHelper;
 import com.d.lib.pulllayout.util.RecyclerScrollHelper;
 
 /**
@@ -278,7 +279,9 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
             mOnBottomScrollListener = new RecyclerScrollHelper.OnBottomScrollListener() {
                 @Override
                 public void onBottom() {
-                    if (!autoLoadMore() || mFooterView.getState() == IState.STATE_ERROR) {
+                    if (!canPullUp() || !autoLoadMore()
+                            || !NestedScrollHelper.canNestedScrollVertically(mRecyclerList)[0]
+                            || mFooterView.getState() == IState.STATE_ERROR) {
                         return;
                     }
                     loadMore();

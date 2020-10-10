@@ -23,34 +23,28 @@ import android.widget.TextView;
 public class CommonHolder {
     public final View itemView;
     public final int layoutId;
-    private int mPosition;
     private final SparseArray<View> mViews;
 
-    private CommonHolder(Context context, ViewGroup parent, int layoutId, int position) {
+    private CommonHolder(Context context, ViewGroup parent, int layoutId) {
         this.layoutId = layoutId;
-        this.mPosition = position;
         this.mViews = new SparseArray<>();
         this.itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
         this.itemView.setTag(this);
     }
 
     @NonNull
-    public static CommonHolder createViewHolder(@NonNull Context context,
-                                                @Nullable View convertView, ViewGroup parent,
-                                                int layoutId, int position) {
+    public static CommonHolder create(@NonNull Context context,
+                                      @Nullable View convertView,
+                                      ViewGroup parent,
+                                      int layoutId) {
         if (convertView == null) {
-            return new CommonHolder(context, parent, layoutId, position);
+            return new CommonHolder(context, parent, layoutId);
         }
         CommonHolder holder = (CommonHolder) convertView.getTag();
         if (holder.layoutId != layoutId) {
-            return new CommonHolder(context, parent, layoutId, position);
+            return new CommonHolder(context, parent, layoutId);
         }
-        holder.mPosition = position;
         return holder;
-    }
-
-    public int getPosition() {
-        return mPosition;
     }
 
     /**

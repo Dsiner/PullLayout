@@ -28,12 +28,9 @@ public class CommonHolder extends RecyclerView.ViewHolder implements ItemTouchHe
     }
 
     @NonNull
-    public static CommonHolder createViewHolder(View itemView, int layoutId) {
-        return new CommonHolder(itemView, layoutId);
-    }
-
-    @NonNull
-    public static CommonHolder createViewHolder(@NonNull Context context, ViewGroup parent, int layoutId) {
+    public static CommonHolder create(@NonNull Context context,
+                                      ViewGroup parent,
+                                      int layoutId) {
         View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
         return new CommonHolder(itemView, layoutId);
     }

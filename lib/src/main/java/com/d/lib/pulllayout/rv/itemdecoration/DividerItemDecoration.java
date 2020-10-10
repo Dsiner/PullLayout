@@ -60,7 +60,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
-        if (parent.getChildAdapterPosition(view) <= mWrapAdapter.getHeadersCount()) {
+        if (mWrapAdapter.isReservedPosition(parent.getChildAdapterPosition(view))) {
             return;
         }
         mOrientation = ((LinearLayoutManager) parent.getLayoutManager()).getOrientation();

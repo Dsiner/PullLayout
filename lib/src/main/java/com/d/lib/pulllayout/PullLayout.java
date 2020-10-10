@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
-import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,8 +18,6 @@ import android.view.animation.DecelerateInterpolator;
 import com.d.lib.pulllayout.util.AppBarHelper;
 import com.d.lib.pulllayout.util.NestedScrollHelper;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +30,8 @@ public class PullLayout extends ViewGroup implements Pullable {
     protected static final int INVALID_POINTER = -1;
     protected static final int INVALID_ORIENTATION = -1;
 
-    @IntDef({HORIZONTAL, VERTICAL})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface OrientationMode {
-    }
-
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
-
-    protected int mWidth;
-    protected int mHeight;
 
     protected int mTouchSlop;
     protected int mDuration = 250;
@@ -440,6 +429,10 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     protected void startNestedAnim(int destX, int destY) {
         stopNestedAnim();
+        if (getScrollX() == destX && getScrollY() == destY) {
+            setPullState(Pullable.PULL_STATE_IDLE);
+            return;
+        }
         mAnimUpdateListener.ofInt(getScrollX(), getScrollY(), destX, destY);
         mAnimation.addUpdateListener(mAnimUpdateListener);
         mAnimation.addListener(mAnimListenerAdapter);
