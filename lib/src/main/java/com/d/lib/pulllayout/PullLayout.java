@@ -67,7 +67,6 @@ public class PullLayout extends ViewGroup implements Pullable {
                 return;
             }
             PullLayout view = reference.get();
-            view.mAnimUpdateListener.factor = 1;
             view.setPullState(Pullable.PULL_STATE_IDLE);
         }
 
@@ -77,7 +76,6 @@ public class PullLayout extends ViewGroup implements Pullable {
                 return;
             }
             PullLayout view = reference.get();
-            view.mAnimUpdateListener.factor = 1;
             view.setPullState(Pullable.PULL_STATE_IDLE);
         }
     }
@@ -85,7 +83,6 @@ public class PullLayout extends ViewGroup implements Pullable {
     static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
         private final WeakReference<PullLayout> reference;
         private int x, y, destX, destY;
-        private float factor;
 
         AnimUpdateListener(PullLayout view) {
             this.reference = new WeakReference<>(view);
@@ -104,12 +101,12 @@ public class PullLayout extends ViewGroup implements Pullable {
                 return;
             }
             PullLayout view = reference.get();
-            factor = (float) animation.getAnimatedValue();
-            int scrollX = (int) (x + (destX - x) * factor);
-            int scrollY = (int) (y + (destY - y) * factor);
+            final float factor = (float) animation.getAnimatedValue();
+            final int scrollX = (int) (x + (destX - x) * factor);
+            final int scrollY = (int) (y + (destY - y) * factor);
+            view.setPullState(Pullable.PULL_STATE_SETTLING);
             view.scrollTo(scrollX, scrollY);
             view.invalidate();
-            view.setPullState(Pullable.PULL_STATE_SETTLING);
         }
     }
 
@@ -314,7 +311,6 @@ public class PullLayout extends ViewGroup implements Pullable {
                     return super.dispatchTouchEvent(ev);
                 }
                 if (mPullState == Pullable.PULL_STATE_DRAGGING) {
-                    setPullState(Pullable.PULL_STATE_IDLE);
                     startNestedAnim(0, 0);
                 }
                 mOrientation = INVALID_ORIENTATION;
@@ -325,7 +321,7 @@ public class PullLayout extends ViewGroup implements Pullable {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void resetTouch() {
+    protected void cancelEvent() {
         final long now = SystemClock.uptimeMillis();
         final MotionEvent cancelEvent = MotionEvent.obtain(now, now,
                 MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
@@ -334,7 +330,6 @@ public class PullLayout extends ViewGroup implements Pullable {
             cancelEvent.recycle();
         }
     }
-
 
     protected void onPointerUp(MotionEvent e) {
         final int actionIndex = e.getActionIndex();
@@ -433,6 +428,7 @@ public class PullLayout extends ViewGroup implements Pullable {
             setPullState(Pullable.PULL_STATE_IDLE);
             return;
         }
+        setPullState(Pullable.PULL_STATE_SETTLING);
         mAnimUpdateListener.ofInt(getScrollX(), getScrollY(), destX, destY);
         mAnimation.addUpdateListener(mAnimUpdateListener);
         mAnimation.addListener(mAnimListenerAdapter);
@@ -466,7 +462,7 @@ public class PullLayout extends ViewGroup implements Pullable {
     }
 
     @Override
-    public void addOnPullScrollListener(OnPullListener listener) {
+    public void addOnPullListener(OnPullListener listener) {
         if (mOnPullListeners == null) {
             mOnPullListeners = new ArrayList<>();
         }
@@ -474,14 +470,14 @@ public class PullLayout extends ViewGroup implements Pullable {
     }
 
     @Override
-    public void removeOnPullScrollListener(OnPullListener listener) {
+    public void removeOnPullListener(OnPullListener listener) {
         if (mOnPullListeners != null) {
             mOnPullListeners.remove(listener);
         }
     }
 
     @Override
-    public void clearOnPullScrollListeners() {
+    public void clearOnPullListeners() {
         if (mOnPullListeners != null) {
             mOnPullListeners.clear();
         }

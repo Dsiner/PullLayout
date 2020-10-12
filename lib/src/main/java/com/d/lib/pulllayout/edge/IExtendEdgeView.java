@@ -16,29 +16,34 @@ import java.lang.ref.WeakReference;
 
 public interface IExtendEdgeView extends IEdgeView {
 
-    void onDispatchPulled(float dx, float dy);
+    void dispatchPulled(float dx, float dy);
 
-    void onExtendTo(int destX, int destY);
+    void postNestedAnim(int destX, int destY);
+
+    void setOnPullListener(Pullable.OnPullListener l);
 
     class NestedExtendChildHelper {
         private EdgeView mEdgeView;
         private Handler mHandler = new Handler(Looper.getMainLooper());
         private WeakRunnable mWeakRunnable;
-        private int mDuration = 300;
+        private int mDuration = 450;
         private ValueAnimator mAnimation;
         private AnimUpdateListener mAnimUpdateListener;
         private AnimListenerAdapter mAnimListenerAdapter;
+        private Pullable.OnPullListener mOnPullListener;
 
         static class WeakRunnable implements Runnable {
             private final WeakReference<NestedExtendChildHelper> reference;
-            private int destX, destY;
+            private int x, y, destX, destY;
             private boolean reset;
 
             WeakRunnable(NestedExtendChildHelper view) {
                 this.reference = new WeakReference<>(view);
             }
 
-            private void init(int destX, int destY, boolean reset) {
+            void ofInt(int x, int y, int destX, int destY, boolean reset) {
+                this.x = x;
+                this.y = y;
                 this.destX = destX;
                 this.destY = destY;
                 this.reset = reset;
@@ -56,9 +61,14 @@ public interface IExtendEdgeView extends IEdgeView {
 
         static class AnimListenerAdapter extends AnimatorListenerAdapter {
             private final WeakReference<NestedExtendChildHelper> reference;
+            private boolean reset;
 
             AnimListenerAdapter(NestedExtendChildHelper view) {
                 this.reference = new WeakReference<>(view);
+            }
+
+            void reset(boolean reset) {
+                this.reset = reset;
             }
 
             @Override
@@ -67,7 +77,9 @@ public interface IExtendEdgeView extends IEdgeView {
                     return;
                 }
                 NestedExtendChildHelper view = reference.get();
-                view.mAnimUpdateListener.factor = 1;
+                if (view.mOnPullListener != null) {
+                    view.mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+                }
             }
 
             @Override
@@ -76,15 +88,18 @@ public interface IExtendEdgeView extends IEdgeView {
                     return;
                 }
                 NestedExtendChildHelper view = reference.get();
-                view.mAnimUpdateListener.factor = 1;
-                view.mEdgeView.setState(STATE_NONE);
+                if (reset) {
+                    view.mEdgeView.setState(STATE_NONE);
+                }
+                if (view.mOnPullListener != null) {
+                    view.mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+                }
             }
         }
 
         static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
             private final WeakReference<NestedExtendChildHelper> reference;
             private int x, y, destX, destY;
-            private float factor;
 
             AnimUpdateListener(NestedExtendChildHelper view) {
                 this.reference = new WeakReference<>(view);
@@ -103,9 +118,13 @@ public interface IExtendEdgeView extends IEdgeView {
                     return;
                 }
                 NestedExtendChildHelper view = reference.get();
-                factor = (float) animation.getAnimatedValue();
-                int scrollY = (int) (y + (destY - y) * factor);
+                final float factor = (float) animation.getAnimatedValue();
+                final int scrollY = (int) (y + (destY - y) * factor);
                 view.setVisibleHeight(scrollY);
+                if (view.mOnPullListener != null) {
+                    view.mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_SETTLING);
+                    view.mOnPullListener.onPulled(null, 0, scrollY);
+                }
             }
         }
 
@@ -128,7 +147,7 @@ public interface IExtendEdgeView extends IEdgeView {
 
         public void dispatchPulled(float dx, float dy) {
             Log.d("EdgeView", "dispatchPulled: " + dy);
-            dy = dy * Pullable.DRAG_FACTOR;
+            dy = dy * Pullable.PULL_FACTOR;
             if (getVisibleHeight() > 0 || dy > 0) {
                 int height = Math.max(0, (int) dy + getVisibleHeight());
                 setVisibleHeight(height);
@@ -136,38 +155,42 @@ public interface IExtendEdgeView extends IEdgeView {
             }
         }
 
+        public void reset() {
+            postNestedAnim(0, 0, mDuration, true);
+        }
+
+        public void postNestedAnim(int destX, int destY) {
+            postNestedAnim(destX, destY, 0, false);
+        }
+
+        private void postNestedAnim(int destX, int destY, long delayMillis, boolean reset) {
+            stopNestedAnim();
+            if (getVisibleHeight() == destY) {
+                if (mOnPullListener != null) {
+                    mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+                }
+                return;
+            }
+            mWeakRunnable.ofInt(0, getVisibleHeight(), 0, destY, reset);
+            mHandler.postDelayed(mWeakRunnable, delayMillis);
+        }
+
         private void startNestedAnim(int destX, int destY, boolean reset) {
             stopNestedAnim();
             mAnimUpdateListener.ofInt(0, getVisibleHeight(), 0, destY);
             mAnimation.addUpdateListener(mAnimUpdateListener);
-            if (reset) {
-                mAnimation.addListener(mAnimListenerAdapter);
-            }
+            mAnimListenerAdapter.reset(reset);
+            mAnimation.addListener(mAnimListenerAdapter);
             mAnimation.start();
         }
 
         private boolean stopNestedAnim() {
+            mHandler.removeCallbacksAndMessages(null);
             boolean running = mAnimation.isRunning();
             mAnimation.removeAllUpdateListeners();
             mAnimation.removeAllListeners();
             mAnimation.cancel();
             return running;
-        }
-
-        public void onExtendTo(int destX, int destY) {
-            mHandler.removeCallbacksAndMessages(null);
-            stopNestedAnim();
-            if (getVisibleHeight() != destY) {
-                mWeakRunnable.init(getVisibleHeight(), destY, false);
-                mHandler.post(mWeakRunnable);
-            }
-        }
-
-        public void onReset() {
-            mHandler.removeCallbacksAndMessages(null);
-            stopNestedAnim();
-            mWeakRunnable.init(getVisibleHeight(), 0, true);
-            mHandler.postDelayed(mWeakRunnable, mDuration);
         }
 
         public void setVisibleHeight(int height) {
@@ -182,6 +205,10 @@ public interface IExtendEdgeView extends IEdgeView {
         public int getVisibleHeight() {
             ViewGroup.LayoutParams lp = mEdgeView.mContainer.getLayoutParams();
             return lp.height;
+        }
+
+        public void setOnPullListener(Pullable.OnPullListener l) {
+            this.mOnPullListener = l;
         }
     }
 }

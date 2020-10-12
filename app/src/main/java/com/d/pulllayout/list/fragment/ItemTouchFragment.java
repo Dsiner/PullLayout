@@ -34,7 +34,7 @@ public class ItemTouchFragment extends BaseFragment<MvpBasePresenter>
         implements View.OnClickListener {
 
     private TitleLayout tl_title;
-    private PullRecyclerView rv_list;
+    private PullRecyclerView mPullList;
     private CommonAdapter<Bean> mAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private int mLayoutManagerType = 1;
@@ -91,7 +91,7 @@ public class ItemTouchFragment extends BaseFragment<MvpBasePresenter>
     protected void bindView(View rootView) {
         tl_title = ViewHelper.findView(rootView, R.id.tl_title);
         tl_title.setVisibility(R.id.iv_title_right, View.VISIBLE);
-        rv_list = ViewHelper.findView(rootView, R.id.rv_list);
+        mPullList = ViewHelper.findView(rootView, R.id.rv_list);
 
         ViewHelper.setOnClick(rootView, this, R.id.iv_title_left,
                 R.id.iv_title_right);
@@ -103,29 +103,29 @@ public class ItemTouchFragment extends BaseFragment<MvpBasePresenter>
         ImageView iv_title_right = ViewHelper.findView(tl_title, R.id.iv_title_right);
         iv_title_right.setImageResource(R.drawable.lib_pub_ic_title_more);
 
-        rv_list.setCanPullDown(false);
-        rv_list.setCanPullUp(false);
-        rv_list.setHasFixedSize(true);
+        mPullList.setCanPullDown(false);
+        mPullList.setCanPullUp(false);
+        mPullList.setHasFixedSize(true);
 
         onLayoutManagerChange();
     }
 
     private void onLayoutManagerChange() {
-        final RecyclerView.LayoutManager layoutManager = rv_list.getLayoutManager();
+        final RecyclerView.LayoutManager layoutManager = mPullList.getLayoutManager();
         // Step 3-1: Set the {@link LayoutManager, @link RecyclerView.Adapter}
         // that this RecyclerView will use.
         if (!(layoutManager instanceof GridLayoutManager)) {
-            rv_list.setLayoutManager(new GridLayoutManager(mContext, 4));
+            mPullList.setLayoutManager(new GridLayoutManager(mContext, 4));
             mAdapter = new ItemTouchGridAdapter(mContext,
                     mAdapter != null ? mAdapter.getDatas() : Bean.create(15),
                     R.layout.adapter_item_touch_grid);
         } else {
-            rv_list.setLayoutManager(new LinearLayoutManager(mContext));
+            mPullList.setLayoutManager(new LinearLayoutManager(mContext));
             mAdapter = new ItemTouchLinearAdapter(mContext,
                     mAdapter != null ? mAdapter.getDatas() : Bean.create(15),
                     R.layout.adapter_item_touch_linear);
         }
-        rv_list.setAdapter(mAdapter);
+        mPullList.setAdapter(mAdapter);
 
         // Release (optional)
         if (mItemTouchHelper != null) {
@@ -141,6 +141,6 @@ public class ItemTouchFragment extends BaseFragment<MvpBasePresenter>
                 mItemTouchHelper.startDrag(viewHolder);
             }
         });
-        mItemTouchHelper.attachToRecyclerView(rv_list);
+        mItemTouchHelper.attachToRecyclerView(mPullList);
     }
 }

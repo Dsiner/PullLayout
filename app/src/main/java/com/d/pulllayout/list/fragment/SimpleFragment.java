@@ -2,9 +2,11 @@ package com.d.pulllayout.list.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.d.lib.common.component.loader.v4.AbsFragment;
 import com.d.lib.common.component.mvp.MvpView;
+import com.d.lib.pulllayout.Pullable;
 import com.d.lib.pulllayout.loader.RecyclerAdapter;
 import com.d.pulllayout.R;
 import com.d.pulllayout.list.activity.ListActivity;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
  * Created by D on 2017/4/26.
  */
 public class SimpleFragment extends AbsFragment<Bean, LoadPresenter> {
-    private int mListType = ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW;
+    private int mListType;
 
     @Override
     protected int getLayoutRes() {
@@ -49,6 +51,27 @@ public class SimpleFragment extends AbsFragment<Bean, LoadPresenter> {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mListType = ListActivity.getListType(this);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initList() {
+        super.initList();
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        ((Pullable) mPullList).addOnPullListener(new Pullable.OnPullListener() {
+            @Override
+            public void onPullStateChanged(Pullable pullable, int newState) {
+                Log.d("dsiner", "onPullStateChanged newState: " + newState);
+            }
+
+            @Override
+            public void onPulled(Pullable pullable, int dx, int dy) {
+                Log.d("dsiner", "onPulled dx: " + dx + " dy: " + dy);
+            }
+        });
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import com.d.lib.pulllayout.Pullable;
 import com.d.lib.pulllayout.R;
 import com.d.lib.pulllayout.edge.IExtendEdgeView;
 
@@ -44,24 +45,29 @@ public class ExtendFooterView extends FooterView implements IExtendEdgeView {
         switch (state) {
             case STATE_LOADING:
             case STATE_NO_MORE:
-                mNestedExtendChildHelper.onExtendTo(0, getExpandedOffset());
+                mNestedExtendChildHelper.postNestedAnim(0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
             case STATE_ERROR:
-                mNestedExtendChildHelper.onReset();
+                mNestedExtendChildHelper.reset();
                 break;
         }
         return true;
     }
 
     @Override
-    public void onDispatchPulled(float dx, float dy) {
+    public void dispatchPulled(float dx, float dy) {
         mNestedExtendChildHelper.dispatchPulled(dx, dy);
     }
 
     @Override
-    public void onExtendTo(int destX, int destY) {
-        mNestedExtendChildHelper.onExtendTo(destX, destY);
+    public void postNestedAnim(int destX, int destY) {
+        mNestedExtendChildHelper.postNestedAnim(destX, destY);
+    }
+
+    @Override
+    public void setOnPullListener(Pullable.OnPullListener l) {
+        mNestedExtendChildHelper.setOnPullListener(l);
     }
 }

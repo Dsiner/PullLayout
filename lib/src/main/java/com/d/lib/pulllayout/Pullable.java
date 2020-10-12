@@ -6,7 +6,7 @@ package com.d.lib.pulllayout;
  */
 public interface Pullable {
 
-    float DRAG_FACTOR = 0.49f;
+    float PULL_FACTOR = 0.49f;
 
     /**
      * The Pullable is not currently scrolling.
@@ -52,24 +52,24 @@ public interface Pullable {
      * Add a listener that will be notified of any changes in pull state or position.
      *
      * <p>Components that add a listener should take care to remove it when finished.
-     * Other components that take ownership of a view may call {@link #clearOnPullScrollListeners()}
+     * Other components that take ownership of a view may call {@link #clearOnPullListeners()}
      * to remove all attached listeners.</p>
      *
      * @param listener listener to set or null to clear
      */
-    void addOnPullScrollListener(OnPullListener listener);
+    void addOnPullListener(OnPullListener listener);
 
     /**
      * Remove a listener that was notified of any changes in pull state or position.
      *
      * @param listener listener to set or null to clear
      */
-    void removeOnPullScrollListener(OnPullListener listener);
+    void removeOnPullListener(OnPullListener listener);
 
     /**
      * Remove all secondary listener that were notified of any changes in pull state or position.
      */
-    void clearOnPullScrollListeners();
+    void clearOnPullListeners();
 
     abstract class OnPullListener {
 

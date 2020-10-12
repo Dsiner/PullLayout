@@ -20,6 +20,7 @@ import com.d.lib.pulllayout.edge.IState;
 import com.d.lib.pulllayout.edge.arrow.FooterView;
 import com.d.lib.pulllayout.edge.arrow.HeaderView;
 import com.d.lib.pulllayout.loader.RecyclerAdapter;
+import com.d.lib.pulllayout.rv.PullRecyclerView;
 import com.d.lib.pulllayout.util.NestedScrollHelper;
 import com.d.lib.pulllayout.util.RecyclerScrollHelper;
 
@@ -28,8 +29,9 @@ import com.d.lib.pulllayout.util.RecyclerScrollHelper;
  * Created by D on 2020/3/21.
  */
 public class PullRecyclerLayout extends PullLayout implements Refreshable {
-    private static final int TYPE_RECYCLERVIEW = 1;
-    private static final int TYPE_LISTVIEW = 2;
+    private static final int TYPE_LISTVIEW = 1;
+    private static final int TYPE_RECYCLERVIEW = 2;
+    private static final int TYPE_PULLRECYCLERVIEW = 3;
 
     @NonNull
     private final IEdgeView mHeaderView;
@@ -54,16 +56,25 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         super(context, attrs, defStyleAttr);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.lib_pull_PullRecyclerLayout);
-        mType = typedArray.getInt(R.styleable.lib_pull_PullRecyclerLayout_lib_pull_type, TYPE_RECYCLERVIEW);
+        mType = typedArray.getInt(R.styleable.lib_pull_PullRecyclerLayout_lib_pull_type, TYPE_PULLRECYCLERVIEW);
         typedArray.recycle();
 
-        if (mType == TYPE_LISTVIEW) {
+        if (TYPE_LISTVIEW == mType) {
             mRecyclerList = new ListView(context);
-        } else {
+
+        } else if (TYPE_RECYCLERVIEW == mType) {
             mRecyclerList = new RecyclerView(context);
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             ((RecyclerView) mRecyclerList).setLayoutManager(layoutManager);
+
+        } else if (TYPE_PULLRECYCLERVIEW == mType) {
+            mRecyclerList = new PullRecyclerView(context);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            ((PullRecyclerView) mRecyclerList).setCanPullDown(false);
+            ((PullRecyclerView) mRecyclerList).setCanPullUp(false);
+            ((PullRecyclerView) mRecyclerList).setLayoutManager(layoutManager);
         }
 
         mHeaderView = getHeader();
@@ -164,6 +175,11 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         mFooterView.setState(IState.STATE_NO_MORE);
     }
 
+    protected boolean isLoading() {
+        return mHeaderView.getState() == IState.STATE_LOADING
+                || mFooterView.getState() == IState.STATE_LOADING;
+    }
+
     public void setAdapter(RecyclerAdapter adapter) {
         View nestedChild = getNestedChild();
         if (nestedChild instanceof RecyclerView) {
@@ -176,11 +192,6 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     @Override
     public void setOnRefreshListener(OnRefreshListener listener) {
         this.mOnRefreshListener = listener;
-    }
-
-    protected boolean isLoading() {
-        return mHeaderView.getState() == IState.STATE_LOADING
-                || mFooterView.getState() == IState.STATE_LOADING;
     }
 
     @Override
@@ -231,7 +242,6 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                     } else {
                         startNestedAnim(0, 0);
                     }
-                    setPullState(Pullable.PULL_STATE_IDLE);
                 }
                 mOrientation = INVALID_ORIENTATION;
                 ev.setAction(MotionEvent.ACTION_CANCEL);
@@ -251,11 +261,6 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         return mRecyclerList;
     }
 
-    @Override
-    public void setLayoutParams(LayoutParams params) {
-        super.setLayoutParams(params);
-    }
-
     public void setNestedChild(View view) {
         if (!(view instanceof RecyclerView)
                 && !(view instanceof ListView)) {
@@ -269,6 +274,8 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
         view.setLayoutParams(lp);
         mRecyclerList = view;
+        mRecyclerList.setHorizontalScrollBarEnabled(false);
+        mRecyclerList.setVerticalScrollBarEnabled(false);
         mRecyclerList.setOverScrollMode(View.OVER_SCROLL_NEVER);
         if (mRecyclerList instanceof ListView) {
             ((ListView) mRecyclerList).setDivider(null);

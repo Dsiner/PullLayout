@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePresenter> {
 
-    private int mListType = ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW;
+    private int mListType;
 
     @Override
     public void onClick(View v) {
@@ -41,19 +41,7 @@ public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePrese
 
     public void onMore(final int listType) {
         MenuPopup menuPopup = PopupWindowFactory.createFactory(this)
-                .getMenuPopup(Arrays.asList(
-                        new MenuPopup.Bean("PullRecyclerLayout\n(RecyclerView)",
-                                mListType == ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW ?
-                                        R.color.lib_pub_color_main
-                                        : R.color.lib_pub_color_white, false),
-                        new MenuPopup.Bean("PullRecyclerLayout\n(ListView)",
-                                mListType == ListType.PULLRECYCLERLAYOUT_LISTVIEW ?
-                                        R.color.lib_pub_color_main
-                                        : R.color.lib_pub_color_white, false),
-                        new MenuPopup.Bean("PullRecyclerView",
-                                mListType == ListType.PULLRECYCLERVIEW ?
-                                        R.color.lib_pub_color_main
-                                        : R.color.lib_pub_color_white, false)),
+                .getMenuPopup(ListType.getTypeBeans(mListType),
                         new MenuPopup.OnMenuListener() {
                             @Override
                             public void onClick(PopupWindow popup, int position, String item) {

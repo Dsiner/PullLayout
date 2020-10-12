@@ -40,7 +40,6 @@ public class MainActivity extends BaseActivity<MvpBasePresenter>
 
             case R.id.btn_coordinator_list:
                 ListActivity.openActivity(mActivity, ListActivity.TYPE_COORDINATOR_LIST);
-//                startActivity(new Intent(MainActivity.this, CoordinatorListActivity.class));
                 break;
 
             case R.id.btn_coordinator_tab:

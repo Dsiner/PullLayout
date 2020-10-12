@@ -23,8 +23,6 @@ import com.d.pulllayout.list.fragment.MultipleFragment;
 import com.d.pulllayout.list.fragment.SimpleFragment;
 import com.d.pulllayout.list.model.ListType;
 
-import java.util.Arrays;
-
 /**
  * ListActivity
  * Created by D on 2017/4/26.
@@ -42,7 +40,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
 
     private TitleLayout tl_title;
     private int mType;
-    private int mListType = ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW;
+    private int mListType;
     private Fragment mCurFragment;
 
     public static void openActivity(Context context, int type) {
@@ -78,19 +76,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
 
     public void onMore(final int listType) {
         MenuPopup menuPopup = PopupWindowFactory.createFactory(this)
-                .getMenuPopup(Arrays.asList(
-                        new MenuPopup.Bean("PullRecyclerLayout\n(RecyclerView)",
-                                mListType == ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW ?
-                                        R.color.lib_pub_color_main
-                                        : R.color.lib_pub_color_white, false),
-                        new MenuPopup.Bean("PullRecyclerLayout\n(ListView)",
-                                mListType == ListType.PULLRECYCLERLAYOUT_LISTVIEW ?
-                                        R.color.lib_pub_color_main
-                                        : R.color.lib_pub_color_white, false),
-                        new MenuPopup.Bean("PullRecyclerView",
-                                mListType == ListType.PULLRECYCLERVIEW ?
-                                        R.color.lib_pub_color_main
-                                        : R.color.lib_pub_color_white, false)),
+                .getMenuPopup(ListType.getTypeBeans(mListType),
                         new MenuPopup.OnMenuListener() {
                             @Override
                             public void onClick(PopupWindow popup, int position, String item) {

@@ -12,8 +12,9 @@
 
     <declare-styleable name="lib_pull_PullRecyclerLayout">
         <attr name="lib_pull_type">
-            <flag name="recyclerView" value="1" />
-            <flag name="listView" value="2" />
+            <flag name="listView" value="1" />
+            <flag name="recyclerView" value="2" />
+            <flag name="pullrecyclerview" value="3" />
         </attr>
     </declare-styleable>
 </resources>

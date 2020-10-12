@@ -1,7 +1,10 @@
 package com.d.lib.pulllayout.util;
 
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
@@ -19,7 +22,7 @@ public class NestedScrollHelper {
         public static final int POSITIVE = 1;
         public static final int NEGATIVE = -1;
 
-        private float mDampFactor = Pullable.DRAG_FACTOR;
+        private float mDampFactor = Pullable.PULL_FACTOR;
         private int mOrientation = INVALID_ORIENTATION;
         private int mOffset;
 
@@ -90,5 +93,23 @@ public class NestedScrollHelper {
         boolean attached = view.getParent() != null;
         int offset = view.getTop() - parent.getHeight();
         return attached && offset <= 0;
+    }
+
+    public static void scrollToPosition(RecyclerView view, int position) {
+        RecyclerView.LayoutManager layoutManager = view.getLayoutManager();
+        if (layoutManager != null) {
+            layoutManager.scrollToPosition(position);
+        }
+    }
+
+    public static void scrollToPositionWithOffset(RecyclerView view, int position, int offset) {
+        RecyclerView.LayoutManager layoutManager = view.getLayoutManager();
+        if (layoutManager instanceof StaggeredGridLayoutManager) {
+            ((StaggeredGridLayoutManager) layoutManager).scrollToPositionWithOffset(position, offset);
+        } else if (layoutManager instanceof GridLayoutManager) {
+            ((GridLayoutManager) layoutManager).scrollToPositionWithOffset(position, offset);
+        } else if (layoutManager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(position, offset);
+        }
     }
 }

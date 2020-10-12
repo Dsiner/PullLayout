@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Created by D on 2017/4/26.
  */
 public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
-    private int mListType = ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW;
+    private int mListType;
 
     @Override
     protected int getLayoutRes() {
@@ -50,6 +50,16 @@ public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
                         new com.d.lib.pulllayout.lv.adapter.
                                 MultiItemTypeSupport<Bean>() {
                             @Override
+                            public int getViewTypeCount() {
+                                return 5;
+                            }
+
+                            @Override
+                            public int getItemViewType(int position, Bean bean) {
+                                return bean.type;
+                            }
+
+                            @Override
                             public int getLayoutId(int viewType) {
                                 switch (viewType) {
                                     case 1:
@@ -66,19 +76,14 @@ public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
                                         return R.layout.adapter_item_doc;
                                 }
                             }
-
-                            @Override
-                            public int getItemViewType(int position, Bean bean) {
-                                return bean.type;
-                            }
-
-                            @Override
-                            public int getViewTypeCount() {
-                                return 5;
-                            }
                         })
                 : new MultipleAdapter(mContext, new ArrayList<Bean>(),
                 new MultiItemTypeSupport<Bean>() {
+                    @Override
+                    public int getItemViewType(int position, Bean bean) {
+                        return bean.type;
+                    }
+
                     @Override
                     public int getLayoutId(int viewType) {
                         switch (viewType) {
@@ -96,11 +101,6 @@ public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
                                 return R.layout.adapter_item_doc;
                         }
                     }
-
-                    @Override
-                    public int getItemViewType(int position, Bean bean) {
-                        return bean.type;
-                    }
                 });
     }
 
@@ -112,8 +112,9 @@ public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
 
     @Override
     protected void initList() {
-        // Step 3-1: Set ths header (optional)
+        // Step 3-1: Add header or footer (optional)
         RefreshableCompat.addHeaderView(mPullList, R.layout.adapter_item_header);
+        RefreshableCompat.addFooterView(mPullList, R.layout.adapter_item_footer);
 
         // Step 3-2: Set the {@link LayoutManager, @link RecyclerView.Adapter}
         // that this RecyclerView will use.
@@ -122,7 +123,6 @@ public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
 
         // Step 3-3: Set the listener to be notified when a refresh is triggered via the swipe gesture.
         mCommonLoader = new CommonLoader<>(mPullList, mAdapter);
-        mCommonLoader.setPageCount(CommonLoader.PAGE_COUNT);
         mCommonLoader.setOnLoaderListener(new CommonLoader.OnLoaderListener() {
             @Override
             public void onRefresh() {
