@@ -17,12 +17,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>pulllayout</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-implementation 'com.dsiner.lib:pulllayout:1.0.0'
+implementation 'com.dsiner.lib:pulllayout:1.0.1'
 ```
 
 ## Chapter 1 Sliding damping
