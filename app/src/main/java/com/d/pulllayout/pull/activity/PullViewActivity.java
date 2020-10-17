@@ -47,7 +47,7 @@ public class PullViewActivity extends BaseActivity<MvpBasePresenter>
     @Override
     protected void bindView() {
         super.bindView();
-        ViewHelper.setOnClick(this, this, R.id.btn_button, R.id.tv_text);
+        ViewHelper.setOnClickListener(this, this, R.id.btn_button, R.id.tv_text);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class PullListViewActivity extends BaseActivity<MvpBasePresenter> {
     @Override
     protected void bindView() {
         super.bindView();
-        lv_list = ViewHelper.findView(this, R.id.lv_list);
+        lv_list = ViewHelper.findViewById(this, R.id.lv_list);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class PullRecyclerViewActivity extends BaseActivity<MvpBasePresenter> {
     @Override
     protected void bindView() {
         super.bindView();
-        rv_list = ViewHelper.findView(this, R.id.rv_list);
+        rv_list = ViewHelper.findViewById(this, R.id.rv_list);
     }
 
     @Override

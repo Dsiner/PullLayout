@@ -87,7 +87,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
                                 replace(mType, mListType);
                             }
                         });
-        menuPopup.showAsDropDown((View) ViewHelper.findView(this, R.id.iv_title_right));
+        menuPopup.showAsDropDown((View) ViewHelper.findViewById(this, R.id.iv_title_right));
     }
 
     @Override
@@ -106,16 +106,16 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
     @Override
     protected void bindView() {
         super.bindView();
-        tl_title = ViewHelper.findView(this, R.id.tl_title);
+        tl_title = ViewHelper.findViewById(this, R.id.tl_title);
         tl_title.setVisibility(R.id.iv_title_right, View.VISIBLE);
 
-        ViewHelper.setOnClick(this, this, R.id.iv_title_left,
+        ViewHelper.setOnClickListener(this, this, R.id.iv_title_left,
                 R.id.iv_title_right);
     }
 
     @Override
     protected void init() {
-        ImageView iv_title_right = ViewHelper.findView(tl_title, R.id.iv_title_right);
+        ImageView iv_title_right = ViewHelper.findViewById(tl_title, R.id.iv_title_right);
         iv_title_right.setImageResource(R.drawable.lib_pub_ic_title_more);
 
         replace(mType, mListType);

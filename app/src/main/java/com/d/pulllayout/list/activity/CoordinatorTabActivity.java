@@ -53,7 +53,7 @@ public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePrese
                                 init();
                             }
                         });
-        menuPopup.showAsDropDown((View) ViewHelper.findView(this, R.id.iv_title_right));
+        menuPopup.showAsDropDown((View) ViewHelper.findViewById(this, R.id.iv_title_right));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePrese
     protected void bindView() {
         super.bindView();
 
-        ViewHelper.setOnClick(this, this, R.id.iv_title_left,
+        ViewHelper.setOnClickListener(this, this, R.id.iv_title_left,
                 R.id.iv_title_right);
     }
 }

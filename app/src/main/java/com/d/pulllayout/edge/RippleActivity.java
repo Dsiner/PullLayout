@@ -59,7 +59,7 @@ public class RippleActivity extends BaseActivity<MvpBasePresenter>
     protected void bindView() {
         ripple_view = findViewById(R.id.ripple_view);
 
-        ViewHelper.setOnClick(this, this, R.id.btn_done,
+        ViewHelper.setOnClickListener(this, this, R.id.btn_done,
                 R.id.btn_loading,
                 R.id.btn_success,
                 R.id.btn_error,

@@ -67,7 +67,7 @@ public interface IExtendEdgeView extends IEdgeView {
                 this.reference = new WeakReference<>(view);
             }
 
-            void reset(boolean reset) {
+            void ofReset(boolean reset) {
                 this.reset = reset;
             }
 
@@ -179,7 +179,7 @@ public interface IExtendEdgeView extends IEdgeView {
             stopNestedAnim();
             mAnimUpdateListener.ofInt(0, getVisibleHeight(), 0, destY);
             mAnimation.addUpdateListener(mAnimUpdateListener);
-            mAnimListenerAdapter.reset(reset);
+            mAnimListenerAdapter.ofReset(reset);
             mAnimation.addListener(mAnimListenerAdapter);
             mAnimation.start();
         }

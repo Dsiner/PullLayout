@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity<MvpBasePresenter>
 
     @Override
     protected void bindView() {
-        ViewHelper.setOnClick(this, this, R.id.btn_ripple,
+        ViewHelper.setOnClickListener(this, this, R.id.btn_ripple,
                 R.id.btn_pull,
                 R.id.btn_simple,
                 R.id.btn_multiple,

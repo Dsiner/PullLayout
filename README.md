@@ -52,6 +52,7 @@ implementation 'com.dsiner.lib:pulllayout:1.0.0'
 
 ### Support
 - [x] PullRecyclerLayout
+    - [x] PullRecyclerView
     - [x] RecyclerView
     - [x] ListView
 - [x] PullRecyclerView

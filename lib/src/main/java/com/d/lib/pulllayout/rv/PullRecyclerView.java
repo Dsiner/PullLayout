@@ -61,14 +61,14 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
 
     public PullRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        setLayoutManager(layoutManager);
         mHeaderView = getHeader();
         mFooterView = getFooter();
         mHeaderList = new ItemViewList(WrapAdapter.ITEM_VIEW_TYPE_HEADER_LIST_INDEX, 100000);
         mFooterList = new ItemViewList(WrapAdapter.ITEM_VIEW_TYPE_FOOTER_LIST_INDEX, 100000);
         mAppBarHelper = new AppBarHelper(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        setLayoutManager(layoutManager);
         new RecyclerScrollHelper(this).addOnScrollListener(new RecyclerScrollHelper.OnBottomScrollListener() {
             @Override
             public void onBottom() {

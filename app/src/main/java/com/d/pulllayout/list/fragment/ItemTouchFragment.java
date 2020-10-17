@@ -67,7 +67,7 @@ public class ItemTouchFragment extends BaseFragment<MvpBasePresenter>
                                         onLayoutManagerChange();
                                     }
                                 });
-                menuPopup.showAsDropDown((View) ViewHelper.findView(mRootView, R.id.iv_title_right));
+                menuPopup.showAsDropDown((View) ViewHelper.findViewById(mRootView, R.id.iv_title_right));
                 break;
         }
     }
@@ -89,18 +89,18 @@ public class ItemTouchFragment extends BaseFragment<MvpBasePresenter>
 
     @Override
     protected void bindView(View rootView) {
-        tl_title = ViewHelper.findView(rootView, R.id.tl_title);
+        tl_title = ViewHelper.findViewById(rootView, R.id.tl_title);
         tl_title.setVisibility(R.id.iv_title_right, View.VISIBLE);
-        mPullList = ViewHelper.findView(rootView, R.id.rv_list);
+        mPullList = ViewHelper.findViewById(rootView, R.id.rv_list);
 
-        ViewHelper.setOnClick(rootView, this, R.id.iv_title_left,
+        ViewHelper.setOnClickListener(rootView, this, R.id.iv_title_left,
                 R.id.iv_title_right);
     }
 
     @Override
     protected void init() {
         tl_title.setText(R.id.tv_title_title, "Item Touch");
-        ImageView iv_title_right = ViewHelper.findView(tl_title, R.id.iv_title_right);
+        ImageView iv_title_right = ViewHelper.findViewById(tl_title, R.id.iv_title_right);
         iv_title_right.setImageResource(R.drawable.lib_pub_ic_title_more);
 
         mPullList.setCanPullDown(false);

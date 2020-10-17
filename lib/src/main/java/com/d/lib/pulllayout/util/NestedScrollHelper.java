@@ -22,12 +22,12 @@ public class NestedScrollHelper {
         public static final int POSITIVE = 1;
         public static final int NEGATIVE = -1;
 
-        private float mDampFactor = Pullable.PULL_FACTOR;
+        private float mPullFactor = Pullable.PULL_FACTOR;
         private int mOrientation = INVALID_ORIENTATION;
         private int mOffset;
 
         public void init(int scroll) {
-            mOffset = (int) (scroll / mDampFactor);
+            mOffset = (int) (scroll / mPullFactor);
             mOrientation = (scroll < 0) ? NEGATIVE
                     : ((scroll == 0) ? INVALID_ORIENTATION : POSITIVE);
         }
@@ -40,7 +40,7 @@ public class NestedScrollHelper {
             mOffset += dx;
             mOffset = mOrientation == POSITIVE ? Math.max(0, mOffset)
                     : mOrientation == NEGATIVE ? Math.min(0, mOffset) : mOffset;
-            return (int) (mOffset * mDampFactor);
+            return (int) (mOffset * mPullFactor);
         }
     }
 

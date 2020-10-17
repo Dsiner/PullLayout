@@ -50,7 +50,7 @@ public class PullActivity extends BaseActivity<MvpBasePresenter>
 
     @Override
     protected void bindView() {
-        ViewHelper.setOnClick(this, this,
+        ViewHelper.setOnClickListener(this, this,
                 R.id.btn_view,
                 R.id.btn_listview,
                 R.id.btn_recyclerview,
