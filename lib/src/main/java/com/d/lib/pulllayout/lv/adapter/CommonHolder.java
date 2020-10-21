@@ -24,27 +24,27 @@ public class CommonHolder {
     public final View itemView;
     public final int layoutId;
     private final SparseArray<View> mViews;
+    int mItemViewType = -1;
 
-    private CommonHolder(Context context, ViewGroup parent, int layoutId) {
+    private CommonHolder(View itemView, int layoutId) {
+        this.itemView = itemView;
         this.layoutId = layoutId;
         this.mViews = new SparseArray<>();
-        this.itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        this.itemView.setTag(this);
     }
 
     @NonNull
     public static CommonHolder create(@NonNull Context context,
-                                      @Nullable View convertView,
                                       ViewGroup parent,
                                       int layoutId) {
-        if (convertView == null) {
-            return new CommonHolder(context, parent, layoutId);
-        }
-        CommonHolder holder = (CommonHolder) convertView.getTag();
-        if (holder.layoutId != layoutId) {
-            return new CommonHolder(context, parent, layoutId);
-        }
-        return holder;
+        View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
+        return new CommonHolder(itemView, layoutId);
+    }
+
+    /**
+     * @return The view type of this ViewHolder.
+     */
+    public final int getItemViewType() {
+        return mItemViewType;
     }
 
     /**

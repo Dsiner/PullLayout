@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.d.lib.pulllayout.PullRecyclerLayout;
@@ -93,6 +94,18 @@ public class RefreshableCompat {
             }
         } else if (refreshable instanceof PullRecyclerView) {
             ((PullRecyclerView) refreshable).setNestedScrollingEnabled(enabled);
+        }
+    }
+
+    public static void notifyItemChanged(AbsListView listView, int position) {
+        if (listView == null || listView.getAdapter() == null) {
+            return;
+        }
+        final int firstVisiblePosition = listView.getFirstVisiblePosition();
+        final int lastVisiblePosition = listView.getLastVisiblePosition();
+        if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
+            View view = listView.getChildAt(position - firstVisiblePosition);
+            listView.getAdapter().getView(position, view, listView);
         }
     }
 }

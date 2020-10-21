@@ -83,26 +83,45 @@ public abstract class CommonAdapter<T> extends BaseAdapter
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final CommonHolder holder = getViewHolder(position, convertView, parent);
-        convert(position, holder, getItem(position));
+        final int itemViewType = getItemViewType(position);
+        CommonHolder holder;
+        if (convertView == null) {
+            holder = onCreateViewHolder(parent, itemViewType);
+        } else {
+            // getTag
+            holder = (CommonHolder) convertView.getTag();
+            if (holder.getItemViewType() != itemViewType) {
+                holder = onCreateViewHolder(parent, itemViewType);
+            }
+        }
+        convert(position, holder, mDatas.get(position));
         return holder.itemView;
     }
 
-    /**
-     * @param position Position
-     * @param holder   Holder
-     * @param item     Data
-     */
-    public abstract void convert(int position, CommonHolder holder, T item);
-
-    private CommonHolder getViewHolder(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public CommonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutId = mLayoutId;
         if (mMultiItemTypeSupport != null) {
             // MultiType
             if (mDatas != null && mDatas.size() > 0) {
-                layoutId = mMultiItemTypeSupport.getLayoutId(getItemViewType(position));
+                layoutId = mMultiItemTypeSupport.getLayoutId(viewType);
             }
         }
-        return CommonHolder.create(mContext, convertView, parent, layoutId);
+        CommonHolder holder = CommonHolder.create(mContext, parent, layoutId);
+        holder.mItemViewType = viewType;
+        // setTag
+        holder.itemView.setTag(holder);
+        onViewHolderCreated(holder, holder.itemView);
+        return holder;
     }
+
+    public void onViewHolderCreated(CommonHolder holder, View itemView) {
+    }
+
+    /**
+     * @param position The position of the item within the adapter's data set.
+     * @param holder   Holder
+     * @param item     Data
+     */
+    public abstract void convert(int position, CommonHolder holder, T item);
 }
