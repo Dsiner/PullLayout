@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:orientation="vertical">
 
     <!-- Content -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <!-- Arrow image, progress bar -->
         <FrameLayout
@@ -49,8 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/lib_pull_list_refresh_expanded"
-                android:textColor="@color/lib_pull_pull_refresh_text"
-                android:textSize="15sp" />
+                android:textColor="@color/lib_pull_color_text"
+                android:textSize="15dp" />
 
             <!-- Recently updated -->
             <TextView
@@ -59,8 +60,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="@string/lib_pull_list_header_last_time"
-                android:textColor="@color/lib_pull_pull_refresh_text"
-                android:textSize="13sp" />
+                android:textColor="@color/lib_pull_color_text"
+                android:textSize="13dp" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

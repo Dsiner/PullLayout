@@ -17,7 +17,7 @@ public class ListType {
             R.layout.fragment_list_pullrecyclerlayout_listview,
             R.layout.fragment_list_pullrecyclerview};
 
-    public static List<MenuPopup.Bean> getTypeBeans(int type) {
+    public static List<MenuPopup.Bean> getMenus(int type) {
         return Arrays.asList(
                 new MenuPopup.Bean("PullRecyclerLayout\n(PullRecyclerView)",
                         type == ListType.PULLRECYCLERLAYOUT_PULLRECYCLERVIEW ?

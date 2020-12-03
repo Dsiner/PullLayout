@@ -1,202 +1,42 @@
 package com.d.lib.pulllayout.edge;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.os.Handler;
-import android.os.Looper;
+import android.animation.TimeInterpolator;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 
 import com.d.lib.pulllayout.Pullable;
-
-import java.lang.ref.WeakReference;
+import com.d.lib.pulllayout.util.NestedAnimHelper;
 
 public interface IExtendEdgeView extends IEdgeView {
+    void setPullFactor(float factor);
 
-    void dispatchPulled(float dx, float dy);
+    void setDuration(int duration);
+
+    void setInterpolator(TimeInterpolator value);
 
     void postNestedAnim(int destX, int destY);
+
+    void dispatchPulled(float dx, float dy);
 
     void setOnPullListener(Pullable.OnPullListener l);
 
     class NestedExtendChildHelper {
-        private EdgeView mEdgeView;
-        private Handler mHandler = new Handler(Looper.getMainLooper());
-        private WeakRunnable mWeakRunnable;
-        private int mDuration = 450;
-        private ValueAnimator mAnimation;
-        private AnimUpdateListener mAnimUpdateListener;
-        private AnimListenerAdapter mAnimListenerAdapter;
-        private Pullable.OnPullListener mOnPullListener;
-
-        static class WeakRunnable implements Runnable {
-            private final WeakReference<NestedExtendChildHelper> reference;
-            private int x, y, destX, destY;
-            private boolean reset;
-
-            WeakRunnable(NestedExtendChildHelper view) {
-                this.reference = new WeakReference<>(view);
-            }
-
-            void ofInt(int x, int y, int destX, int destY, boolean reset) {
-                this.x = x;
-                this.y = y;
-                this.destX = destX;
-                this.destY = destY;
-                this.reset = reset;
-            }
-
-            @Override
-            public void run() {
-                if (isFinish(reference)) {
-                    return;
-                }
-                NestedExtendChildHelper view = reference.get();
-                view.startNestedAnim(destX, destY, reset);
-            }
-        }
-
-        static class AnimListenerAdapter extends AnimatorListenerAdapter {
-            private final WeakReference<NestedExtendChildHelper> reference;
-            private boolean reset;
-
-            AnimListenerAdapter(NestedExtendChildHelper view) {
-                this.reference = new WeakReference<>(view);
-            }
-
-            void ofReset(boolean reset) {
-                this.reset = reset;
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                if (isFinish(reference)) {
-                    return;
-                }
-                NestedExtendChildHelper view = reference.get();
-                if (view.mOnPullListener != null) {
-                    view.mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
-                }
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (isFinish(reference)) {
-                    return;
-                }
-                NestedExtendChildHelper view = reference.get();
-                if (reset) {
-                    view.mEdgeView.setState(STATE_NONE);
-                }
-                if (view.mOnPullListener != null) {
-                    view.mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
-                }
-            }
-        }
-
-        static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
-            private final WeakReference<NestedExtendChildHelper> reference;
-            private int x, y, destX, destY;
-
-            AnimUpdateListener(NestedExtendChildHelper view) {
-                this.reference = new WeakReference<>(view);
-            }
-
-            void ofInt(int x, int y, int destX, int destY) {
-                this.x = x;
-                this.y = y;
-                this.destX = destX;
-                this.destY = destY;
-            }
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (isFinish(reference)) {
-                    return;
-                }
-                NestedExtendChildHelper view = reference.get();
-                final float factor = (float) animation.getAnimatedValue();
-                final int scrollY = (int) (y + (destY - y) * factor);
-                view.setVisibleHeight(scrollY);
-                if (view.mOnPullListener != null) {
-                    view.mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_SETTLING);
-                    view.mOnPullListener.onPulled(null, 0, scrollY);
-                }
-            }
-        }
-
-        private static boolean isFinish(WeakReference<NestedExtendChildHelper> reference) {
-            NestedExtendChildHelper view = reference.get();
-            return view == null || view.mEdgeView.getContext() == null
-                    || view.mEdgeView.getContext() instanceof Activity
-                    && ((Activity) view.mEdgeView.getContext()).isFinishing();
-        }
+        private final EdgeView mEdgeView;
+        private final NestedAnimHelper mNestedAnimHelper;
+        private float mPullFactor = Pullable.PULL_FACTOR;
 
         public NestedExtendChildHelper(EdgeView view) {
             mEdgeView = view;
-            mWeakRunnable = new WeakRunnable(this);
-            mAnimation = ValueAnimator.ofFloat(0f, 1f);
-            mAnimation.setDuration(mDuration);
-            mAnimation.setInterpolator(new DecelerateInterpolator());
-            mAnimUpdateListener = new AnimUpdateListener(this);
-            mAnimListenerAdapter = new AnimListenerAdapter(this);
-        }
-
-        public void dispatchPulled(float dx, float dy) {
-            Log.d("EdgeView", "dispatchPulled: " + dy);
-            dy = dy * Pullable.PULL_FACTOR;
-            if (getVisibleHeight() > 0 || dy > 0) {
-                int height = Math.max(0, (int) dy + getVisibleHeight());
-                setVisibleHeight(height);
-                Log.d("EdgeView", "getVisibleHeight: " + getVisibleHeight());
-            }
-        }
-
-        public void reset() {
-            postNestedAnim(0, 0, mDuration, true);
-        }
-
-        public void postNestedAnim(int destX, int destY) {
-            postNestedAnim(destX, destY, 0, false);
-        }
-
-        private void postNestedAnim(int destX, int destY, long delayMillis, boolean reset) {
-            stopNestedAnim();
-            if (getVisibleHeight() == destY) {
-                if (mOnPullListener != null) {
-                    mOnPullListener.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+            mNestedAnimHelper = new NestedAnimHelper(view) {
+                @Override
+                public void onState(int state) {
+                    mEdgeView.setState(state);
                 }
-                return;
-            }
-            mWeakRunnable.ofInt(0, getVisibleHeight(), 0, destY, reset);
-            mHandler.postDelayed(mWeakRunnable, delayMillis);
-        }
-
-        private void startNestedAnim(int destX, int destY, boolean reset) {
-            stopNestedAnim();
-            mAnimUpdateListener.ofInt(0, getVisibleHeight(), 0, destY);
-            mAnimation.addUpdateListener(mAnimUpdateListener);
-            mAnimListenerAdapter.ofReset(reset);
-            mAnimation.addListener(mAnimListenerAdapter);
-            mAnimation.start();
-        }
-
-        private boolean stopNestedAnim() {
-            mHandler.removeCallbacksAndMessages(null);
-            boolean running = mAnimation.isRunning();
-            mAnimation.removeAllUpdateListeners();
-            mAnimation.removeAllListeners();
-            mAnimation.cancel();
-            return running;
+            };
         }
 
         public void setVisibleHeight(int height) {
-            if (height < 0) {
-                height = 0;
-            }
+            height = Math.max(0, height);
             ViewGroup.LayoutParams lp = mEdgeView.mContainer.getLayoutParams();
             lp.height = height;
             mEdgeView.mContainer.setLayoutParams(lp);
@@ -207,8 +47,54 @@ public interface IExtendEdgeView extends IEdgeView {
             return lp.height;
         }
 
-        public void setOnPullListener(Pullable.OnPullListener l) {
-            this.mOnPullListener = l;
+        public void setPullFactor(float factor) {
+            this.mPullFactor = factor;
+        }
+
+        public void setDuration(int duration) {
+            this.mNestedAnimHelper.setDuration(duration);
+        }
+
+        public void setInterpolator(TimeInterpolator value) {
+            this.mNestedAnimHelper.setInterpolator(value);
+        }
+
+        public void postNestedAnim(int destX, int destY) {
+            this.mNestedAnimHelper.postNestedAnim(0, getVisibleHeight(), 0, destY);
+        }
+
+        public void resetDelayed(int delayMillis) {
+            this.mNestedAnimHelper.postNestedAnimDelayed(0, getVisibleHeight(), 0, 0,
+                    delayMillis, IState.STATE_NONE);
+        }
+
+        public void dispatchPulled(float dx, float dy) {
+            Log.d("EdgeView", "dispatchPulled: " + dy);
+            dy = dy * mPullFactor;
+            if (getVisibleHeight() > 0 || dy > 0) {
+                int height = Math.max(0, (int) dy + getVisibleHeight());
+                setVisibleHeight(height);
+                Log.d("EdgeView", "getVisibleHeight: " + getVisibleHeight());
+            }
+        }
+
+        public void setOnPullListener(final Pullable.OnPullListener l) {
+            this.mNestedAnimHelper.setOnPullListener(new Pullable.OnPullListener() {
+                @Override
+                public void onPullStateChanged(Pullable pullable, int newState) {
+                    if (l != null) {
+                        l.onPullStateChanged(pullable, newState);
+                    }
+                }
+
+                @Override
+                public void onPulled(Pullable pullable, int dx, int dy) {
+                    setVisibleHeight(dy);
+                    if (l != null) {
+                        l.onPulled(pullable, dx, dy);
+                    }
+                }
+            });
         }
     }
 }

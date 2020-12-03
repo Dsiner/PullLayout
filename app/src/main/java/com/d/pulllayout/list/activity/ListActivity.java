@@ -21,6 +21,7 @@ import com.d.pulllayout.list.fragment.CoordinatorLayoutFragment;
 import com.d.pulllayout.list.fragment.ItemTouchFragment;
 import com.d.pulllayout.list.fragment.MultipleFragment;
 import com.d.pulllayout.list.fragment.SimpleFragment;
+import com.d.pulllayout.list.model.EdgeType;
 import com.d.pulllayout.list.model.ListType;
 
 /**
@@ -29,36 +30,43 @@ import com.d.pulllayout.list.model.ListType;
  */
 public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
         implements View.OnClickListener {
-
-    public static final String ARG_TYPE = "ARG_TYPE";
-    public static final String ARG_ARGS = "ARG_ARGS";
+    public static final String EXTRA_TYPE = "EXTRA_TYPE";
+    public static final String EXTRA_LIST_TYPE = "EXTRA_LIST_TYPE";
+    public static final String EXTRA_EDGE_TYPE = "EXTRA_EDGE_TYPE";
 
     public static final int TYPE_SIMPLE = 0;
     public static final int TYPE_MULTIPLE = 1;
     public static final int TYPE_COORDINATOR_LIST = 2;
     public static final int TYPE_ITEM_TOUCH = 3;
 
-    private TitleLayout tl_title;
-    private int mType;
-    private int mListType;
-    private Fragment mCurFragment;
+    protected TitleLayout tl_title;
+    protected int mType = TYPE_SIMPLE;
+    protected int mListType = ListType.PULLRECYCLERLAYOUT_LISTVIEW;
+    protected int mEdgeType = EdgeType.TYPE_CLASSIC;
+    protected Fragment mCurFragment;
 
     public static void openActivity(Context context, int type) {
         if (context == null) {
             return;
         }
         Intent intent = new Intent(context, ListActivity.class);
-        intent.putExtra(ARG_TYPE, type);
+        intent.putExtra(EXTRA_TYPE, type);
         if (!(context instanceof Activity)) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);
     }
 
-    public static int getListType(Fragment fragment) {
+    public static int getExtrasListType(Fragment fragment) {
         return fragment.getArguments() != null
-                ? fragment.getArguments().getInt(ListActivity.ARG_ARGS, ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW)
+                ? fragment.getArguments().getInt(ListActivity.EXTRA_LIST_TYPE, ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW)
                 : ListType.PULLRECYCLERLAYOUT_RECYCLERVIEW;
+    }
+
+    public static int getExtrasEdgeType(Fragment fragment) {
+        return fragment.getArguments() != null
+                ? fragment.getArguments().getInt(ListActivity.EXTRA_EDGE_TYPE, EdgeType.TYPE_CLASSIC)
+                : EdgeType.TYPE_CLASSIC;
     }
 
     @Override
@@ -74,9 +82,9 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
         }
     }
 
-    public void onMore(final int listType) {
+    protected void onMore(final int listType) {
         MenuPopup menuPopup = PopupWindowFactory.createFactory(this)
-                .getMenuPopup(ListType.getTypeBeans(mListType),
+                .getMenuPopup(ListType.getMenus(mListType),
                         new MenuPopup.OnMenuListener() {
                             @Override
                             public void onClick(PopupWindow popup, int position, String item) {
@@ -84,7 +92,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
                                     return;
                                 }
                                 mListType = position;
-                                replace(mType, mListType);
+                                replace(mType, mListType, mEdgeType);
                             }
                         });
         menuPopup.showAsDropDown((View) ViewHelper.findViewById(this, R.id.iv_title_right));
@@ -99,7 +107,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        mType = getIntent().getIntExtra(ARG_TYPE, TYPE_SIMPLE);
+        mType = getIntent().getIntExtra(EXTRA_TYPE, TYPE_SIMPLE);
         super.onCreate(savedInstanceState);
     }
 
@@ -118,14 +126,15 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
         ImageView iv_title_right = ViewHelper.findViewById(tl_title, R.id.iv_title_right);
         iv_title_right.setImageResource(R.drawable.lib_pub_ic_title_more);
 
-        replace(mType, mListType);
+        replace(mType, mListType, mEdgeType);
     }
 
-    public void replace(int type, int listType) {
+    public void replace(int type, int listType, int edgeType) {
         final String title;
         final Fragment fragment;
         final Bundle bundle = new Bundle();
-        bundle.putInt(ARG_ARGS, listType);
+        bundle.putInt(EXTRA_LIST_TYPE, listType);
+        bundle.putInt(EXTRA_EDGE_TYPE, edgeType);
         if (type == TYPE_SIMPLE) {
             title = "Simple";
             fragment = new SimpleFragment();

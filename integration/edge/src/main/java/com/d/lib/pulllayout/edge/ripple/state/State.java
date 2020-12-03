@@ -2,11 +2,10 @@ package com.d.lib.pulllayout.edge.ripple.state;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import com.d.lib.pulllayout.R;
+import com.d.lib.pulllayout.edge.R;
 
 /**
  * State
@@ -25,9 +24,9 @@ public class State {
     public State(View view) {
         this.mView = view;
         this.mContext = view.getContext();
-        this.mColor = ContextCompat.getColor(mContext, R.color.lib_pull_color_main);
-        this.mColorError = ContextCompat.getColor(mContext, R.color.lib_pull_color_error);
-        this.mColorWhite = Color.parseColor("#ffffff");
+        this.mColor = ContextCompat.getColor(mContext, R.color.lib_pull_edge_color_main);
+        this.mColorError = ContextCompat.getColor(mContext, R.color.lib_pull_edge_color_error);
+        this.mColorWhite = ContextCompat.getColor(mContext, R.color.lib_pull_edge_color_white);
     }
 
     public void setMeasuredDimension(int measuredWidth, int measuredHeight) {

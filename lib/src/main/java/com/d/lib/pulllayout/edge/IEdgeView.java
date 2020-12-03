@@ -12,6 +12,8 @@ public interface IEdgeView extends IState {
 
     int getExpandedOffset();
 
+    void setOnFooterClickListener(OnClickListener listener);
+
     interface OnClickListener {
         /**
          * Called when a view has been clicked.

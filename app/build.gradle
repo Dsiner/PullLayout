@@ -36,6 +36,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
 
     implementation project(':lib')
+    implementation project(':integration:edge')
     implementation('com.dsiner.lib:common:1.1.1') {
         exclude group: 'com.dsiner.lib', module: 'pulllayout'
     }

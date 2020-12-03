@@ -1,5 +1,6 @@
 package com.d.lib.pulllayout.rv;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,9 +35,9 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
     private static final int INVALID_POINTER = -1;
 
     @NonNull
-    private final IExtendEdgeView mHeaderView;
+    private IExtendEdgeView mHeaderView;
     @NonNull
-    private final IExtendEdgeView mFooterView;
+    private IExtendEdgeView mFooterView;
     @NonNull
     private final ItemViewList mHeaderList, mFooterList;
 
@@ -89,6 +90,18 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         return view;
     }
 
+    @Override
+    public void setHeader(IEdgeView view) {
+        if (!(view instanceof IExtendEdgeView)) {
+            throw new IllegalArgumentException("View type must be IExtendEdgeView.");
+        }
+        this.mHeaderView = (IExtendEdgeView) view;
+        this.mHeaderView.setOnPullListener(getOnPullListener());
+        if (mWrapAdapter != null) {
+            setAdapter(mWrapAdapter.getAdapter());
+        }
+    }
+
     @NonNull
     protected IExtendEdgeView getFooter() {
         ExtendFooterView view = new ExtendFooterView(getContext());
@@ -102,6 +115,24 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         return view;
     }
 
+    @Override
+    public void setFooter(IEdgeView view) {
+        if (!(view instanceof IExtendEdgeView)) {
+            throw new IllegalArgumentException("View type must be IExtendEdgeView.");
+        }
+        this.mFooterView = (IExtendEdgeView) view;
+        this.mFooterView.setOnPullListener(getOnPullListener());
+        this.mFooterView.setOnFooterClickListener(new IEdgeView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMore();
+            }
+        });
+        if (mWrapAdapter != null) {
+            setAdapter(mWrapAdapter.getAdapter());
+        }
+    }
+
     private OnPullListener getOnPullListener() {
         return new OnPullListener() {
             @Override
@@ -111,9 +142,9 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
 
             @Override
             public void onPulled(Pullable pullable, int dx, int dy) {
-                boolean isTop = NestedScrollHelper.isOnTop((View) mHeaderView);
-                int top = ((View) mHeaderView).getBottom();
-                int bottom = getHeight() - ((View) mFooterView).getTop();
+                final boolean isTop = NestedScrollHelper.isOnTop((View) mHeaderView);
+                final int top = ((View) mHeaderView).getBottom();
+                final int bottom = getHeight() - ((View) mFooterView).getTop();
                 if (isTop && top > 0) {
                     dispatchOnPullScrolled(0, -top, false);
                 } else if (NestedScrollHelper.isOnBottom(PullRecyclerView.this, (View) mFooterView)
@@ -421,6 +452,24 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
             mWrapAdapter.setCanPullUp(enable);
             mWrapAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void setPullFactor(float factor) {
+        this.mHeaderView.setPullFactor(factor);
+        this.mFooterView.setPullFactor(factor);
+    }
+
+    @Override
+    public void setDuration(int duration) {
+        this.mHeaderView.setDuration(duration);
+        this.mFooterView.setDuration(duration);
+    }
+
+    @Override
+    public void setInterpolator(TimeInterpolator value) {
+        this.mHeaderView.setInterpolator(value);
+        this.mFooterView.setInterpolator(value);
     }
 
     private void dispatchOnPullStateChanged(int state) {

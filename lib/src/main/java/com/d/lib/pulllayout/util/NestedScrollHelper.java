@@ -32,6 +32,10 @@ public class NestedScrollHelper {
                     : ((scroll == 0) ? INVALID_ORIENTATION : POSITIVE);
         }
 
+        public void setPullFactor(float factor) {
+            this.mPullFactor = factor;
+        }
+
         public void orientation(int orientation) {
             mOrientation = orientation;
         }

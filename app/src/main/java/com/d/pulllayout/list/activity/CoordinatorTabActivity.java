@@ -41,7 +41,7 @@ public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePrese
 
     public void onMore(final int listType) {
         MenuPopup menuPopup = PopupWindowFactory.createFactory(this)
-                .getMenuPopup(ListType.getTypeBeans(mListType),
+                .getMenuPopup(ListType.getMenus(mListType),
                         new MenuPopup.OnMenuListener() {
                             @Override
                             public void onClick(PopupWindow popup, int position, String item) {
@@ -73,7 +73,7 @@ public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePrese
         List<Fragment> list = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             final Bundle bundle = new Bundle();
-            bundle.putInt(ListActivity.ARG_ARGS, mListType);
+            bundle.putInt(ListActivity.EXTRA_LIST_TYPE, mListType);
             Fragment fragment = new SimpleFragment();
             fragment.setArguments(bundle);
             list.add(fragment);

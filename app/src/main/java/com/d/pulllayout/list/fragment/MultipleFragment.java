@@ -106,7 +106,7 @@ public class MultipleFragment extends AbsFragment<Bean, LoadPresenter> {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mListType = ListActivity.getListType(this);
+        mListType = ListActivity.getExtrasListType(this);
         super.onCreate(savedInstanceState);
     }
 

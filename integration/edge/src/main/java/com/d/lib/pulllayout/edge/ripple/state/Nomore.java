@@ -20,7 +20,7 @@ public class Nomore extends Success {
     @Override
     protected void initAttr(Context context) {
         mSign = new Done(mView);
-        mContent = "没有更多了";
+        mContent = "No more content";
 
         mPaintText.setColor(mColorWhite);
         mPaintText.setTextSize(Utils.dp2px(context, 14));

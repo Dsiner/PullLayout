@@ -1,9 +1,6 @@
 package com.d.lib.pulllayout;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
-import android.app.Activity;
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
@@ -13,12 +10,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 
 import com.d.lib.pulllayout.util.AppBarHelper;
+import com.d.lib.pulllayout.util.NestedAnimHelper;
 import com.d.lib.pulllayout.util.NestedScrollHelper;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +30,6 @@ public class PullLayout extends ViewGroup implements Pullable {
     public static final int VERTICAL = 1;
 
     protected int mTouchSlop;
-    protected int mDuration = 250;
     protected int mOrientation = INVALID_ORIENTATION;
     protected int mPullPointerId = INVALID_POINTER;
     protected int mTouchX, mTouchY;
@@ -42,80 +37,14 @@ public class PullLayout extends ViewGroup implements Pullable {
     protected final NestedScrollHelper.Offset mPullOffsetX = new NestedScrollHelper.Offset();
     protected final NestedScrollHelper.Offset mPullOffsetY = new NestedScrollHelper.Offset();
     protected int mPullState = Pullable.PULL_STATE_IDLE;
+    protected NestedAnimHelper mNestedAnimHelper;
     protected AppBarHelper mAppBarHelper;
-
-    protected ValueAnimator mAnimation;
-    protected AnimUpdateListener mAnimUpdateListener;
-    protected AnimListenerAdapter mAnimListenerAdapter;
 
     protected boolean mEnable;
     protected int mGravity;
     protected boolean mCanPullDown = true;
     protected boolean mCanPullUp = true;
     protected List<Pullable.OnPullListener> mOnPullListeners;
-
-    static class AnimListenerAdapter extends AnimatorListenerAdapter {
-        private final WeakReference<PullLayout> reference;
-
-        AnimListenerAdapter(PullLayout view) {
-            this.reference = new WeakReference<>(view);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-            if (isFinish(reference)) {
-                return;
-            }
-            PullLayout view = reference.get();
-            view.setPullState(Pullable.PULL_STATE_IDLE);
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            if (isFinish(reference)) {
-                return;
-            }
-            PullLayout view = reference.get();
-            view.setPullState(Pullable.PULL_STATE_IDLE);
-        }
-    }
-
-    static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
-        private final WeakReference<PullLayout> reference;
-        private int x, y, destX, destY;
-
-        AnimUpdateListener(PullLayout view) {
-            this.reference = new WeakReference<>(view);
-        }
-
-        void ofInt(int x, int y, int destX, int destY) {
-            this.x = x;
-            this.y = y;
-            this.destX = destX;
-            this.destY = destY;
-        }
-
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            if (isFinish(reference)) {
-                return;
-            }
-            PullLayout view = reference.get();
-            final float factor = (float) animation.getAnimatedValue();
-            final int scrollX = (int) (x + (destX - x) * factor);
-            final int scrollY = (int) (y + (destY - y) * factor);
-            view.setPullState(Pullable.PULL_STATE_SETTLING);
-            view.scrollTo(scrollX, scrollY);
-            view.invalidate();
-        }
-    }
-
-    private static boolean isFinish(WeakReference<PullLayout> reference) {
-        PullLayout view = reference.get();
-        return view == null || view.getContext() == null
-                || view.getContext() instanceof Activity
-                && ((Activity) view.getContext()).isFinishing();
-    }
 
     public PullLayout(Context context) {
         this(context, null);
@@ -140,20 +69,35 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     private void init(Context context) {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        mAnimation = ValueAnimator.ofFloat(0f, 1f);
-        mAnimation.setDuration(mDuration);
-        mAnimation.setInterpolator(new DecelerateInterpolator());
-        mAnimUpdateListener = new AnimUpdateListener(this);
-        mAnimListenerAdapter = new AnimListenerAdapter(this);
+        mNestedAnimHelper = new NestedAnimHelper(this) {
+            @Override
+            public void onState(int state) {
+                super.onState(state);
+            }
+        };
+        mNestedAnimHelper.setOnPullListener(new OnPullListener() {
+            @Override
+            public void onPullStateChanged(Pullable pullable, int newState) {
+                setPullState(newState);
+            }
+
+            @Override
+            public void onPulled(Pullable pullable, int x, int y) {
+                scrollTo(x, y);
+                invalidate();
+            }
+        });
         mAppBarHelper = new AppBarHelper(this);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int count = getChildCount();
-        if (count > 0) {
-            View child = getNestedChild();
-            child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+            }
         }
     }
 
@@ -393,6 +337,22 @@ public class PullLayout extends ViewGroup implements Pullable {
                 : this.mGravity & (~NestedScrollHelper.GRAVITY_BOTTOM);
     }
 
+    @Override
+    public void setPullFactor(float factor) {
+        this.mPullOffsetX.setPullFactor(factor);
+        this.mPullOffsetY.setPullFactor(factor);
+    }
+
+    @Override
+    public void setDuration(int duration) {
+        this.mNestedAnimHelper.setDuration(duration);
+    }
+
+    @Override
+    public void setInterpolator(TimeInterpolator value) {
+        this.mNestedAnimHelper.setInterpolator(value);
+    }
+
     private boolean canStartScrollVertically(boolean[] canNestedScroll, int deltas) {
         return !canNestedScroll[0] && deltas < 0 && mAppBarHelper.isExpanded()
                 || !canNestedScroll[1] && deltas > 0;
@@ -423,24 +383,11 @@ public class PullLayout extends ViewGroup implements Pullable {
     }
 
     protected void startNestedAnim(int destX, int destY) {
-        stopNestedAnim();
-        if (getScrollX() == destX && getScrollY() == destY) {
-            setPullState(Pullable.PULL_STATE_IDLE);
-            return;
-        }
-        setPullState(Pullable.PULL_STATE_SETTLING);
-        mAnimUpdateListener.ofInt(getScrollX(), getScrollY(), destX, destY);
-        mAnimation.addUpdateListener(mAnimUpdateListener);
-        mAnimation.addListener(mAnimListenerAdapter);
-        mAnimation.start();
+        mNestedAnimHelper.postNestedAnim(getScrollX(), getScrollY(), destX, destY);
     }
 
     protected boolean stopNestedAnim() {
-        boolean running = mAnimation.isRunning();
-        mAnimation.removeAllUpdateListeners();
-        mAnimation.removeAllListeners();
-        mAnimation.cancel();
-        return running;
+        return mNestedAnimHelper.stopNestedAnim();
     }
 
     protected void dispatchOnPullStateChanged(int state) {

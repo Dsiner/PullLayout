@@ -1,5 +1,6 @@
 package com.d.lib.pulllayout.edge.ripple;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -43,15 +44,25 @@ public class ExtendHeaderView extends HeaderView implements IExtendEdgeView {
 
             case STATE_SUCCESS:
             case STATE_ERROR:
-                mNestedExtendChildHelper.reset();
+                mNestedExtendChildHelper.resetDelayed(1650);
                 break;
         }
         return true;
     }
 
     @Override
-    public void dispatchPulled(float dx, float dy) {
-        mNestedExtendChildHelper.dispatchPulled(dx, dy);
+    public void setPullFactor(float factor) {
+        this.mNestedExtendChildHelper.setPullFactor(factor);
+    }
+
+    @Override
+    public void setDuration(int duration) {
+        this.mNestedExtendChildHelper.setDuration(duration);
+    }
+
+    @Override
+    public void setInterpolator(TimeInterpolator value) {
+        this.mNestedExtendChildHelper.setInterpolator(value);
     }
 
     @Override
@@ -60,7 +71,12 @@ public class ExtendHeaderView extends HeaderView implements IExtendEdgeView {
     }
 
     @Override
-    public void setOnPullListener(Pullable.OnPullListener l) {
+    public void dispatchPulled(float dx, float dy) {
+        mNestedExtendChildHelper.dispatchPulled(dx, dy);
+    }
+
+    @Override
+    public void setOnPullListener(final Pullable.OnPullListener l) {
         mNestedExtendChildHelper.setOnPullListener(l);
     }
 }

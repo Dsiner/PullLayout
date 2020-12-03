@@ -34,9 +34,9 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     private static final int TYPE_PULLRECYCLERVIEW = 3;
 
     @NonNull
-    private final IEdgeView mHeaderView;
+    private IEdgeView mHeaderView;
     @NonNull
-    private final IEdgeView mFooterView;
+    private IEdgeView mFooterView;
     private final int mType;
     private View mRecyclerList;
     private boolean mAutoLoadMore = true;
@@ -80,6 +80,11 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
         mHeaderView = getHeader();
         mFooterView = getFooter();
 
+        resetAllViews();
+    }
+
+    private void resetAllViews() {
+        removeAllViews();
         addView((View) mHeaderView);
         setNestedChild(mRecyclerList);
         addView((View) mFooterView);
@@ -88,6 +93,13 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     @NonNull
     protected IEdgeView getHeader() {
         return new HeaderView(getContext());
+    }
+
+    @Override
+    public void setHeader(IEdgeView view) {
+        removeView((View) mHeaderView);
+        addView((View) view, 0);
+        this.mHeaderView = view;
     }
 
     @NonNull
@@ -103,6 +115,22 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
             }
         });
         return view;
+    }
+
+    @Override
+    public void setFooter(IEdgeView view) {
+        removeView((View) mFooterView);
+        addView((View) view);
+        view.setOnFooterClickListener(new IEdgeView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!canPullUp() || isLoading()) {
+                    return;
+                }
+                loadMore();
+            }
+        });
+        this.mFooterView = view;
     }
 
     @Override

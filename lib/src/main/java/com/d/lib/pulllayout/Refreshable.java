@@ -1,5 +1,7 @@
 package com.d.lib.pulllayout;
 
+import com.d.lib.pulllayout.edge.IEdgeView;
+
 /**
  * Refreshable
  * Created by D on 2017/4/26.
@@ -9,6 +11,10 @@ public interface Refreshable {
     boolean autoLoadMore();
 
     void setAutoLoadMore(boolean enable);
+
+    void setHeader(IEdgeView view);
+
+    void setFooter(IEdgeView view);
 
     void reset();
 

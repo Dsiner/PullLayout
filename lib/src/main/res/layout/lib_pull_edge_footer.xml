@@ -12,8 +12,8 @@
 
         <com.d.lib.pulllayout.edge.arrow.LoadingView
             android:id="@+id/ldv_loading"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="12.5dp"
+            android:layout_height="12.5dp"
             android:layout_marginRight="10dp"
             android:visibility="gone" />
 
@@ -22,6 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lib_pull_list_load_more_loading"
-            android:textColor="@color/lib_pull_pull_refresh_text" />
+            android:textColor="@color/lib_pull_color_text" />
     </LinearLayout>
 </LinearLayout>

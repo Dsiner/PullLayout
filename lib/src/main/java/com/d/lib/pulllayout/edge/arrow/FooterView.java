@@ -16,8 +16,6 @@ public class FooterView extends EdgeView implements View.OnClickListener {
     private LoadingView ldv_loading;
     private TextView tv_load_more;
 
-    private IEdgeView.OnClickListener mOnClickListener;
-
     public FooterView(Context context) {
         super(context);
     }
@@ -40,13 +38,6 @@ public class FooterView extends EdgeView implements View.OnClickListener {
         super.init(context);
         ldv_loading = (LoadingView) mContainer.findViewById(R.id.ldv_loading);
         tv_load_more = (TextView) mContainer.findViewById(R.id.tv_load_more);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (mOnClickListener != null) {
-            mOnClickListener.onClick(v);
-        }
     }
 
     @Override
@@ -93,9 +84,5 @@ public class FooterView extends EdgeView implements View.OnClickListener {
                 break;
         }
         return true;
-    }
-
-    public void setOnFooterClickListener(IEdgeView.OnClickListener listener) {
-        this.mOnClickListener = listener;
     }
 }

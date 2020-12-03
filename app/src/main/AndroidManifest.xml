@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".edge.RippleActivity" />
+        <activity android:name=".edge.EdgeListActivity" />
         <activity android:name=".pull.activity.PullActivity" />
         <activity android:name=".pull.activity.PullViewActivity" />
         <activity android:name=".pull.activity.PullListViewActivity" />

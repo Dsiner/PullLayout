@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lib_pull_edge_color_white">#FFFFFF</color>
+    <color name="lib_pull_edge_color_black">#000000</color>
+    <color name="lib_pull_edge_color_main">#5F89FF</color>
+    <color name="lib_pull_edge_color_error">#FF735C</color>
+</resources>

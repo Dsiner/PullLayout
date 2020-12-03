@@ -4,9 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 
-import com.d.lib.pulllayout.R;
 import com.d.lib.pulllayout.edge.EdgeView;
+import com.d.lib.pulllayout.edge.R;
 
 public class HeaderView extends EdgeView {
 
@@ -26,12 +27,13 @@ public class HeaderView extends EdgeView {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.lib_pull_edge_ripple;
+        return R.layout.lib_pull_edge_ripple_header;
     }
 
     @Override
     protected void init(@NonNull final Context context) {
         super.init(context);
+        mContainer.setGravity(Gravity.BOTTOM);
         bindView();
     }
 
@@ -44,8 +46,11 @@ public class HeaderView extends EdgeView {
         if (mState == state) {
             return false;
         }
-        mState = state;
+        switch (state) {
+            case STATE_NONE:
+        }
         mRippleView.setState(state);
+        mState = state;
         return true;
     }
 }

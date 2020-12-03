@@ -145,7 +145,7 @@ public class Success extends State {
 
     protected void initAttr(Context context) {
         mSign = new Done(mView);
-        mContent = "刷新成功";
+        mContent = "Refresh success";
 
         mPaintText.setColor(mColorWhite);
         mPaintText.setTextSize(Utils.dp2px(context, 14));

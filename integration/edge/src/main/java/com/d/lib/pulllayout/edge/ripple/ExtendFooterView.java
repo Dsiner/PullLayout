@@ -1,5 +1,6 @@
 package com.d.lib.pulllayout.edge.ripple;
 
+import android.animation.TimeInterpolator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -46,21 +47,39 @@ public class ExtendFooterView extends FooterView implements IExtendEdgeView {
                 break;
 
             case STATE_SUCCESS:
+                mNestedExtendChildHelper.resetDelayed(250);
+                break;
+
             case STATE_ERROR:
-                mNestedExtendChildHelper.reset();
+                mNestedExtendChildHelper.resetDelayed(1700);
                 break;
         }
         return true;
     }
 
     @Override
-    public void dispatchPulled(float dx, float dy) {
-        mNestedExtendChildHelper.dispatchPulled(dx, dy);
+    public void setPullFactor(float factor) {
+        this.mNestedExtendChildHelper.setPullFactor(factor);
+    }
+
+    @Override
+    public void setDuration(int duration) {
+        this.mNestedExtendChildHelper.setDuration(duration);
+    }
+
+    @Override
+    public void setInterpolator(TimeInterpolator value) {
+        this.mNestedExtendChildHelper.setInterpolator(value);
     }
 
     @Override
     public void postNestedAnim(int destX, int destY) {
         mNestedExtendChildHelper.postNestedAnim(destX, destY);
+    }
+
+    @Override
+    public void dispatchPulled(float dx, float dy) {
+        mNestedExtendChildHelper.dispatchPulled(dx, dy);
     }
 
     @Override

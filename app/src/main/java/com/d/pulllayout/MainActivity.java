@@ -7,7 +7,7 @@ import com.d.lib.common.component.mvp.MvpBasePresenter;
 import com.d.lib.common.component.mvp.MvpView;
 import com.d.lib.common.component.mvp.app.BaseActivity;
 import com.d.lib.common.util.ViewHelper;
-import com.d.pulllayout.edge.RippleActivity;
+import com.d.pulllayout.edge.EdgeListActivity;
 import com.d.pulllayout.list.activity.CoordinatorTabActivity;
 import com.d.pulllayout.list.activity.ListActivity;
 import com.d.pulllayout.pull.activity.PullActivity;
@@ -18,12 +18,12 @@ public class MainActivity extends BaseActivity<MvpBasePresenter>
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_ripple:
-                startActivity(new Intent(MainActivity.this, RippleActivity.class));
-                break;
-
             case R.id.btn_pull:
                 startActivity(new Intent(MainActivity.this, PullActivity.class));
+                break;
+
+            case R.id.btn_edge:
+                startActivity(new Intent(MainActivity.this, EdgeListActivity.class));
                 break;
 
             case R.id.btn_simple:
@@ -65,8 +65,9 @@ public class MainActivity extends BaseActivity<MvpBasePresenter>
 
     @Override
     protected void bindView() {
-        ViewHelper.setOnClickListener(this, this, R.id.btn_ripple,
+        ViewHelper.setOnClickListener(this, this,
                 R.id.btn_pull,
+                R.id.btn_edge,
                 R.id.btn_simple,
                 R.id.btn_multiple,
                 R.id.btn_item_touch,

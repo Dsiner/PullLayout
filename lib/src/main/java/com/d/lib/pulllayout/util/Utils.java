@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Utils
@@ -28,6 +30,20 @@ public class Utils {
     public static float getTextHeight(Paint p) {
         Paint.FontMetrics fm = p.getFontMetrics();
         return (float) ((Math.ceil(fm.descent - fm.top) + 2) / 2);
+    }
+
+    public static void setVisibleHeight(View view, int height) {
+        if (height < 0) {
+            height = 0;
+        }
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        lp.height = height;
+        view.setLayoutParams(lp);
+    }
+
+    public static int getVisibleHeight(View view) {
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        return lp.height;
     }
 
     /**

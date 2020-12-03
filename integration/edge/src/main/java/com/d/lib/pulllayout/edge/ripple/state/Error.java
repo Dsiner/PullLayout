@@ -20,7 +20,7 @@ public class Error extends Success {
     @Override
     protected void initAttr(Context context) {
         mSign = new Discon(mView);
-        mContent = "网络无法连接";
+        mContent = "Refresh error";
 
         mPaintText.setColor(mColorWhite);
         mPaintText.setTextSize(Utils.dp2px(context, 14));
