@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -101,6 +100,8 @@ public class HeaderView extends EdgeView {
                 img_head_arrow.setVisibility(View.INVISIBLE);
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_loading));
+
+                startNestedAnim(0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
@@ -109,6 +110,8 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_success));
                 updateTime();
+
+                postNestedAnimDelayed(0, 0, 450, -1);
                 break;
 
             case STATE_ERROR:
@@ -117,6 +120,8 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_error));
                 updateTime();
+
+                postNestedAnimDelayed(0, 0, 450, -1);
                 break;
         }
         mState = state;

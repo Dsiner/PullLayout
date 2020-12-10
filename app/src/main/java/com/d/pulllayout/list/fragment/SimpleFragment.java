@@ -3,22 +3,16 @@ package com.d.pulllayout.list.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
 import com.d.lib.common.component.loader.v4.AbsFragment;
 import com.d.lib.common.component.mvp.MvpView;
 import com.d.lib.pulllayout.Pullable;
-import com.d.lib.pulllayout.Refreshable;
-import com.d.lib.pulllayout.edge.ripple.ExtendFooterView;
-import com.d.lib.pulllayout.edge.ripple.ExtendHeaderView;
-import com.d.lib.pulllayout.edge.ripple.FooterView;
-import com.d.lib.pulllayout.edge.ripple.HeaderView;
 import com.d.lib.pulllayout.loader.RecyclerAdapter;
 import com.d.pulllayout.R;
 import com.d.pulllayout.list.activity.ListActivity;
 import com.d.pulllayout.list.adapter.rv.SimpleAdapter;
 import com.d.pulllayout.list.model.Bean;
+import com.d.pulllayout.list.model.EdgeType;
 import com.d.pulllayout.list.model.ListType;
 import com.d.pulllayout.list.presenter.LoadPresenter;
 
@@ -70,12 +64,10 @@ public class SimpleFragment extends AbsFragment<Bean, LoadPresenter> {
     @Override
     protected void init() {
         super.init();
-        ((Refreshable) mPullList).setHeader(new HeaderView(mContext));
-        ((Refreshable) mPullList).setFooter(new FooterView(mContext));
-        ((Refreshable) mPullList).setAutoLoadMore(true);
+        mPullList.setHeader(EdgeType.getEdgeView(mContext, mEdgeType)[0]);
+        mPullList.setFooter(EdgeType.getEdgeView(mContext, mEdgeType)[1]);
         ((Pullable) mPullList).setPullFactor(0.49f);
         ((Pullable) mPullList).setDuration(250);
-        ((Pullable) mPullList).setInterpolator(new DecelerateInterpolator());
         ((Pullable) mPullList).addOnPullListener(new Pullable.OnPullListener() {
             @Override
             public void onPullStateChanged(Pullable pullable, int newState) {

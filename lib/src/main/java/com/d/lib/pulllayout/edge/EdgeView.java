@@ -1,22 +1,28 @@
 package com.d.lib.pulllayout.edge;
 
+import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public abstract class EdgeView extends LinearLayout
-        implements IEdgeView, View.OnClickListener {
+import com.d.lib.pulllayout.Pullable;
+import com.d.lib.pulllayout.util.NestedAnimHelper;
+import com.d.lib.pulllayout.util.Utils;
+
+public abstract class EdgeView extends LinearLayout implements IEdgeView {
 
     protected LinearLayout mContainer;
     protected int mMeasuredHeight;
     protected int mState = STATE_NONE;
-    protected IEdgeView.OnClickListener mOnClickListener;
+    protected NestedAnimHelper mNestedAnimHelper;
+    protected NestedExtendChildHelper mNestedExtendChildHelper;
+    protected IEdgeView.OnNestedAnimListener mOnNestedAnimListener;
+    protected OnClickListener mOnFooterClickListener;
 
     public EdgeView(Context context) {
         super(context);
@@ -33,13 +39,6 @@ public abstract class EdgeView extends LinearLayout
         init(context);
     }
 
-    @Override
-    public void onClick(View v) {
-        if (mOnClickListener != null) {
-            mOnClickListener.onClick(v);
-        }
-    }
-
     protected void init(@NonNull final Context context) {
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         setOrientation(VERTICAL);
@@ -49,13 +48,74 @@ public abstract class EdgeView extends LinearLayout
 
         measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mMeasuredHeight = getMeasuredHeight();
-
-        setOnClickListener(this);
+        mNestedAnimHelper = new NestedAnimHelper(this);
+        mNestedExtendChildHelper = new NestedExtendChildHelper(this);
     }
+
+    protected abstract int getLayoutId();
 
     @Override
     public int getState() {
         return mState;
+    }
+
+    @Override
+    public int getVisibleHeight() {
+        return Utils.getVisibleHeight(mContainer);
+    }
+
+    @Override
+    public void setVisibleHeight(int height) {
+        Utils.setVisibleHeight(mContainer, Math.max(0, height));
+    }
+
+    @Override
+    public int getExpandedOffset() {
+        return mMeasuredHeight;
+    }
+
+    @Override
+    public void setPullFactor(float factor) {
+        this.mNestedExtendChildHelper.setPullFactor(factor);
+    }
+
+    @Override
+    public void dispatchPulled(float dx, float dy) {
+        mNestedExtendChildHelper.dispatchPulled(dx, dy);
+    }
+
+    @Override
+    public void setDuration(int duration) {
+        mNestedAnimHelper.setDuration(duration);
+    }
+
+    @Override
+    public void setInterpolator(TimeInterpolator value) {
+        mNestedAnimHelper.setInterpolator(value);
+    }
+
+    @Override
+    public void startNestedAnim(int destX, int destY) {
+        mNestedAnimHelper.startNestedAnim(getStartX(), getStartY(), destX, destY);
+    }
+
+    @Override
+    public void postNestedAnimDelayed(int destX, int destY, long delayMillis, int state) {
+        mNestedAnimHelper.postNestedAnimDelayed(getStartX(), getStartY(), destX, destY,
+                delayMillis, state);
+    }
+
+    @Override
+    public boolean stopNestedAnim() {
+        return mNestedAnimHelper.stopNestedAnim();
+    }
+
+    private int getStartX() {
+        return mOnNestedAnimListener != null ? mOnNestedAnimListener.getStartX() : 0;
+    }
+
+    private int getStartY() {
+        return mOnNestedAnimListener != null ? mOnNestedAnimListener.getStartY() : 0;
     }
 
     @Override
@@ -72,13 +132,36 @@ public abstract class EdgeView extends LinearLayout
     }
 
     @Override
-    public int getExpandedOffset() {
-        return mMeasuredHeight;
+    public void setOnNestedAnimListener(IEdgeView.OnNestedAnimListener l) {
+        mOnNestedAnimListener = l;
+        mNestedAnimHelper.setOnNestedAnimListener(l);
     }
 
-    protected abstract int getLayoutId();
+    @Override
+    public void setOnFooterClickListener(OnClickListener l) {
+        this.mOnFooterClickListener = l;
+    }
 
-    public void setOnFooterClickListener(IEdgeView.OnClickListener listener) {
-        this.mOnClickListener = listener;
+    public static class NestedExtendChildHelper {
+        private final EdgeView mEdgeView;
+        private float mPullFactor = Pullable.PULL_FACTOR;
+
+        public NestedExtendChildHelper(EdgeView view) {
+            mEdgeView = view;
+        }
+
+        public void setPullFactor(float factor) {
+            mPullFactor = factor;
+        }
+
+        public void dispatchPulled(float dx, float dy) {
+            Log.d("EdgeView", "dispatchPulled: " + dy);
+            dy = dy * mPullFactor;
+            if (mEdgeView.getVisibleHeight() > 0 || dy > 0) {
+                int height = Math.max(0, (int) dy + mEdgeView.getVisibleHeight());
+                mEdgeView.setVisibleHeight(height);
+                Log.d("EdgeView", "getVisibleHeight: " + mEdgeView.getVisibleHeight());
+            }
+        }
     }
 }

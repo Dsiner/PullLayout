@@ -1,3 +1,4 @@
 include ':app',
         ':lib',
-        ':integration:edge'
+        ':integration:edge_ripple',
+        ':integration:edge_elastic'

@@ -32,18 +32,16 @@ public class Utils {
         return (float) ((Math.ceil(fm.descent - fm.top) + 2) / 2);
     }
 
-    public static void setVisibleHeight(View view, int height) {
-        if (height < 0) {
-            height = 0;
-        }
-        ViewGroup.LayoutParams lp = view.getLayoutParams();
-        lp.height = height;
-        view.setLayoutParams(lp);
-    }
-
     public static int getVisibleHeight(View view) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         return lp.height;
+    }
+
+    public static void setVisibleHeight(View view, int height) {
+        height = Math.max(0, height);
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        lp.height = height;
+        view.setLayoutParams(lp);
     }
 
     /**

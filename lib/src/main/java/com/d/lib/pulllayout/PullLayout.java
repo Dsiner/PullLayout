@@ -4,6 +4,7 @@ import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
+import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.lib.pulllayout.util.AppBarHelper;
 import com.d.lib.pulllayout.util.NestedAnimHelper;
 import com.d.lib.pulllayout.util.NestedScrollHelper;
@@ -69,25 +71,35 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     private void init(Context context) {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        mNestedAnimHelper = new NestedAnimHelper(this) {
+        mNestedAnimHelper = new NestedAnimHelper(this);
+        mNestedAnimHelper.setOnNestedAnimListener(getOnNestedAnimListener(null));
+        mAppBarHelper = new AppBarHelper(this);
+    }
+
+    protected IEdgeView.OnNestedAnimListener getOnNestedAnimListener(@Nullable final IEdgeView edgeView) {
+        return new IEdgeView.OnNestedAnimListener() {
+
             @Override
-            public void onState(int state) {
-                super.onState(state);
+            public int getStartX() {
+                return getScrollX();
             }
-        };
-        mNestedAnimHelper.setOnPullListener(new OnPullListener() {
+
+            @Override
+            public int getStartY() {
+                return getScrollY();
+            }
+
             @Override
             public void onPullStateChanged(Pullable pullable, int newState) {
                 setPullState(newState);
             }
 
             @Override
-            public void onPulled(Pullable pullable, int x, int y) {
-                scrollTo(x, y);
+            public void onPulled(Pullable pullable, int dx, int dy) {
+                scrollTo(dx, dy);
                 invalidate();
             }
-        });
-        mAppBarHelper = new AppBarHelper(this);
+        };
     }
 
     @Override
@@ -353,6 +365,14 @@ public class PullLayout extends ViewGroup implements Pullable {
         this.mNestedAnimHelper.setInterpolator(value);
     }
 
+    protected void startNestedAnim(int destX, int destY) {
+        mNestedAnimHelper.startNestedAnim(getScrollX(), getScrollY(), destX, destY);
+    }
+
+    protected boolean stopNestedAnim() {
+        return mNestedAnimHelper.stopNestedAnim();
+    }
+
     private boolean canStartScrollVertically(boolean[] canNestedScroll, int deltas) {
         return !canNestedScroll[0] && deltas < 0 && mAppBarHelper.isExpanded()
                 || !canNestedScroll[1] && deltas > 0;
@@ -380,14 +400,6 @@ public class PullLayout extends ViewGroup implements Pullable {
 
     protected View getNestedChild() {
         return getChildAt(0);
-    }
-
-    protected void startNestedAnim(int destX, int destY) {
-        mNestedAnimHelper.postNestedAnim(getScrollX(), getScrollY(), destX, destY);
-    }
-
-    protected boolean stopNestedAnim() {
-        return mNestedAnimHelper.stopNestedAnim();
     }
 
     protected void dispatchOnPullStateChanged(int state) {

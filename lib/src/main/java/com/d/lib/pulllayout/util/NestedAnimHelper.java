@@ -22,7 +22,7 @@ public class NestedAnimHelper {
     private final AnimUpdateListener mAnimUpdateListener;
     private final AnimListenerAdapter mAnimListenerAdapter;
     private int mDuration = 250;
-    private Pullable.OnPullListener mOnPullListener;
+    private Pullable.OnPullListener mOnNestedAnimListener;
 
     static class WeakRunnable implements Runnable {
         private final WeakReference<NestedAnimHelper> reference;
@@ -69,7 +69,7 @@ public class NestedAnimHelper {
                 return;
             }
             final NestedAnimHelper view = reference.get();
-            view.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+            view.onAnimStateChanged(null, Pullable.PULL_STATE_IDLE);
         }
 
         @Override
@@ -78,7 +78,7 @@ public class NestedAnimHelper {
                 return;
             }
             final NestedAnimHelper view = reference.get();
-            view.onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+            view.onAnimStateChanged(null, Pullable.PULL_STATE_IDLE);
             if (state != -1) {
                 view.onState(state);
             }
@@ -110,8 +110,8 @@ public class NestedAnimHelper {
             final int scrollX = (int) (startX + (destX - startX) * factor);
             final int scrollY = (int) (startY + (destY - startY) * factor);
 
-            view.onPullStateChanged(null, Pullable.PULL_STATE_SETTLING);
-            view.onPulled(null, scrollX, scrollY);
+            view.onAnimStateChanged(null, Pullable.PULL_STATE_SETTLING);
+            view.onAnimUpdate(null, scrollX, scrollY);
         }
     }
 
@@ -141,7 +141,7 @@ public class NestedAnimHelper {
         this.mAnimation.setInterpolator(value);
     }
 
-    public void postNestedAnim(int startX, int startY, int destX, int destY) {
+    public void startNestedAnim(int startX, int startY, int destX, int destY) {
         postNestedAnimDelayed(startX, startY, destX, destY, 0, -1);
     }
 
@@ -150,7 +150,11 @@ public class NestedAnimHelper {
                                       int state) {
         stopNestedAnim();
         if (startX == destX && startY == destY) {
-            onPullStateChanged(null, Pullable.PULL_STATE_IDLE);
+            onAnimStateChanged(null, Pullable.PULL_STATE_IDLE);
+            return;
+        }
+        if (delayMillis <= 0) {
+            startNestedAnim(startX, startY, destX, destY, state);
             return;
         }
         mWeakRunnable.ofInt(startX, startY, destX, destY, state);
@@ -179,19 +183,19 @@ public class NestedAnimHelper {
     public void onState(int state) {
     }
 
-    public void onPullStateChanged(Pullable pullable, int newState) {
-        if (mOnPullListener != null) {
-            mOnPullListener.onPullStateChanged(pullable, newState);
+    private void onAnimStateChanged(Pullable pullable, int newState) {
+        if (mOnNestedAnimListener != null) {
+            mOnNestedAnimListener.onPullStateChanged(pullable, newState);
         }
     }
 
-    public void onPulled(Pullable pullable, int x, int y) {
-        if (mOnPullListener != null) {
-            mOnPullListener.onPulled(pullable, x, y);
+    private void onAnimUpdate(Pullable pullable, int x, int y) {
+        if (mOnNestedAnimListener != null) {
+            mOnNestedAnimListener.onPulled(pullable, x, y);
         }
     }
 
-    public void setOnPullListener(Pullable.OnPullListener l) {
-        this.mOnPullListener = l;
+    public void setOnNestedAnimListener(Pullable.OnPullListener l) {
+        this.mOnNestedAnimListener = l;
     }
 }

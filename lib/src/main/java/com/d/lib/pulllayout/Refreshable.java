@@ -8,13 +8,17 @@ import com.d.lib.pulllayout.edge.IEdgeView;
  */
 public interface Refreshable {
 
-    boolean autoLoadMore();
-
-    void setAutoLoadMore(boolean enable);
+    IEdgeView getHeader();
 
     void setHeader(IEdgeView view);
 
+    IEdgeView getFooter();
+
     void setFooter(IEdgeView view);
+
+    boolean autoLoadMore();
+
+    void setAutoLoadMore(boolean enable);
 
     void reset();
 
