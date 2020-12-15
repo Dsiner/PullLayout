@@ -101,7 +101,7 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_loading));
 
-                startNestedAnim(0, getExpandedOffset());
+                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
@@ -111,7 +111,7 @@ public class HeaderView extends EdgeView {
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_success));
                 updateTime();
 
-                postNestedAnimDelayed(0, 0, 450, -1);
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
                 break;
 
             case STATE_ERROR:
@@ -121,7 +121,7 @@ public class HeaderView extends EdgeView {
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_error));
                 updateTime();
 
-                postNestedAnimDelayed(0, 0, 450, -1);
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
                 break;
         }
         mState = state;

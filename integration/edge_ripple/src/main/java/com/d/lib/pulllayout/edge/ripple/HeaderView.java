@@ -48,12 +48,12 @@ public class HeaderView extends EdgeView {
         mRippleView.setState(state);
         switch (state) {
             case STATE_LOADING:
-                startNestedAnim(0, getExpandedOffset());
+                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
             case STATE_ERROR:
-                postNestedAnimDelayed(0, 0, 1650, -1);
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 1650);
                 break;
         }
         mState = state;

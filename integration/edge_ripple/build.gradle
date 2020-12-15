@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    resourcePrefix 'lib_pull_edge_'
+    resourcePrefix 'lib_pull_edge_ripple_'
 
     defaultConfig {
         minSdkVersion 11

@@ -97,7 +97,6 @@ public class PullLayout extends ViewGroup implements Pullable {
             @Override
             public void onPulled(Pullable pullable, int dx, int dy) {
                 scrollTo(dx, dy);
-                invalidate();
             }
         };
     }
@@ -267,7 +266,7 @@ public class PullLayout extends ViewGroup implements Pullable {
                     return super.dispatchTouchEvent(ev);
                 }
                 if (mPullState == Pullable.PULL_STATE_DRAGGING) {
-                    startNestedAnim(0, 0);
+                    startNestedAnim(getScrollX(), getScrollY(), 0, 0);
                 }
                 mOrientation = INVALID_ORIENTATION;
                 ev.setAction(MotionEvent.ACTION_CANCEL);
@@ -301,7 +300,7 @@ public class PullLayout extends ViewGroup implements Pullable {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        dispatchOnPullScrolled(l, t);
+        dispatchPulled(l, t);
     }
 
     @Override
@@ -322,7 +321,7 @@ public class PullLayout extends ViewGroup implements Pullable {
             return;
         }
         mPullState = state;
-        dispatchOnPullStateChanged(state);
+        dispatchPullStateChanged(state);
     }
 
     @Override
@@ -365,11 +364,13 @@ public class PullLayout extends ViewGroup implements Pullable {
         this.mNestedAnimHelper.setInterpolator(value);
     }
 
-    protected void startNestedAnim(int destX, int destY) {
-        mNestedAnimHelper.startNestedAnim(getScrollX(), getScrollY(), destX, destY);
+    @Override
+    public void startNestedAnim(int startX, int startY, int destX, int destY) {
+        mNestedAnimHelper.startNestedAnim(startX, startY, destX, destY);
     }
 
-    protected boolean stopNestedAnim() {
+    @Override
+    public boolean stopNestedAnim() {
         return mNestedAnimHelper.stopNestedAnim();
     }
 
@@ -402,7 +403,7 @@ public class PullLayout extends ViewGroup implements Pullable {
         return getChildAt(0);
     }
 
-    protected void dispatchOnPullStateChanged(int state) {
+    protected void dispatchPullStateChanged(int state) {
         // Listeners go last. All other internal state is consistent by this point.
         if (mOnPullListeners != null) {
             for (int i = mOnPullListeners.size() - 1; i >= 0; i--) {
@@ -411,7 +412,8 @@ public class PullLayout extends ViewGroup implements Pullable {
         }
     }
 
-    protected void dispatchOnPullScrolled(int hresult, int vresult) {
+    @Override
+    public void dispatchPulled(int hresult, int vresult) {
         // Pass the real deltas to onScrolled
         if (mOnPullListeners != null) {
             for (int i = mOnPullListeners.size() - 1; i >= 0; i--) {

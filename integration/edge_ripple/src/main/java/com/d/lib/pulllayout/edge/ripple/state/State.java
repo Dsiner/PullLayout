@@ -24,9 +24,9 @@ public class State {
     public State(View view) {
         this.mView = view;
         this.mContext = view.getContext();
-        this.mColor = ContextCompat.getColor(mContext, R.color.lib_pull_edge_color_main);
-        this.mColorError = ContextCompat.getColor(mContext, R.color.lib_pull_edge_color_error);
-        this.mColorWhite = ContextCompat.getColor(mContext, R.color.lib_pull_edge_color_white);
+        this.mColor = ContextCompat.getColor(mContext, R.color.lib_pull_edge_ripple_color_main);
+        this.mColorError = ContextCompat.getColor(mContext, R.color.lib_pull_edge_ripple_color_error);
+        this.mColorWhite = ContextCompat.getColor(mContext, R.color.lib_pull_edge_ripple_color_white);
     }
 
     public void setMeasuredDimension(int measuredWidth, int measuredHeight) {

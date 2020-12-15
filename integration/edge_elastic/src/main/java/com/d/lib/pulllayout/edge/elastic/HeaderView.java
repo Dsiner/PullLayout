@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 
 import com.d.lib.pulllayout.edge.EdgeView;
-import com.d.lib.pulllayout.edge.IState;
 
 public class HeaderView extends EdgeView {
     private BezierWaveView bwv_wave;
@@ -47,12 +46,12 @@ public class HeaderView extends EdgeView {
         }
         switch (state) {
             case STATE_LOADING:
-                startNestedAnim(0, getExpandedOffset());
+                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
             case STATE_ERROR:
-                postNestedAnimDelayed(0, 0, 1650, IState.STATE_NONE);
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 1650);
                 break;
         }
         mState = state;

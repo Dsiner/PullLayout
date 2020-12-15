@@ -41,7 +41,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
 
     protected TitleLayout tl_title;
     protected int mType = TYPE_SIMPLE;
-    protected int mListType = ListType.PULLRECYCLERLAYOUT_LISTVIEW;
+    protected int mListType = ListType.PULLRECYCLERLAYOUT_PULLRECYCLERVIEW;
     protected int mEdgeType = EdgeType.TYPE_CLASSIC;
     protected Fragment mCurFragment;
 
@@ -138,15 +138,19 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
         if (type == TYPE_SIMPLE) {
             title = "Simple";
             fragment = new SimpleFragment();
+
         } else if (type == TYPE_MULTIPLE) {
             title = "Multiple";
             fragment = new MultipleFragment();
+
         } else if (type == TYPE_COORDINATOR_LIST) {
             title = "CoordinatorLayout";
             fragment = new CoordinatorLayoutFragment();
+
         } else if (type == TYPE_ITEM_TOUCH) {
             title = "Item Touch";
             fragment = new ItemTouchFragment();
+
         } else {
             title = "Invalid";
             fragment = new Fragment();

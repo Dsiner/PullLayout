@@ -254,14 +254,20 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                     if (canPullDown() && getScrollY() < -mHeaderView.getExpandedOffset()
                             && mAppBarHelper.isExpanded()) {
                         refresh();
-                        mHeaderView.startNestedAnim(getScrollX(), mHeaderView.getState() == IState.STATE_LOADING
-                                ? -mHeaderView.getExpandedOffset() : 0);
+                        mHeaderView.startNestedAnim(getScrollX(),
+                                getScrollY(),
+                                getScrollX(),
+                                mHeaderView.getState() == IState.STATE_LOADING
+                                        ? -mHeaderView.getExpandedOffset() : 0);
                     } else if (canPullUp() && getScrollY() > mFooterView.getExpandedOffset()) {
                         loadMore();
-                        mFooterView.startNestedAnim(getScrollX(), mFooterView.getState() == IState.STATE_LOADING
-                                ? mFooterView.getExpandedOffset() : 0);
+                        mFooterView.startNestedAnim(getScrollX(),
+                                getScrollY(),
+                                getScrollX(),
+                                mFooterView.getState() == IState.STATE_LOADING
+                                        ? mFooterView.getExpandedOffset() : 0);
                     } else {
-                        startNestedAnim(0, 0);
+                        startNestedAnim(getScrollX(), getScrollY(), 0, 0);
                     }
                 }
                 mOrientation = INVALID_ORIENTATION;
@@ -287,13 +293,13 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     }
 
     @Override
-    protected void startNestedAnim(int destX, int destY) {
+    public void startNestedAnim(int startX, int startY, int destX, int destY) {
         stopNestedAnim();
-        super.startNestedAnim(destX, destY);
+        super.startNestedAnim(startX, startY, destX, destY);
     }
 
     @Override
-    protected boolean stopNestedAnim() {
+    public boolean stopNestedAnim() {
         mHeaderView.stopNestedAnim();
         mFooterView.stopNestedAnim();
         return super.stopNestedAnim();
@@ -353,13 +359,13 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     }
 
     @Override
-    protected void dispatchOnPullScrolled(int hresult, int vresult) {
+    public void dispatchPulled(int hresult, int vresult) {
         if (-vresult >= 0) {
             mHeaderView.onPulled(hresult, Math.max(0, -vresult));
         }
         if (vresult >= 0) {
             mFooterView.onPulled(hresult, Math.max(0, vresult));
         }
-        super.dispatchOnPullScrolled(hresult, vresult);
+        super.dispatchPulled(hresult, vresult);
     }
 }

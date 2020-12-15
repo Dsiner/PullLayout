@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.d.lib.pulllayout.Pullable;
+import com.d.lib.pulllayout.edge.INestedAnim;
 
 import java.lang.ref.WeakReference;
 
-public class NestedAnimHelper {
+public class NestedAnimHelper implements INestedAnim {
     private final View mView;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final WeakRunnable mWeakRunnable;
@@ -132,22 +133,30 @@ public class NestedAnimHelper {
         mAnimListenerAdapter = new AnimListenerAdapter(this);
     }
 
+    @Override
     public void setDuration(int duration) {
         this.mDuration = duration;
         this.mAnimation.setDuration(duration);
     }
 
+    @Override
     public void setInterpolator(TimeInterpolator value) {
         this.mAnimation.setInterpolator(value);
     }
 
+    @Override
     public void startNestedAnim(int startX, int startY, int destX, int destY) {
         postNestedAnimDelayed(startX, startY, destX, destY, 0, -1);
     }
 
     public void postNestedAnimDelayed(int startX, int startY, int destX, int destY,
-                                      long delayMillis,
-                                      int state) {
+                                      long delayMillis) {
+        postNestedAnimDelayed(startX, startY, destX, destY, delayMillis, -1);
+    }
+
+    private void postNestedAnimDelayed(int startX, int startY, int destX, int destY,
+                                       long delayMillis,
+                                       int state) {
         stopNestedAnim();
         if (startX == destX && startY == destY) {
             onAnimStateChanged(null, Pullable.PULL_STATE_IDLE);
@@ -171,6 +180,7 @@ public class NestedAnimHelper {
         mAnimation.start();
     }
 
+    @Override
     public boolean stopNestedAnim() {
         mHandler.removeCallbacksAndMessages(null);
         boolean running = mAnimation.isRunning();

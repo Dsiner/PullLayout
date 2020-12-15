@@ -59,28 +59,28 @@ public class FooterView extends EdgeView {
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_loading));
 
-                startNestedAnim(0, getExpandedOffset());
+                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_success));
 
-                startNestedAnim(0, 0);
+                startNestedAnim(getStartX(), getStartY(), 0, 0);
                 break;
 
             case STATE_ERROR:
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_error));
 
-                postNestedAnimDelayed(0, 0, 450, -1);
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
                 break;
 
             case STATE_NO_MORE:
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_nomore));
 
-                startNestedAnim(0, getExpandedOffset());
+                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
         }
         setOnClickListener(state == STATE_ERROR ? mOnFooterClickListener : null);

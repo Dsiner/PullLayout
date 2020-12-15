@@ -46,15 +46,15 @@ public class FooterView extends EdgeView {
         switch (state) {
             case STATE_LOADING:
             case STATE_NO_MORE:
-                startNestedAnim(0, getExpandedOffset());
+                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
-                startNestedAnim(0, 0);
+                startNestedAnim(getStartX(), getStartY(), 0, 0);
                 break;
 
             case STATE_ERROR:
-                postNestedAnimDelayed(0, 0, 1700, -1);
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 1700);
                 break;
         }
         setOnClickListener(state == STATE_ERROR ? mOnFooterClickListener : null);

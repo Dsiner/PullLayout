@@ -1,12 +1,13 @@
 package com.d.lib.pulllayout;
 
-import android.animation.TimeInterpolator;
+import com.d.lib.pulllayout.edge.INestedAnim;
+import com.d.lib.pulllayout.edge.INestedExtend;
 
 /**
  * Pullable
  * Created by D on 2017/4/26.
  */
-public interface Pullable {
+public interface Pullable extends INestedAnim, INestedExtend {
 
     float PULL_FACTOR = 0.49f;
 
@@ -49,12 +50,6 @@ public interface Pullable {
     boolean canPullUp();
 
     void setCanPullUp(boolean enable);
-
-    void setPullFactor(float factor);
-
-    void setDuration(int duration);
-
-    void setInterpolator(TimeInterpolator value);
 
     /**
      * Add a listener that will be notified of any changes in pull state or position.

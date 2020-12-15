@@ -54,6 +54,14 @@ public abstract class EdgeView extends LinearLayout implements IEdgeView {
 
     protected abstract int getLayoutId();
 
+    protected int getStartX() {
+        return mOnNestedAnimListener != null ? mOnNestedAnimListener.getStartX() : 0;
+    }
+
+    protected int getStartY() {
+        return mOnNestedAnimListener != null ? mOnNestedAnimListener.getStartY() : 0;
+    }
+
     @Override
     public int getState() {
         return mState;
@@ -80,8 +88,8 @@ public abstract class EdgeView extends LinearLayout implements IEdgeView {
     }
 
     @Override
-    public void dispatchPulled(float dx, float dy) {
-        mNestedExtendChildHelper.dispatchPulled(dx, dy);
+    public void dispatchPulled(int hresult, int vresult) {
+        mNestedExtendChildHelper.dispatchPulled(hresult, vresult);
     }
 
     @Override
@@ -95,27 +103,17 @@ public abstract class EdgeView extends LinearLayout implements IEdgeView {
     }
 
     @Override
-    public void startNestedAnim(int destX, int destY) {
-        mNestedAnimHelper.startNestedAnim(getStartX(), getStartY(), destX, destY);
+    public void startNestedAnim(int startX, int startY, int destX, int destY) {
+        mNestedAnimHelper.startNestedAnim(startX, startY, destX, destY);
     }
 
-    @Override
-    public void postNestedAnimDelayed(int destX, int destY, long delayMillis, int state) {
-        mNestedAnimHelper.postNestedAnimDelayed(getStartX(), getStartY(), destX, destY,
-                delayMillis, state);
+    public void postNestedAnimDelayed(int startX, int startY, int destX, int destY, long delayMillis) {
+        mNestedAnimHelper.postNestedAnimDelayed(startX, startY, destX, destY, delayMillis);
     }
 
     @Override
     public boolean stopNestedAnim() {
         return mNestedAnimHelper.stopNestedAnim();
-    }
-
-    private int getStartX() {
-        return mOnNestedAnimListener != null ? mOnNestedAnimListener.getStartX() : 0;
-    }
-
-    private int getStartY() {
-        return mOnNestedAnimListener != null ? mOnNestedAnimListener.getStartY() : 0;
     }
 
     @Override
@@ -142,7 +140,7 @@ public abstract class EdgeView extends LinearLayout implements IEdgeView {
         this.mOnFooterClickListener = l;
     }
 
-    public static class NestedExtendChildHelper {
+    public static class NestedExtendChildHelper implements INestedExtend {
         private final EdgeView mEdgeView;
         private float mPullFactor = Pullable.PULL_FACTOR;
 
@@ -150,15 +148,17 @@ public abstract class EdgeView extends LinearLayout implements IEdgeView {
             mEdgeView = view;
         }
 
+        @Override
         public void setPullFactor(float factor) {
             mPullFactor = factor;
         }
 
-        public void dispatchPulled(float dx, float dy) {
-            Log.d("EdgeView", "dispatchPulled: " + dy);
-            dy = dy * mPullFactor;
-            if (mEdgeView.getVisibleHeight() > 0 || dy > 0) {
-                int height = Math.max(0, (int) dy + mEdgeView.getVisibleHeight());
+        @Override
+        public void dispatchPulled(int hresult, int vresult) {
+            Log.d("EdgeView", "dispatchPulled: " + vresult);
+            vresult = (int) (vresult * mPullFactor);
+            if (mEdgeView.getVisibleHeight() > 0 || vresult > 0) {
+                int height = Math.max(0, (int) vresult + mEdgeView.getVisibleHeight());
                 mEdgeView.setVisibleHeight(height);
                 Log.d("EdgeView", "getVisibleHeight: " + mEdgeView.getVisibleHeight());
             }
