@@ -172,11 +172,11 @@ public class MultipleAdapter extends CommonAdapter<Bean> {
 
 ### Support headers or footers ###
 ```Java
-.addHeaderView(view);
-.addFooterView(view);
+mPullList.addHeaderView(view);
+mPullList.addFooterView(view);
 
-.removeHeaderView(view);
-.removeFooterView(view);
+mPullList.removeHeaderView(view);
+mPullList.removeFooterView(view);
 ```
 
 More usage see [Demo](app/src/main/java/com/d/pulllayout/MainActivity.java)
