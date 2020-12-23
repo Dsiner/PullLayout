@@ -14,11 +14,11 @@ import java.util.TreeSet;
  * Created by D on 2018/1/25.
  */
 public abstract class CommonCheckAdapter<T> extends CommonAdapter<T> {
-    public final static int MODE_NORMAL = 0;
-    public final static int MODE_SELECT = 1;
+    public static final int MODE_NORMAL = 0;
+    public static final int MODE_SELECT = 1;
 
-    protected int mMode = MODE_NORMAL;
     protected final Set<Integer> mSelectedPositions;
+    protected int mMode = MODE_NORMAL;
 
     public CommonCheckAdapter(@NonNull Context context, List<T> datas, int layoutId) {
         super(context, datas, layoutId);
@@ -35,13 +35,6 @@ public abstract class CommonCheckAdapter<T> extends CommonAdapter<T> {
         this.notifyDataSetChanged();
     }
 
-    public boolean isSelected(int position) {
-        return mSelectedPositions.contains(position);
-    }
-
-    public void setSelected(int position) {
-        mSelectedPositions.contains(position);
-    }
 
     public void toggleSelection(int position) {
         if (position < 0) {
@@ -87,6 +80,10 @@ public abstract class CommonCheckAdapter<T> extends CommonAdapter<T> {
         }
     }
 
+    public boolean isSelected(int position) {
+        return mSelectedPositions.contains(position);
+    }
+
     public boolean isSelectAll() {
         List<T> list = getDatas();
         for (int i = 0; i < list.size(); i++) {
@@ -98,7 +95,7 @@ public abstract class CommonCheckAdapter<T> extends CommonAdapter<T> {
     }
 
     @NonNull
-    public List<T> getChecked() {
+    public List<T> getSelected() {
         List<T> list = new ArrayList<>();
         List<Integer> positions = getSelectedPositions();
         for (int i = 0; i < positions.size(); i++) {

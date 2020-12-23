@@ -22,10 +22,10 @@ public class WrapAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * The following ItemViewType are reserved values (ReservedItemViewType) .
      * If the user's adapter is duplicated with them, an exception will be forced to be thrown.
      */
-    public final static int ITEM_VIEW_TYPE_HEADER = 1000000;
-    public final static int ITEM_VIEW_TYPE_FOOTER = 1000001;
-    public final static int ITEM_VIEW_TYPE_HEADER_LIST_INDEX = 1100000;
-    public final static int ITEM_VIEW_TYPE_FOOTER_LIST_INDEX = 1200000;
+    public static final int ITEM_VIEW_TYPE_HEADER = 1000000;
+    public static final int ITEM_VIEW_TYPE_FOOTER = 1000001;
+    public static final int ITEM_VIEW_TYPE_HEADER_LIST_INDEX = 1100000;
+    public static final int ITEM_VIEW_TYPE_FOOTER_LIST_INDEX = 1200000;
 
     @NonNull
     private final RecyclerView.Adapter mAdapter;

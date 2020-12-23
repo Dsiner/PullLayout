@@ -10,7 +10,7 @@ import java.util.List;
  * Created by D on 2017/8/23.
  */
 public class CommonLoader<T> {
-    public final static int PAGE_COUNT = 20; // Number of data per page
+    public static final int PAGE_COUNT = 20; // Number of data per page
 
     public int page = 1;
 

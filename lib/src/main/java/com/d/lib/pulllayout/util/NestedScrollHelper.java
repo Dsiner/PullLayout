@@ -12,10 +12,10 @@ import android.widget.ScrollView;
 import com.d.lib.pulllayout.Pullable;
 
 public class NestedScrollHelper {
-    public final static int GRAVITY_TOP = 0x0001;
-    public final static int GRAVITY_BOTTOM = 0x0010;
-    public final static int GRAVITY_LEFT = 0x0100;
-    public final static int GRAVITY_RIGHT = 0x1000;
+    public static final int GRAVITY_TOP = 0x0001;
+    public static final int GRAVITY_BOTTOM = 0x0010;
+    public static final int GRAVITY_LEFT = 0x0100;
+    public static final int GRAVITY_RIGHT = 0x1000;
 
     public static class Offset {
         public static final int INVALID_ORIENTATION = 0;
