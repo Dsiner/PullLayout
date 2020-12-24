@@ -37,6 +37,75 @@ public class Success extends State {
     private Task mTask;
     private Handler mHandler;
 
+    public Success(View view) {
+        super(view);
+        init(mContext);
+        initAttr(mContext);
+    }
+
+    @Override
+    public void reStart() {
+        stop();
+        mTaskRunning = true;
+        mStep = 0;
+        mView.invalidate();
+        mHandler.postDelayed(mTask, 700);
+    }
+
+    @Override
+    public void stop() {
+        mAnimator.cancel();
+        mTaskRunning = false;
+        mStep = 0;
+        mHandler.removeCallbacks(mTask);
+    }
+
+    private void init(Context context) {
+        mTask = new Task(this);
+        mHandler = new Handler();
+
+        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        mAnimator = ValueAnimator.ofFloat(0f, 1f);
+        mAnimator.setDuration(450);
+        mAnimator.setInterpolator(new LinearInterpolator());
+        mAnimator.addListener(new AnimListenerAdapter(this));
+        mAnimator.addUpdateListener(new AnimUpdateListener(this));
+    }
+
+    protected void initAttr(Context context) {
+        mSign = new Done(mView);
+        mContent = "Refresh success";
+
+        mPaintText.setColor(mColorWhite);
+        mPaintText.setTextSize(Utils.dp2px(context, 14));
+        mPaintText.setTextAlign(Paint.Align.CENTER);
+        mTextHeight = Utils.getTextHeight(mPaintText);
+
+        mPaint.setColor(mColor);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mStep == 0) {
+            mSign.onDraw(canvas);
+            return;
+        }
+        float start = mHeight * 0.35f / 2f;
+        float end = (float) Math.sqrt(mHeight / 2f * mHeight / 2f + mWidth / 2f * mWidth / 2f) + 1;
+        canvas.drawCircle(mWidth / 2f, mHeight / 2f, start + (end - start) * mFactor, mPaint);
+
+        canvas.drawText(mContent, mWidth / 2f, mHeight / 2 + mTextHeight / 2, mPaintText);
+    }
+
+    @Override
+    public void setMeasuredDimension(int measuredWidth, int measuredHeight) {
+        super.setMeasuredDimension(measuredWidth, measuredHeight);
+        mSign.setMeasuredDimension(measuredWidth, measuredHeight);
+    }
+
     static class AnimListenerAdapter extends AnimatorListenerAdapter {
         private final WeakReference<Success> reference;
 
@@ -104,74 +173,5 @@ public class Success extends State {
             }
             view.mAnimator.start();
         }
-    }
-
-    @Override
-    public void reStart() {
-        stop();
-        mTaskRunning = true;
-        mStep = 0;
-        mView.invalidate();
-        mHandler.postDelayed(mTask, 700);
-    }
-
-    @Override
-    public void stop() {
-        mAnimator.cancel();
-        mTaskRunning = false;
-        mStep = 0;
-        mHandler.removeCallbacks(mTask);
-    }
-
-    public Success(View view) {
-        super(view);
-        init(mContext);
-        initAttr(mContext);
-    }
-
-    private void init(Context context) {
-        mTask = new Task(this);
-        mHandler = new Handler();
-
-        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-        mAnimator = ValueAnimator.ofFloat(0f, 1f);
-        mAnimator.setDuration(450);
-        mAnimator.setInterpolator(new LinearInterpolator());
-        mAnimator.addListener(new AnimListenerAdapter(this));
-        mAnimator.addUpdateListener(new AnimUpdateListener(this));
-    }
-
-    protected void initAttr(Context context) {
-        mSign = new Done(mView);
-        mContent = "Refresh success";
-
-        mPaintText.setColor(mColorWhite);
-        mPaintText.setTextSize(Utils.dp2px(context, 14));
-        mPaintText.setTextAlign(Paint.Align.CENTER);
-        mTextHeight = Utils.getTextHeight(mPaintText);
-
-        mPaint.setColor(mColor);
-    }
-
-    @Override
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        if (mStep == 0) {
-            mSign.onDraw(canvas);
-            return;
-        }
-        float start = mHeight * 0.35f / 2f;
-        float end = (float) Math.sqrt(mHeight / 2f * mHeight / 2f + mWidth / 2f * mWidth / 2f) + 1;
-        canvas.drawCircle(mWidth / 2f, mHeight / 2f, start + (end - start) * mFactor, mPaint);
-
-        canvas.drawText(mContent, mWidth / 2f, mHeight / 2 + mTextHeight / 2, mPaintText);
-    }
-
-    @Override
-    public void setMeasuredDimension(int measuredWidth, int measuredHeight) {
-        super.setMeasuredDimension(measuredWidth, measuredHeight);
-        mSign.setMeasuredDimension(measuredWidth, measuredHeight);
     }
 }

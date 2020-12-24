@@ -33,24 +33,9 @@ public class Loading extends State {
     private float mFactor;
     private boolean mTaskRunning;
 
-    static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
-        private final WeakReference<Loading> reference;
-
-        AnimUpdateListener(Loading view) {
-            this.reference = new WeakReference<>(view);
-        }
-
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            Loading view = reference.get();
-            if (view == null || view.mContext == null
-                    || view.mContext instanceof Activity && ((Activity) view.mContext).isFinishing()
-                    || view.mView == null) {
-                return;
-            }
-            view.mFactor = (float) animation.getAnimatedValue();
-            view.mView.invalidate();
-        }
+    public Loading(View view) {
+        super(view);
+        init(mContext);
     }
 
     @Override
@@ -64,11 +49,6 @@ public class Loading extends State {
     public void stop() {
         mAnimator.cancel();
         mTaskRunning = false;
-    }
-
-    public Loading(View view) {
-        super(view);
-        init(mContext);
     }
 
     private void init(Context context) {
@@ -105,5 +85,25 @@ public class Loading extends State {
         mRect.set((int) startX + mSpace, (int) startY + mSpace, (int) (startX + w) - mSpace, (int) (startY + h) - mSpace);
         mRectF.set(mRect);
         canvas.drawArc(mRectF, mFactor, 90, false, mPaint);
+    }
+
+    static class AnimUpdateListener implements ValueAnimator.AnimatorUpdateListener {
+        private final WeakReference<Loading> reference;
+
+        AnimUpdateListener(Loading view) {
+            this.reference = new WeakReference<>(view);
+        }
+
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            Loading view = reference.get();
+            if (view == null || view.mContext == null
+                    || view.mContext instanceof Activity && ((Activity) view.mContext).isFinishing()
+                    || view.mView == null) {
+                return;
+            }
+            view.mFactor = (float) animation.getAnimatedValue();
+            view.mView.invalidate();
+        }
     }
 }

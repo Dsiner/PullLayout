@@ -12,12 +12,12 @@ Maven:
 <dependency>
   <groupId>com.dsiner.lib</groupId>
   <artifactId>pulllayout</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-implementation 'com.dsiner.lib:pulllayout:1.0.1'
+implementation 'com.dsiner.lib:pulllayout:1.0.3'
 ```
 
 ## Features
