@@ -32,14 +32,12 @@ import java.util.List;
  */
 public class PullRecyclerView extends RecyclerView implements Pullable, Refreshable {
     private static final int INVALID_POINTER = -1;
-
+    @NonNull
+    private final ItemViewList mHeaderList, mFooterList;
     @NonNull
     private IEdgeView mHeaderView;
     @NonNull
     private IEdgeView mFooterView;
-    @NonNull
-    private final ItemViewList mHeaderList, mFooterList;
-
     private boolean mCanPullDown = true;
     private boolean mCanPullUp = true;
     private boolean mAutoLoadMore = true;
@@ -216,6 +214,7 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
 
     @Override
     public void loadMoreSuccess() {
+        NestedScrollHelper.stopNestedScroll(this);
         mFooterView.setState(IState.STATE_SUCCESS);
     }
 
@@ -268,16 +267,6 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         return false;
     }
 
-    @Override
-    public void setAdapter(Adapter adapter) {
-        mWrapAdapter = new WrapAdapter(adapter, mHeaderView, mFooterView, mHeaderList, mFooterList);
-        mWrapAdapter.setCanPullDown(mCanPullDown);
-        mWrapAdapter.setCanPullUp(mCanPullUp);
-        WrapAdapterDataObserver adapterDataObserver = new WrapAdapterDataObserver(mWrapAdapter);
-        adapter.registerAdapterDataObserver(adapterDataObserver);
-        super.setAdapter(mWrapAdapter);
-    }
-
     /**
      * Retrieves the previously set wrap adapter or null if no adapter is set.
      */
@@ -288,6 +277,16 @@ public class PullRecyclerView extends RecyclerView implements Pullable, Refresha
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void setAdapter(Adapter adapter) {
+        mWrapAdapter = new WrapAdapter(adapter, mHeaderView, mFooterView, mHeaderList, mFooterList);
+        mWrapAdapter.setCanPullDown(mCanPullDown);
+        mWrapAdapter.setCanPullUp(mCanPullUp);
+        WrapAdapterDataObserver adapterDataObserver = new WrapAdapterDataObserver(mWrapAdapter);
+        adapter.registerAdapterDataObserver(adapterDataObserver);
+        super.setAdapter(mWrapAdapter);
     }
 
     @Override

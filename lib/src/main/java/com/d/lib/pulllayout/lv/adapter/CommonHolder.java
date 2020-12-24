@@ -48,6 +48,13 @@ public class CommonHolder {
     }
 
     /**
+     * Set the view type of this ViewHolder.
+     */
+    public final void setItemViewType(int itemViewType) {
+        this.mItemViewType = itemViewType;
+    }
+
+    /**
      * Finds the first descendant view with the given ID
      */
     public <T extends View> T getView(@IdRes int id) {

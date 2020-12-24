@@ -151,6 +151,10 @@ public class CommonLoader<T> {
         }
     }
 
+    public void setOnLoaderListener(OnLoaderListener listener) {
+        this.mListener = listener;
+    }
+
     public interface OnLoaderListener {
         void onRefresh();
 
@@ -161,9 +165,5 @@ public class CommonLoader<T> {
         void loadSuccess();
 
         void loadError(boolean isEmpty);
-    }
-
-    public void setOnLoaderListener(OnLoaderListener listener) {
-        this.mListener = listener;
     }
 }

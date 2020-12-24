@@ -8,9 +8,9 @@ import java.util.List;
  */
 public interface RecyclerAdapter<T> {
 
-    void setDatas(List<T> datas);
-
     List<T> getDatas();
+
+    void setDatas(List<T> datas);
 
     void notifyDataSetChanged();
 }

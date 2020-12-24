@@ -42,9 +42,8 @@ public class LoadPresenter extends AbsPresenter<Bean> {
     }
 
     static class ApiClient {
-        private volatile static ApiClient INSTANCE;
-
         private static final int TIMEOUT = 1 * 1000;
+        private volatile static ApiClient INSTANCE;
         private static int LAST_PAGE;
         private Handler mHandler = new Handler(Looper.getMainLooper());
 

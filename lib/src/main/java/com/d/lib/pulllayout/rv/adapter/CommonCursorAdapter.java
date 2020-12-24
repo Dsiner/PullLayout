@@ -29,6 +29,10 @@ public abstract class CommonCursorAdapter extends RecyclerView.Adapter<CommonHol
         mMultiItemTypeSupport = multiItemTypeSupport;
     }
 
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     public void setCursor(Cursor cursor) {
         if (mCursor == cursor) {
             return;
@@ -37,10 +41,6 @@ public abstract class CommonCursorAdapter extends RecyclerView.Adapter<CommonHol
         mCursor = cursor;
         notifyDataSetChanged();
         Utils.closeQuietly(oldCursor);
-    }
-
-    public Cursor getCursor() {
-        return mCursor;
     }
 
     protected boolean isDataValid(Cursor cursor) {

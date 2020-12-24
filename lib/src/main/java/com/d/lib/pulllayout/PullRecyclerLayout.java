@@ -33,12 +33,11 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
     private static final int TYPE_LISTVIEW = 1;
     private static final int TYPE_RECYCLERVIEW = 2;
     private static final int TYPE_PULLRECYCLERVIEW = 3;
-
+    private final int mType;
     @NonNull
     private IEdgeView mHeaderView;
     @NonNull
     private IEdgeView mFooterView;
-    private final int mType;
     private View mRecyclerList;
     private boolean mAutoLoadMore = true;
     private RecyclerScrollHelper mRecyclerScrollHelper;
@@ -180,6 +179,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
 
     @Override
     public void loadMoreSuccess() {
+        NestedScrollHelper.stopNestedScroll(getNestedChild());
         stopNestedAnim();
         mFooterView.setState(IState.STATE_SUCCESS);
     }

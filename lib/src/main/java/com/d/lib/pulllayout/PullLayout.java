@@ -25,19 +25,17 @@ import java.util.List;
  * Created by D on 2018/5/29.
  */
 public class PullLayout extends ViewGroup implements Pullable {
-    protected static final int INVALID_POINTER = -1;
-    protected static final int INVALID_ORIENTATION = -1;
-
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
-
+    protected static final int INVALID_POINTER = -1;
+    protected static final int INVALID_ORIENTATION = -1;
+    protected final NestedScrollHelper.Offset mPullOffsetX = new NestedScrollHelper.Offset();
+    protected final NestedScrollHelper.Offset mPullOffsetY = new NestedScrollHelper.Offset();
     protected int mTouchSlop;
     protected int mOrientation = INVALID_ORIENTATION;
     protected int mPullPointerId = INVALID_POINTER;
     protected int mTouchX, mTouchY;
     protected int mLastTouchX, mLastTouchY;
-    protected final NestedScrollHelper.Offset mPullOffsetX = new NestedScrollHelper.Offset();
-    protected final NestedScrollHelper.Offset mPullOffsetY = new NestedScrollHelper.Offset();
     protected int mPullState = Pullable.PULL_STATE_IDLE;
     protected NestedAnimHelper mNestedAnimHelper;
     protected AppBarHelper mAppBarHelper;

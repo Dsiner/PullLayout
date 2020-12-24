@@ -36,16 +36,16 @@ public abstract class CommonAdapter<T> extends BaseAdapter
     }
 
     @Override
+    public List<T> getDatas() {
+        return mDatas;
+    }
+
+    @Override
     public void setDatas(List<T> datas) {
         if (mDatas != null && datas != null) {
             mDatas.clear();
             mDatas.addAll(datas);
         }
-    }
-
-    @Override
-    public List<T> getDatas() {
-        return mDatas;
     }
 
     @Override

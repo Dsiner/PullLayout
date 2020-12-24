@@ -12,7 +12,7 @@ import android.view.MotionEvent;
  * Created by D on 2020/3/11.
  */
 public class NoScrollViewPager extends ViewPager {
-    private boolean enableScroll = false;
+    private boolean mEnableScroll = false;
 
     public NoScrollViewPager(@NonNull Context context) {
         super(context);
@@ -23,20 +23,20 @@ public class NoScrollViewPager extends ViewPager {
     }
 
     public boolean isEnableScroll() {
-        return enableScroll;
+        return mEnableScroll;
     }
 
     public void setEnableScroll(boolean enableScrollHorizontally) {
-        this.enableScroll = enableScrollHorizontally;
+        this.mEnableScroll = enableScrollHorizontally;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return enableScroll && super.onInterceptTouchEvent(ev);
+        return mEnableScroll && super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        return enableScroll && super.onTouchEvent(ev);
+        return mEnableScroll && super.onTouchEvent(ev);
     }
 }
