@@ -2,8 +2,9 @@ package com.d.lib.pulllayout.edge.ripple.state;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.d.lib.pulllayout.edge.ripple.R;
 

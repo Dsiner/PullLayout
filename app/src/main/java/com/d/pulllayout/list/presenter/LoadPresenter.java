@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.d.lib.common.component.loader.AbsPresenter;
+import com.d.lib.common.component.loader.MvpBaseLoaderPresenter;
 import com.d.lib.common.event.bus.callback.SimpleCallback;
 import com.d.pulllayout.list.model.Bean;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * LoadPresenter
  * Created by D on 2017/4/26.
  */
-public class LoadPresenter extends AbsPresenter<Bean> {
+public class LoadPresenter extends MvpBaseLoaderPresenter<Bean> {
 
     public LoadPresenter(Context context) {
         super(context);

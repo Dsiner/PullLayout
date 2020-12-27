@@ -1,6 +1,6 @@
 package com.d.pulllayout.list.model;
 
-import com.d.lib.common.view.popup.MenuPopup;
+import com.d.lib.common.widget.popup.MenuPopup;
 import com.d.pulllayout.R;
 
 import java.util.Arrays;
@@ -12,7 +12,7 @@ public class ListType {
     public static final int PULLRECYCLERLAYOUT_LISTVIEW = 2;
     public static final int PULLRECYCLERVIEW = 3;
 
-    public static int[] S_RES_IDS = new int[]{R.layout.lib_pub_fragment_abs,
+    public static int[] S_RES_IDS = new int[]{R.layout.lib_pub_fragment_loader,
             R.layout.fragment_list_pullrecyclerlayout_recyclerview,
             R.layout.fragment_list_pullrecyclerlayout_listview,
             R.layout.fragment_list_pullrecyclerview};

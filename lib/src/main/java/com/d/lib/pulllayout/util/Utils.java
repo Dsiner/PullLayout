@@ -3,9 +3,10 @@ package com.d.lib.pulllayout.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 
 /**
  * Utils

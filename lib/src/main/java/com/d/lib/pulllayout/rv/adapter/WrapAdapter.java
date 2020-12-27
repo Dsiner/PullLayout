@@ -1,11 +1,12 @@
 package com.d.lib.pulllayout.rv.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.lib.pulllayout.rv.ItemViewList;

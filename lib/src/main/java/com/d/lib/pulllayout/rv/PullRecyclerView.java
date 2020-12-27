@@ -2,14 +2,15 @@ package com.d.lib.pulllayout.rv;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.d.lib.pulllayout.Pullable;
 import com.d.lib.pulllayout.Refreshable;

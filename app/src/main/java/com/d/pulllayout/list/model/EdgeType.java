@@ -2,7 +2,7 @@ package com.d.pulllayout.list.model;
 
 import android.content.Context;
 
-import com.d.lib.common.view.popup.MenuPopup;
+import com.d.lib.common.widget.popup.MenuPopup;
 import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.pulllayout.R;
 

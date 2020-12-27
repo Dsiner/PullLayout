@@ -1,10 +1,11 @@
 package com.d.pulllayout.list.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.d.lib.common.component.loader.v4.AbsFragment;
+import androidx.annotation.Nullable;
+
+import com.d.lib.common.component.loader.v4.BaseLoaderFragment;
 import com.d.lib.common.component.mvp.MvpView;
 import com.d.lib.pulllayout.Pullable;
 import com.d.lib.pulllayout.loader.RecyclerAdapter;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
  * Simple Type
  * Created by D on 2017/4/26.
  */
-public class SimpleFragment extends AbsFragment<Bean, LoadPresenter> {
+public class SimpleFragment extends BaseLoaderFragment<Bean, LoadPresenter> {
     private int mListType;
     private int mEdgeType;
 

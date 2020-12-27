@@ -4,18 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.d.lib.common.component.mvp.MvpBasePresenter;
 import com.d.lib.common.component.mvp.app.v4.BaseFragmentActivity;
 import com.d.lib.common.util.ViewHelper;
-import com.d.lib.common.view.TitleLayout;
-import com.d.lib.common.view.popup.MenuPopup;
-import com.d.lib.common.view.popup.PopupWindowFactory;
+import com.d.lib.common.widget.TitleLayout;
+import com.d.lib.common.widget.popup.MenuPopup;
+import com.d.lib.common.widget.popup.PopupWindowFactory;
 import com.d.pulllayout.R;
 import com.d.pulllayout.list.fragment.CoordinatorLayoutFragment;
 import com.d.pulllayout.list.fragment.ItemTouchFragment;
@@ -102,7 +103,7 @@ public class ListActivity extends BaseFragmentActivity<MvpBasePresenter>
     protected int getLayoutRes() {
         return mType == TYPE_COORDINATOR_LIST
                 ? R.layout.fragment_list_coordinatorlayout
-                : R.layout.lib_pub_activity_abs_content;
+                : R.layout.lib_pub_activity_loader_content;
     }
 
     @Override

@@ -1,7 +1,8 @@
 package com.d.lib.pulllayout.rv;
 
-import android.support.annotation.Nullable;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,10 +2,6 @@ package com.d.lib.pulllayout.rv.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.d.lib.pulllayout.rv.itemtouchhelper.ItemTouchHelperViewHolder;
 

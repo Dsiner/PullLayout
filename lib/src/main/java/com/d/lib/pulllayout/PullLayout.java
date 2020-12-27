@@ -4,13 +4,14 @@ import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 import com.d.lib.pulllayout.edge.IEdgeView;
 import com.d.lib.pulllayout.util.AppBarHelper;

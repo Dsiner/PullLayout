@@ -2,10 +2,11 @@ package com.d.pulllayout.list.adapter.rv;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.d.lib.pulllayout.rv.adapter.CommonAdapter;
 import com.d.lib.pulllayout.rv.adapter.CommonHolder;

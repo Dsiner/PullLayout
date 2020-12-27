@@ -1,6 +1,6 @@
 package com.d.lib.pulllayout.rv.itemtouchhelper;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Listener for manual initiation of a drag.

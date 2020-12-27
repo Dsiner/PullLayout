@@ -2,9 +2,10 @@ package com.d.lib.pulllayout.rv.itemtouchhelper;
 
 import android.graphics.Canvas;
 import android.os.Build;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * An implementation of ItemTouchHelper.Callback that enables basic drag drop and swipe-to-dismiss

@@ -1,20 +1,21 @@
 package com.d.pulllayout.list.fragment;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.d.lib.common.component.mvp.MvpBasePresenter;
 import com.d.lib.common.component.mvp.MvpView;
 import com.d.lib.common.component.mvp.app.v4.BaseFragment;
 import com.d.lib.common.util.ViewHelper;
-import com.d.lib.common.view.TitleLayout;
-import com.d.lib.common.view.popup.MenuPopup;
-import com.d.lib.common.view.popup.PopupWindowFactory;
+import com.d.lib.common.widget.TitleLayout;
+import com.d.lib.common.widget.popup.MenuPopup;
+import com.d.lib.common.widget.popup.PopupWindowFactory;
 import com.d.lib.pulllayout.rv.PullRecyclerView;
 import com.d.lib.pulllayout.rv.adapter.CommonAdapter;
 import com.d.lib.pulllayout.rv.itemtouchhelper.OnStartDragListener;

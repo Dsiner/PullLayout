@@ -1,17 +1,18 @@
 package com.d.pulllayout.list.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.PopupWindow;
 
-import com.d.lib.common.component.loader.v4.AbsPageFragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.d.lib.common.component.loader.v4.BasePagerFragmentActivity;
 import com.d.lib.common.component.mvp.MvpBasePresenter;
 import com.d.lib.common.util.ViewHelper;
-import com.d.lib.common.view.popup.MenuPopup;
-import com.d.lib.common.view.popup.PopupWindowFactory;
+import com.d.lib.common.widget.popup.MenuPopup;
+import com.d.lib.common.widget.popup.PopupWindowFactory;
 import com.d.pulllayout.R;
 import com.d.pulllayout.list.fragment.CoordinatorLayoutFragment;
 import com.d.pulllayout.list.model.ListType;
@@ -24,7 +25,7 @@ import java.util.List;
  * CoordinatorTabActivity
  * Created by D on 2018/5/31.
  */
-public class CoordinatorTabActivity extends AbsPageFragmentActivity<MvpBasePresenter> {
+public class CoordinatorTabActivity extends BasePagerFragmentActivity<MvpBasePresenter> {
 
     private int mListType = ListType.PULLRECYCLERLAYOUT_PULLRECYCLERVIEW;
 

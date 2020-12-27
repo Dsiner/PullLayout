@@ -1,7 +1,7 @@
 package com.d.pulllayout.pull.activity;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.d.lib.common.component.mvp.MvpBasePresenter;
 import com.d.lib.common.component.mvp.MvpView;

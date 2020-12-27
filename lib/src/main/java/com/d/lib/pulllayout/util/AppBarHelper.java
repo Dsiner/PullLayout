@@ -1,9 +1,11 @@
 package com.d.lib.pulllayout.util;
 
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewParent;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 public class AppBarHelper {
     private final View mView;

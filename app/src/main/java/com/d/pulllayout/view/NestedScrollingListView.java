@@ -1,10 +1,11 @@
 package com.d.pulllayout.view;
 
 import android.content.Context;
-import android.support.v4.view.NestedScrollingChild;
-import android.support.v4.view.NestedScrollingChildHelper;
 import android.util.AttributeSet;
 import android.widget.ListView;
+
+import androidx.core.view.NestedScrollingChild;
+import androidx.core.view.NestedScrollingChildHelper;
 
 public class NestedScrollingListView extends ListView implements NestedScrollingChild {
 

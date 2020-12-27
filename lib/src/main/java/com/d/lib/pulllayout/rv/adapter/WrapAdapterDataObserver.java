@@ -1,6 +1,6 @@
 package com.d.lib.pulllayout.rv.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * WrapAdapterDataObserver for RecyclerView

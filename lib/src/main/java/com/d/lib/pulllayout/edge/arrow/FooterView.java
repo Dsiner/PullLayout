@@ -1,11 +1,12 @@
 package com.d.lib.pulllayout.edge.arrow;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.d.lib.pulllayout.R;
 import com.d.lib.pulllayout.edge.EdgeView;
