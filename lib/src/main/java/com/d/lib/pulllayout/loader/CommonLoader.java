@@ -55,8 +55,14 @@ public class CommonLoader<T> {
         if (data == null) {
             return;
         }
-        int sizeLoad = data.size();
-        loadList(data);
+        final int sizeLoad = data.size();
+        if (page == 1) {
+            mDatas.clear();
+        }
+        mDatas.addAll(data);
+        mAdapter.setDatas(mDatas);
+        mAdapter.notifyDataSetChanged();
+
         if (page == 1) {
             mRefreshable.refreshSuccess();
         } else {
@@ -86,15 +92,6 @@ public class CommonLoader<T> {
         if (mListener != null) {
             mListener.loadError(mDatas.size() <= 0);
         }
-    }
-
-    protected void loadList(List<T> caches) {
-        if (page == 1) {
-            mDatas.clear();
-        }
-        mDatas.addAll(caches);
-        mAdapter.setDatas(mDatas);
-        mAdapter.notifyDataSetChanged();
     }
 
     public void add(T data) {
