@@ -75,6 +75,7 @@ public class HeaderView extends EdgeView {
     @Override
     public boolean setState(int state) {
         if (mState == state) {
+            nestedAnim(state);
             return false;
         }
         switch (state) {
@@ -101,8 +102,6 @@ public class HeaderView extends EdgeView {
                 img_head_arrow.setVisibility(View.INVISIBLE);
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_loading));
-
-                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
@@ -111,8 +110,6 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_success));
                 updateTime();
-
-                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
                 break;
 
             case STATE_ERROR:
@@ -121,12 +118,20 @@ public class HeaderView extends EdgeView {
                 ldv_loading.setVisibility(View.INVISIBLE);
                 tv_head_tip.setText(getResources().getString(R.string.lib_pull_list_refresh_error));
                 updateTime();
+                break;
+        }
+        nestedAnim(state);
+        mState = state;
+        return true;
+    }
 
+    private void nestedAnim(int state) {
+        switch (state) {
+            case STATE_SUCCESS:
+            case STATE_ERROR:
                 postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
                 break;
         }
-        mState = state;
-        return true;
     }
 
     private void updateTime() {
