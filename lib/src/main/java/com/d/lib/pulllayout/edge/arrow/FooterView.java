@@ -42,6 +42,7 @@ public class FooterView extends EdgeView {
     @Override
     public boolean setState(int state) {
         if (mState == state) {
+            nestedAnim(state);
             return false;
         }
         switch (state) {
@@ -63,26 +64,34 @@ public class FooterView extends EdgeView {
             case STATE_SUCCESS:
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_success));
-
-                startNestedAnim(getStartX(), getStartY(), 0, 0);
                 break;
 
             case STATE_ERROR:
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_error));
-
-                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
                 break;
 
             case STATE_NO_MORE:
                 ldv_loading.setVisibility(View.GONE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_nomore));
-
-                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
         }
+        nestedAnim(state);
         setOnClickListener(state == STATE_ERROR ? mOnFooterClickListener : null);
         mState = state;
         return true;
+    }
+
+    private void nestedAnim(int state) {
+        switch (state) {
+            case STATE_SUCCESS:
+            case STATE_NO_MORE:
+                startNestedAnim(getStartX(), getStartY(), 0, 0);
+                break;
+
+            case STATE_ERROR:
+                postNestedAnimDelayed(getStartX(), getStartY(), 0, 0, 450);
+                break;
+        }
     }
 }
