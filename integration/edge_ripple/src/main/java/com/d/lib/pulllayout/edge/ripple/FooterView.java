@@ -44,7 +44,6 @@ public class FooterView extends EdgeView {
         }
         mRippleView.setState(state);
         switch (state) {
-            case STATE_LOADING:
             case STATE_NO_MORE:
                 startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;

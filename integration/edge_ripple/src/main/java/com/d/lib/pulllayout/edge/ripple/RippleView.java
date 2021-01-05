@@ -80,18 +80,23 @@ public class RippleView extends View implements IState {
             case STATE_NONE:
                 mAttacher = mNone;
                 break;
+
             case STATE_LOADING:
                 mAttacher = mLoading;
                 break;
+
             case STATE_SUCCESS:
                 mAttacher = mSuccess;
                 break;
+
             case STATE_ERROR:
                 mAttacher = mError;
                 break;
+
             case STATE_NO_MORE:
                 mAttacher = mNomore;
                 break;
+
             default:
                 mAttacher = mNone;
                 break;

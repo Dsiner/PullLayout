@@ -14,11 +14,11 @@ import com.d.lib.pulllayout.util.Utils;
  * Created by D on 2018/3/30.
  */
 public class Discon extends State {
-    private Paint paint;
-    private Paint paintCircle;
-    private Rect rect;
-    private RectF rectF;
-    private float strokeWidth;
+    private Paint mPaint;
+    private Paint mPaintCircle;
+    private Rect mRect;
+    private RectF mRectF;
+    private float mStrokeWidth;
 
     public Discon(View view) {
         super(view);
@@ -26,17 +26,17 @@ public class Discon extends State {
     }
 
     private void init(Context context) {
-        strokeWidth = Utils.dp2px(context, 2.5f);
+        mStrokeWidth = Utils.dp2px(context, 2.5f);
 
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(mColorWhite);
-        paint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setColor(mColorWhite);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
 
-        paintCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintCircle.setColor(mColorError);
+        mPaintCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCircle.setColor(mColorError);
 
-        rect = new Rect();
-        rectF = new RectF();
+        mRect = new Rect();
+        mRectF = new RectF();
     }
 
     @Override
@@ -47,18 +47,18 @@ public class Discon extends State {
         float startX = (mWidth - w) / 2;
         float startY = (mHeight - h) / 2;
 
-        canvas.drawCircle(mWidth / 2f, mHeight / 2f, h / 2f, paintCircle);
+        canvas.drawCircle(mWidth / 2f, mHeight / 2f, h / 2f, mPaintCircle);
 
         canvas.translate(mWidth / 2, mHeight / 2);
         canvas.rotate(45);
 
         float factor = 0.51f;
-        rect.set((int) (-w / 2f * factor), (int) (-strokeWidth / 2f), (int) (w / 2f * factor), (int) (strokeWidth / 2f));
-        rectF.set(rect);
-        canvas.drawRect(rectF, paint);
+        mRect.set((int) (-w / 2f * factor), (int) (-mStrokeWidth / 2f), (int) (w / 2f * factor), (int) (mStrokeWidth / 2f));
+        mRectF.set(mRect);
+        canvas.drawRect(mRectF, mPaint);
 
         canvas.rotate(90);
-        canvas.drawRect(rectF, paint);
+        canvas.drawRect(mRectF, mPaint);
         canvas.rotate(-135);
         canvas.translate(-mWidth / 2, -mHeight / 2);
     }

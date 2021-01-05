@@ -58,8 +58,6 @@ public class FooterView extends EdgeView {
             case STATE_LOADING:
                 ldv_loading.setVisibility(View.VISIBLE);
                 tv_load_more.setText(getResources().getString(R.string.lib_pull_list_load_more_loading));
-
-                startNestedAnim(getStartX(), getStartY(), 0, getExpandedOffset());
                 break;
 
             case STATE_SUCCESS:
