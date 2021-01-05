@@ -14,11 +14,11 @@ public class CommonLoader<T> {
 
     public int page = 1;
 
-    private Refreshable mRefreshable;
-    private RecyclerAdapter<T> mAdapter;
-    private List<T> mDatas;
-    private int mPageCount = PAGE_COUNT;
-    private OnLoaderListener mListener;
+    protected Refreshable mRefreshable;
+    protected RecyclerAdapter<T> mAdapter;
+    protected List<T> mDatas;
+    protected int mPageCount = PAGE_COUNT;
+    protected OnLoaderListener mListener;
 
     public CommonLoader(Refreshable refreshable, RecyclerAdapter<T> adapter) {
         this.mDatas = new ArrayList<>();
@@ -56,7 +56,7 @@ public class CommonLoader<T> {
             return;
         }
         int sizeLoad = data.size();
-        initList(data);
+        loadList(data);
         if (page == 1) {
             mRefreshable.refreshSuccess();
         } else {
@@ -88,36 +88,16 @@ public class CommonLoader<T> {
         }
     }
 
-    private void initList(List<T> caches) {
+    protected void loadList(List<T> caches) {
         if (page == 1) {
             mDatas.clear();
-            mDatas.addAll(caches);
-            mAdapter.setDatas(mDatas);
-            mAdapter.notifyDataSetChanged();
-        } else {
-            mDatas.addAll(caches);
-            mAdapter.setDatas(mDatas);
-            mAdapter.notifyDataSetChanged();
         }
+        mDatas.addAll(caches);
+        mAdapter.setDatas(mDatas);
+        mAdapter.notifyDataSetChanged();
     }
 
-    public void addTop(T data) {
-        if (mDatas != null && data != null) {
-            mDatas.add(0, data);
-            mAdapter.setDatas(mDatas);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    public void addTop(List<T> datas) {
-        if (mDatas != null && datas != null) {
-            mDatas.addAll(0, datas);
-            mAdapter.setDatas(mDatas);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    public void addData(T data) {
+    public void add(T data) {
         if (mDatas != null && data != null) {
             mDatas.add(data);
             mAdapter.setDatas(mDatas);
@@ -125,7 +105,7 @@ public class CommonLoader<T> {
         }
     }
 
-    public void addData(List<T> datas) {
+    public void addAll(List<T> datas) {
         if (mDatas != null && datas != null) {
             mDatas.addAll(datas);
             mAdapter.setDatas(mDatas);
@@ -133,7 +113,7 @@ public class CommonLoader<T> {
         }
     }
 
-    public void addData(int position, T data) {
+    public void add(int position, T data) {
         if (mDatas != null && data != null
                 && position >= 0 && position <= mDatas.size()) {
             mDatas.add(position, data);
@@ -142,7 +122,7 @@ public class CommonLoader<T> {
         }
     }
 
-    public void addData(int position, List<T> datas) {
+    public void addAll(int position, List<T> datas) {
         if (mDatas != null && datas != null
                 && position >= 0 && position <= mDatas.size()) {
             mDatas.addAll(position, datas);

@@ -46,7 +46,7 @@ public abstract class EdgeView extends LinearLayout implements IEdgeView {
                 .inflate(getLayoutId(), this, false);
         addView(mContainer);
 
-        measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mMeasuredHeight = getMeasuredHeight();
         mNestedAnimHelper = new NestedAnimHelper(this);
         mNestedExtendChildHelper = new NestedExtendChildHelper(this);

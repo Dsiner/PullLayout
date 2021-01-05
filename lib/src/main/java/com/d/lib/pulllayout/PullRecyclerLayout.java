@@ -254,6 +254,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                     if (canPullDown() && getScrollY() < -mHeaderView.getExpandedOffset()
                             && mAppBarHelper.isExpanded()) {
                         refresh();
+                        stopNestedAnim();
                         mHeaderView.startNestedAnim(getScrollX(),
                                 getScrollY(),
                                 getScrollX(),
@@ -261,6 +262,7 @@ public class PullRecyclerLayout extends PullLayout implements Refreshable {
                                         ? -mHeaderView.getExpandedOffset() : 0);
                     } else if (canPullUp() && getScrollY() > mFooterView.getExpandedOffset()) {
                         loadMore();
+                        stopNestedAnim();
                         mFooterView.startNestedAnim(getScrollX(),
                                 getScrollY(),
                                 getScrollX(),
