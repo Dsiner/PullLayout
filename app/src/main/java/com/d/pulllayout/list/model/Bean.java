@@ -41,11 +41,12 @@ public class Bean {
     }
 
     public static List<Bean> createMultiple(int page) {
-        List<Bean> list = new ArrayList<>();
-        int count = CommonLoader.PAGE_COUNT;
-        for (int i = 0; i < CommonLoader.PAGE_COUNT; i++) {
-            int type = i % 4;
-            Bean bean = new Bean(type, i, "" + (count * (page - 1) + i), "mark");
+        final List<Bean> list = new ArrayList<>();
+        final int count = CommonLoader.PAGE_COUNT;
+        for (int i = 0; i < count; i++) {
+            final int type = i % 4;
+            final int index = count * (page - 1) + i;
+            Bean bean = new Bean(type, index, "" + index, "mark");
             list.add(bean);
         }
         return list;
