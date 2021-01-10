@@ -34,7 +34,7 @@ dependencies {
     implementation project(':lib')
     implementation project(':integration:edge_ripple')
     implementation project(':integration:edge_elastic')
-    implementation('com.dsiner.lib:common:1.2.0') {
+    implementation('com.dsiner.lib:common:2.0.0') {
         exclude group: 'com.dsiner.lib', module: 'pulllayout'
     }
 }
