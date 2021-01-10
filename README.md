@@ -17,9 +17,9 @@ Maven:
 ```
 or Gradle:
 ```groovy
-AndroidX
+// AndroidX
 implementation 'com.dsiner.lib:pulllayout:2.0.0'
-or Support
+// Or Support
 implementation 'com.dsiner.lib:pulllayout:1.0.4'
 ```
 
